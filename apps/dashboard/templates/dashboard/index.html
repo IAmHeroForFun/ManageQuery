@@ -1,0 +1,122 @@
+{% extends "dashboard/base.html" %}
+
+{% block title %}New Analysis — Mapping Flood Damage from Space{% endblock %}
+
+{% block content %}
+<div class="index-layout">
+    <!-- Left: Map Container -->
+    <div class="map-section">
+        <div class="map-header">
+            <div>
+                <h2>Select Area of Interest (AOI)</h2>
+                <p>Draw a rectangle with the map tool <strong>OR</strong> enter coordinates manually in the panel.</p>
+            </div>
+            <button type="button" id="btn-load-trishuli" class="btn btn-preset">
+                🏔️ Load Trishuli Flood Preset
+            </button>
+        </div>
+        <div id="map" class="map-container" style="min-height: 600px; height: 600px; width: 100%; display: block;"></div>
+    </div>
+
+    <!-- Right: Configuration Panel -->
+    <div class="form-section">
+        <div class="card">
+            <h3 class="panel-heading">Configuration Parameters</h3>
+            <form id="form-analysis">
+                <div class="form-group">
+                    <label for="flood-date">Flood Event Date</label>
+                    <input type="date" id="flood-date" name="flood_date" class="form-control" value="2026-08-26" required>
+                    <small class="form-text">Pre/post satellite imagery pairs will be filtered around this date.</small>
+                </div>
+
+                <!-- Manual AOI Bounding Box Coordinates -->
+                <div class="form-group manual-coord-group">
+                    <label>AOI Bounding Box Coordinates (Editable)</label>
+                    <div class="bbox-grid">
+                        <div>
+                            <span class="coord-label">Min Lon (West):</span>
+                            <input type="number" step="0.0001" id="aoi-min-lon" class="form-control" value="85.1500" required>
+                        </div>
+                        <div>
+                            <span class="coord-label">Min Lat (South):</span>
+                            <input type="number" step="0.0001" id="aoi-min-lat" class="form-control" value="27.9500" required>
+                        </div>
+                        <div>
+                            <span class="coord-label">Max Lon (East):</span>
+                            <input type="number" step="0.0001" id="aoi-max-lon" class="form-control" value="85.5500" required>
+                        </div>
+                        <div>
+                            <span class="coord-label">Max Lat (North):</span>
+                            <input type="number" step="0.0001" id="aoi-max-lat" class="form-control" value="28.4500" required>
+                        </div>
+                    </div>
+                    <small class="form-text">Type coordinates manually or draw on the map; both sync automatically.</small>
+                </div>
+
+                <div class="form-group">
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="use-segmentation" name="use_segmentation" checked>
+                        <span>Run U-Net Flood Segmentation Model (AI Bonus)</span>
+                    </label>
+                    <small class="form-text">Infers water vs saturated debris using trained Kuro Siwo weights.</small>
+                </div>
+
+                <div class="form-group">
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="trace-flood-path" name="trace_flood_path" checked>
+                        <span>Trace Downstream Flood Path (D8 DEM Routing)</span>
+                    </label>
+                    <small class="form-text">Traces hydrological flow corridor from upstream origin point.</small>
+                </div>
+
+                <!-- Upstream Source Origin Coordinates (Editable) -->
+                <div id="source-point-container" class="form-group manual-coord-group">
+                    <label>Upstream Source Origin (Click map or type manually)</label>
+                    <div class="coords-row">
+                        <div>
+                            <span class="coord-label">Longitude:</span>
+                            <input type="number" step="0.0001" id="source-lon" class="form-control" value="85.4500">
+                        </div>
+                        <div>
+                            <span class="coord-label">Latitude:</span>
+                            <input type="number" step="0.0001" id="source-lat" class="form-control" value="28.3600">
+                        </div>
+                    </div>
+                    <small class="form-text">Origin location of glacial lake collapse / debris start.</small>
+                </div>
+
+                <div id="aoi-status" class="aoi-status-box">
+                    <span class="status-indicator"></span>
+                    <span id="aoi-status-text">AOI ready: Trishuli River Corridor (Nepal)</span>
+                </div>
+
+                <button type="submit" id="btn-submit" class="btn btn-primary btn-block">
+                    🚀 Run Satellite Flood Analysis
+                </button>
+            </form>
+        </div>
+
+        {% if recent_jobs %}
+        <div class="card recent-jobs-card">
+            <h3 class="panel-heading">Recent Analyses</h3>
+            <ul class="job-list">
+                {% for j in recent_jobs %}
+                <li class="job-item">
+                    <a href="/dashboard/{{ j.id }}/" class="job-link">
+                        <span class="job-status badge-{{ j.status }}">{{ j.status|upper }}</span>
+                        <span class="job-date">{{ j.flood_date }}</span>
+                        <span class="job-area">{% if j.flood_area_km2 %}{{ j.flood_area_km2|floatformat:1 }} km²{% else %}Pending{% endif %}</span>
+                    </a>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="/static/js/map.js"></script>
+<script src="/static/js/aoi_selector.js"></script>
+{% endblock %}

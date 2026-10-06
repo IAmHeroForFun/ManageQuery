@@ -1,0 +1,306 @@
+:root {
+    /* Color Palette: Green, White, Blue, Yellow */
+    --color-blue: #0284c7;
+    --color-blue-hover: #0369a1;
+    --color-blue-light: #e0f2fe;
+    --color-blue-glow: rgba(2, 132, 199, 0.25);
+
+    --color-green: #16a34a;
+    --color-green-hover: #15803d;
+    --color-green-light: #dcfce7;
+
+    --color-yellow: #eab308;
+    --color-yellow-hover: #ca8a04;
+    --color-yellow-light: #fef9c3;
+
+    --color-white: #ffffff;
+    --color-slate-50: #f8fafc;
+    --color-slate-100: #f1f5f9;
+    --color-slate-200: #e2e8f0;
+    --color-slate-700: #334155;
+    --color-slate-800: #1e293b;
+    --color-slate-900: #0f172a;
+    --color-navy-950: #081225;
+
+    --color-red: #ef4444;
+    --color-darkred: #991b1b;
+    --color-purple: #9333ea;
+
+    /* Theme Tokens */
+    --bg-page: #081225;
+    --bg-card: #0f213d;
+    --bg-card-alt: #162b4d;
+    --border-color: #1e3a63;
+    --text-primary: #ffffff;
+    --text-muted: #94a3b8;
+    --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    --font-mono: 'JetBrains Mono', monospace;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: var(--font-sans);
+    background-color: var(--bg-page);
+    color: var(--text-primary);
+    line-height: 1.5;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Header */
+.app-header {
+    background-color: rgba(8, 18, 37, 0.96);
+    border-bottom: 2px solid var(--color-blue);
+    padding: 0.85rem 1.5rem;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    backdrop-filter: blur(10px);
+}
+
+.header-container {
+    max-width: 1440px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.brand-link {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    text-decoration: none;
+    color: inherit;
+}
+
+.satellite-icon {
+    font-size: 2.2rem;
+}
+
+.brand-title {
+    font-size: 1.25rem;
+    font-weight: 800;
+    letter-spacing: 0.04em;
+    color: var(--color-white);
+}
+
+.brand-subtitle {
+    font-size: 0.75rem;
+    color: var(--color-yellow);
+    font-weight: 500;
+}
+
+.header-nav {
+    display: flex;
+    gap: 0.85rem;
+    align-items: center;
+}
+
+.nav-item {
+    color: var(--color-white);
+    text-decoration: none;
+    font-size: 0.875rem;
+    font-weight: 600;
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    border: 1px solid var(--border-color);
+    background-color: var(--bg-card);
+    transition: all 0.15s ease;
+}
+
+.nav-item:hover {
+    background-color: var(--color-blue);
+    border-color: var(--color-blue);
+}
+
+.btn-report-nav {
+    background-color: var(--color-blue);
+    color: var(--color-white);
+    border-color: var(--color-blue);
+}
+.btn-report-nav:hover {
+    background-color: var(--color-blue-hover);
+}
+
+/* Main */
+.app-main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Footer */
+.app-footer {
+    background-color: var(--color-navy-950);
+    border-top: 1px solid var(--border-color);
+    padding: 1.25rem 1.5rem;
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    text-align: center;
+}
+
+.footer-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+}
+
+/* Cards & Surface */
+.card {
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    padding: 1.35rem;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+}
+
+.panel-heading {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--color-white);
+    border-bottom: 2px solid var(--color-blue);
+    padding-bottom: 0.4rem;
+    margin-bottom: 1rem;
+}
+
+/* Buttons */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.65rem 1.25rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.15s ease;
+}
+
+.btn-primary {
+    background-color: var(--color-blue);
+    color: var(--color-white);
+}
+.btn-primary:hover {
+    background-color: var(--color-blue-hover);
+    box-shadow: 0 0 12px var(--color-blue-glow);
+}
+
+.btn-preset {
+    background-color: var(--color-green);
+    color: var(--color-white);
+}
+.btn-preset:hover {
+    background-color: var(--color-green-hover);
+}
+
+.btn-secondary {
+    background-color: var(--bg-card-alt);
+    color: var(--color-white);
+    border: 1px solid var(--border-color);
+}
+.btn-secondary:hover {
+    background-color: #1e3a63;
+}
+
+.btn-outline {
+    background: transparent;
+    border: 1px solid var(--color-blue);
+    color: var(--color-blue);
+}
+.btn-outline:hover {
+    background-color: var(--color-blue);
+    color: var(--color-white);
+}
+
+.btn-block {
+    width: 100%;
+}
+
+/* Forms */
+.form-group {
+    margin-bottom: 1.15rem;
+}
+
+.form-group label {
+    display: block;
+    font-size: 0.825rem;
+    font-weight: 600;
+    margin-bottom: 0.4rem;
+    color: var(--color-white);
+}
+
+.form-control {
+    width: 100%;
+    padding: 0.6rem 0.75rem;
+    background-color: #060e1a;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    color: var(--color-white);
+    font-size: 0.875rem;
+    transition: border 0.15s ease;
+}
+
+.form-control:focus {
+    outline: none;
+    border-color: var(--color-blue);
+    box-shadow: 0 0 0 2px var(--color-blue-glow);
+}
+
+.form-text {
+    display: block;
+    font-size: 0.725rem;
+    color: var(--text-muted);
+    margin-top: 0.25rem;
+}
+
+.checkbox-label {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.5rem;
+    cursor: pointer;
+    font-weight: 500;
+    font-size: 0.85rem;
+}
+
+.checkbox-label input[type="checkbox"] {
+    margin-top: 0.2rem;
+    accent-color: var(--color-green);
+}
+
+/* Badges */
+.job-status {
+    padding: 0.25rem 0.6rem;
+    border-radius: 4px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+}
+
+.badge-completed { background-color: rgba(22, 163, 74, 0.25); color: #4ade80; border: 1px solid #16a34a; }
+.badge-processing { background-color: rgba(2, 132, 199, 0.25); color: #38bdf8; border: 1px solid #0284c7; }
+.badge-downloading { background-color: rgba(234, 179, 8, 0.25); color: #fde047; border: 1px solid #eab308; }
+.badge-queued { background-color: rgba(148, 163, 184, 0.25); color: #cbd5e1; border: 1px solid #475569; }
+.badge-failed { background-color: rgba(239, 68, 68, 0.25); color: #f87171; border: 1px solid #ef4444; }
+
+/* Global Map Dimensions */
+#map, #dashboard-map, .map-container, .map-viewport {
+    min-height: 600px;
+    height: 100%;
+    width: 100%;
+    display: block;
+    position: relative;
+    background-color: #07111e;
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+}

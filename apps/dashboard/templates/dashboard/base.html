@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Mapping Flood Damage from Space{% endblock %}</title>
+
+    <!-- Satellite SVG Favicon (prevents /favicon.ico 404) -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🛰️</text></svg>">
+
+    <!-- Leaflet & Leaflet-Draw CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.css" />
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+    <!-- Custom CSS Stylesheets -->
+    <link rel="stylesheet" href="/static/css/main.css">
+    <link rel="stylesheet" href="/static/css/dashboard.css">
+    <link rel="stylesheet" href="/static/css/report.css">
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    <header class="app-header">
+        <div class="header-container">
+            <div class="brand">
+                <a href="/" class="brand-link">
+                    <span class="satellite-icon">🛰️</span>
+                    <div>
+                        <h1 class="brand-title">MAPPING FLOOD DAMAGE FROM SPACE</h1>
+                        <p class="brand-subtitle">Multimodal Satellite Disaster Response • August 2026 Trishuli Flood, Nepal</p>
+                    </div>
+                </a>
+            </div>
+            <nav class="header-nav">
+                <a href="/" class="nav-item">New Analysis</a>
+                {% block nav_extra %}{% endblock %}
+            </nav>
+        </div>
+    </header>
+
+    <main class="app-main">
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer class="app-footer">
+        <div class="footer-container">
+            <p class="attribution">
+                Contains modified Copernicus Sentinel data 2026. Produced using Copernicus WorldDEM-30 © DLR e.V. & Airbus Defence and Space GmbH. © OpenStreetMap contributors. Training data: Bountos et al., 2024 (Kuro Siwo, MIT License).
+            </p>
+            <p class="disclaimer">
+                Educational Prototype for Multimodal AI Hackathon 2026 (Track B). Respect for affected communities — prototype system.
+            </p>
+        </div>
+    </footer>
+
+    <!-- Leaflet & Draw JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.js"></script>
+
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

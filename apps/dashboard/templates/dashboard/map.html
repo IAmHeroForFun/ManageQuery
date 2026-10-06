@@ -1,0 +1,147 @@
+{% extends "dashboard/base.html" %}
+
+{% block title %}Dashboard — Job {{ job.id }}{% endblock %}
+
+{% block nav_extra %}
+<a href="/dashboard/{{ job.id }}/report/" class="nav-item btn-report-nav">📄 Situation Report</a>
+{% endblock %}
+
+{% block content %}
+<div class="dashboard-layout">
+    <!-- Main Map Viewport -->
+    <div class="map-wrapper">
+        <div id="dashboard-map" class="map-viewport" style="height: 100%; min-height: 600px; width: 100%; display: block;"></div>
+
+        <!-- Floating Layer Controls Bar -->
+        <div class="layer-control-panel">
+            <span class="control-panel-title">Layers:</span>
+            <label class="layer-toggle-btn">
+                <input type="checkbox" id="toggle-flood" checked>
+                <span class="legend-color legend-yellow"></span> Flood & Debris (SAR/NDWI)
+            </label>
+            <label class="layer-toggle-btn">
+                <input type="checkbox" id="toggle-roads" checked>
+                <span class="legend-color legend-red"></span> Damaged Roads
+            </label>
+            <label class="layer-toggle-btn">
+                <input type="checkbox" id="toggle-buildings" checked>
+                <span class="legend-color legend-darkred"></span> Affected Buildings
+            </label>
+            <label class="layer-toggle-btn">
+                <input type="checkbox" id="toggle-cutoff" checked>
+                <span class="legend-color legend-blue"></span> Cut-off Settlements
+            </label>
+            {% if job.trace_flood_path %}
+            <label class="layer-toggle-btn">
+                <input type="checkbox" id="toggle-path" checked>
+                <span class="legend-color legend-purple"></span> Traced Flow Path
+            </label>
+            {% endif %}
+            {% if job.use_segmentation %}
+            <label class="layer-toggle-btn">
+                <input type="checkbox" id="toggle-unet" checked>
+                <span class="legend-color legend-green"></span> U-Net AI Segmentation
+            </label>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Right Sidebar Statistics & Tracking -->
+    <aside class="sidebar-panel">
+        <!-- Progress / Status Card -->
+        <div id="progress-card" class="card progress-card">
+            <div class="progress-header">
+                <h4>Pipeline Execution Status</h4>
+                <span id="job-status-badge" class="job-status badge-{{ job.status }}">{{ job.status|upper }}</span>
+            </div>
+            <div class="progress-bar-container">
+                <div id="progress-bar-fill" class="progress-bar-fill" style="width: {{ job.progress }}%;"></div>
+            </div>
+            <p id="current-step-text" class="current-step-text">{{ job.current_step }}</p>
+        </div>
+
+        <!-- Summary Metrics Grid -->
+        <div class="stats-grid">
+            <div class="stat-card stat-card-yellow">
+                <div class="stat-icon">🌊</div>
+                <div class="stat-data">
+                    <span id="stat-flood-area" class="stat-number">
+                        {% if job.flood_area_km2 %}{{ job.flood_area_km2|floatformat:1 }}{% else %}--{% endif %}
+                    </span>
+                    <span class="stat-unit">km²</span>
+                    <p class="stat-label">Inundated / Debris Area</p>
+                </div>
+            </div>
+
+            <div class="stat-card stat-card-red">
+                <div class="stat-icon">🏚️</div>
+                <div class="stat-data">
+                    <span id="stat-buildings" class="stat-number">
+                        {% if job.buildings_affected %}{{ job.buildings_affected }}{% else %}--{% endif %}
+                    </span>
+                    <span class="stat-unit">units</span>
+                    <p class="stat-label">Buildings Affected</p>
+                </div>
+            </div>
+
+            <div class="stat-card stat-card-yellow">
+                <div class="stat-icon">🛣️</div>
+                <div class="stat-data">
+                    <span id="stat-roads" class="stat-number">
+                        {% if job.roads_damaged_km %}{{ job.roads_damaged_km|floatformat:1 }}{% else %}--{% endif %}
+                    </span>
+                    <span class="stat-unit">km</span>
+                    <p class="stat-label">Roads Destroyed</p>
+                </div>
+            </div>
+
+            <div class="stat-card stat-card-blue">
+                <div class="stat-icon">🚫</div>
+                <div class="stat-data">
+                    <span id="stat-cutoff" class="stat-number">
+                        {% if job.settlements_cutoff %}{{ job.settlements_cutoff }}{% else %}--{% endif %}
+                    </span>
+                    <span class="stat-unit">villages</span>
+                    <p class="stat-label">Cut-Off Settlements</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Cut-Off Settlements List -->
+        <div class="card settlements-card">
+            <div class="settlement-header">
+                <h4>🏥 Hospital Connectivity (Who is cut off?)</h4>
+            </div>
+            <p class="settlement-explanation">
+                Villages marked <strong>🔴 CUT OFF</strong> lost all intact drivable road routes to district medical facilities and need prioritized emergency airlifts. <em>Click any village below to zoom in on the map.</em>
+            </p>
+            <ul id="settlements-list" class="settlement-list">
+                <li class="settlement-loading">Loading network connectivity analysis...</li>
+            </ul>
+        </div>
+
+        <!-- Action Card -->
+        <div class="card action-card">
+            <a href="/dashboard/{{ job.id }}/report/" class="btn btn-primary btn-block">
+                📑 View / Generate Situation Report
+            </a>
+            <a href="/" class="btn btn-outline btn-block mt-2">
+                🔄 Run New Analysis
+            </a>
+        </div>
+    </aside>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    window.JOB_ID = "{{ job.id }}";
+    window.JOB_STATUS = "{{ job.status }}";
+    window.JOB_PROGRESS = {{ job.progress }};
+    window.JOB_AOI = {{ job.aoi_geojson|safe }};
+</script>
+<script src="/static/js/map.js"></script>
+<script src="/static/js/layers.js"></script>
+<script src="/static/js/polling.js"></script>
+<script src="/static/js/layer_controls.js"></script>
+{% endblock %}

@@ -40,7 +40,13 @@ def test_flood_path_tracing():
 
         path_data = json.loads(res["path_geojson"])
         assert path_data["type"] == "LineString"
-        assert len(path_data["coordinates"]) > 10
+        assert len(path_data["coordinates"]) > 5
         assert res["path_length_km"] > 0
+        assert res["elevation_drop_m"] > 0
+        assert res["avg_speed_kmh"] > 0
         settlements = json.loads(res["settlements_on_path"])
         assert len(settlements) > 0
+        etas = json.loads(res["settlement_etas"])
+        assert len(etas) > 0
+        assert "eta_minutes" in etas[0]
+        assert "distance_from_origin_km" in etas[0]

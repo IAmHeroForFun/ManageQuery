@@ -131,9 +131,14 @@ class FloodPath(TimeStampedUUIDModel):
     path_geojson = models.TextField(help_text="LineString of the flow path")
     settlements_on_path = models.TextField(default='[]', help_text="JSON list of settlements along the path")
     path_length_km = models.FloatField(default=0.0)
+    start_elevation_m = models.IntegerField(default=0)
+    end_elevation_m = models.IntegerField(default=0)
+    elevation_drop_m = models.IntegerField(default=0)
+    avg_speed_kmh = models.FloatField(default=0.0)
+    settlement_etas = models.TextField(default='[]', help_text="JSON list of settlements with arrival timeline")
 
     def __str__(self):
-        return f"Flood Path for Job {self.job_id} ({self.path_length_km:.1f} km)"
+        return f"Flood Path for Job {self.job_id} ({self.path_length_km:.1f} km, drop {self.elevation_drop_m}m)"
 
 
 class SituationReport(TimeStampedUUIDModel):

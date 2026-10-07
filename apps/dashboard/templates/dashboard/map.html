@@ -43,6 +43,10 @@
                 <span class="legend-color legend-green"></span> U-Net AI Segmentation
             </label>
             {% endif %}
+            <label class="layer-toggle-btn" style="border-left: 1px solid var(--border-color); padding-left: 0.5rem;">
+                <input type="checkbox" id="toggle-emsr927">
+                <span class="legend-color" style="background-color: #3b82f6; border: 1px dashed #1d4ed8;"></span> Copernicus EMSR927 Reference
+            </label>
         </div>
     </div>
 
@@ -122,6 +126,9 @@
 
         <!-- Action Card -->
         <div class="card action-card">
+            <button type="button" id="btn-view-emsr927" class="btn btn-secondary btn-block" style="margin-bottom: 0.5rem; background: rgba(59, 130, 246, 0.1); border: 1px solid #3b82f6; color: #2563eb; font-weight: 600;">
+                🎯 View EMSR927 Reference Benchmark
+            </button>
             <a href="/dashboard/{{ job.id }}/report/" class="btn btn-primary btn-block">
                 📑 View / Generate Situation Report
             </a>

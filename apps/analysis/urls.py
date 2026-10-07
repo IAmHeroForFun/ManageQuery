@@ -8,6 +8,8 @@ from .views import (
     FloodPathView,
     SegmentationView,
     SituationReportView,
+    RescuerCopilotQAView,
+    EMSR927ValidationView,
 )
 
 urlpatterns = [
@@ -19,4 +21,6 @@ urlpatterns = [
     path('analysis/<uuid:pk>/flood-path/', FloodPathView.as_view(), name='analysis-flood-path'),
     path('analysis/<uuid:pk>/segmentation/', SegmentationView.as_view(), name='analysis-segmentation'),
     path('analysis/<uuid:pk>/report/', SituationReportView.as_view(), name='analysis-report'),
+    path('analysis/<uuid:pk>/copilot-qa/', RescuerCopilotQAView.as_view(), name='analysis-copilot-qa'),
+    path('analysis/<uuid:pk>/emsr927-validation/', EMSR927ValidationView.as_view(), name='analysis-emsr927-validation'),
 ]

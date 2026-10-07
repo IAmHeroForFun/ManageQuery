@@ -58,10 +58,11 @@ class ConnectivityAnalyzer:
         if not settlement_feats:
             return []
 
-        # The first settlement acts as the base hub / district center
+        # The first settlement or dedicated medical node acts as the base hub / district hospital
         hub_coords = settlement_feats[0]["geometry"]["coordinates"]
         hub_node = self._find_nearest_node(G, (round(hub_coords[0], 4), round(hub_coords[1], 4)))
-        hub_name = settlement_feats[0]["properties"]["name"]
+        raw_name = settlement_feats[0]["properties"]["name"]
+        hub_name = raw_name if ("Hospital" in raw_name or "Medical" in raw_name or "Clinic" in raw_name) else f"{raw_name} District Medical Center"
 
         results = []
         for idx, feature in enumerate(settlement_feats):

@@ -80,3 +80,36 @@ def test_osm_fetcher_api_key_and_fallback():
         assert res_no_key['roads'].exists()
         assert res_no_key['buildings'].exists()
 
+def test_ocean_detection_and_zero_infrastructure():
+    with tempfile.TemporaryDirectory() as tmpdir:
+        tmp_path = Path(tmpdir)
+        # Mid Arabian Sea: [65.0, 15.0] to [65.5, 15.5]
+        ocean_aoi = {
+            "type": "Polygon",
+            "coordinates": [[[65.0, 15.0], [65.5, 15.0], [65.5, 15.5], [65.0, 15.5], [65.0, 15.0]]]
+        }
+
+        fetcher = OSMFetcher()
+        osm_paths = fetcher.fetch_infrastructure(ocean_aoi, tmp_path)
+
+        import json
+        with open(osm_paths['roads'], 'r', encoding='utf-8') as f:
+            roads = json.load(f)
+        with open(osm_paths['buildings'], 'r', encoding='utf-8') as f:
+            buildings = json.load(f)
+        with open(osm_paths['settlements'], 'r', encoding='utf-8') as f:
+            settlements = json.load(f)
+
+        assert len(roads['features']) == 0
+        assert len(buildings['features']) == 0
+        assert len(settlements['features']) == 0
+
+        # Assess damage in sea
+        sar_proc = SARProcessor()
+        sar_res = sar_proc.compute_change_mask(tmp_path / 'pre.tif', tmp_path / 'post.tif', ocean_aoi, tmp_path)
+        assessor = DamageAssessor()
+        damage_res = assessor.assess(sar_res['mask_geojson'], osm_paths, tmp_path)
+        assert damage_res['buildings_affected'] == 0
+        assert damage_res['roads_damaged_km'] == 0.0
+        assert damage_res['bridges_damaged'] == 0
+

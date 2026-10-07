@@ -109,3 +109,23 @@ def test_generate_and_fetch_situation_report(client, sample_job):
     get_resp = client.get(f'/api/analysis/{sample_job.id}/report/')
     assert get_resp.status_code == 200
     assert get_resp.data['report_english'] == post_resp.data['report_english']
+
+@pytest.mark.django_db
+def test_rescuer_copilot_qa_endpoint(client, sample_job):
+    resp = client.post(
+        f'/api/analysis/{sample_job.id}/copilot-qa/',
+        data={"question": "Which settlements are cut off from the hospital?"},
+        format='json'
+    )
+    assert resp.status_code == 200
+    assert 'answer' in resp.data
+    assert len(resp.data['answer']) > 10
+    assert 'Ghatta' in resp.data['answer'] or 'settlement' in resp.data['answer']
+
+@pytest.mark.django_db
+def test_emsr927_validation_endpoint(client, sample_job):
+    resp = client.get(f'/api/analysis/{sample_job.id}/emsr927-validation/')
+    assert resp.status_code == 200
+    assert resp.data['activation_id'] == 'EMSR927'
+    assert 'metrics' in resp.data
+    assert resp.data['metrics']['intersection_over_union_iou'] > 0.70

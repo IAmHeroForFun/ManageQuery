@@ -191,6 +191,11 @@ def run_flood_analysis(job_id: str, *args, **kwargs):
                     'path_geojson': path_result['path_geojson'],
                     'settlements_on_path': path_result['settlements_on_path'],
                     'path_length_km': path_result['path_length_km'],
+                    'start_elevation_m': path_result.get('start_elevation_m', 0),
+                    'end_elevation_m': path_result.get('end_elevation_m', 0),
+                    'elevation_drop_m': path_result.get('elevation_drop_m', 0),
+                    'avg_speed_kmh': path_result.get('avg_speed_kmh', 0.0),
+                    'settlement_etas': path_result.get('settlement_etas', '[]'),
                 }
             )
 

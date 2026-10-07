@@ -9,13 +9,37 @@
         <div class="map-header">
             <div>
                 <h2>Select Area of Interest (AOI)</h2>
-                <p>Draw a rectangle with the map tool <strong>OR</strong> enter coordinates manually in the panel.</p>
+                <p>Drag the box or its corner handles on the map, choose a preset, or click map to reposition.</p>
             </div>
-            <button type="button" id="btn-load-trishuli" class="btn btn-preset">
-                🏔️ Load Trishuli Flood Preset
+            <div class="map-quick-actions">
+                <button type="button" id="btn-recenter-aoi" class="btn btn-secondary btn-sm" title="Center box at current map view">
+                    🎯 Center Box Here
+                </button>
+            </div>
+        </div>
+
+        <!-- Quick Region Presets Bar -->
+        <div class="preset-chips-bar">
+            <span class="chips-label">Quick Regions:</span>
+            <button type="button" class="preset-chip active" data-preset="trishuli">
+                🏔️ Trishuli Basin, Nepal
+            </button>
+            <button type="button" class="preset-chip" data-preset="gujarat">
+                🌊 Gujarat Coast, India
+            </button>
+            <button type="button" class="preset-chip" data-preset="melamchi">
+                🌊 Melamchi Basin, Nepal
+            </button>
+            <button type="button" class="preset-chip" data-preset="rhine">
+                🏞️ Rhine Valley, Europe
             </button>
         </div>
+
         <div id="map" class="map-container" style="min-height: 600px; height: 600px; width: 100%; display: block;"></div>
+        
+        <div class="map-helper-tip">
+            💡 <strong>Pro-Tip:</strong> Grab the <strong>white center handle (✥)</strong> to slide the entire box anywhere on Earth, or drag the <strong>corner circles (⚪)</strong> to resize. Click the map anytime to place the purple Upstream Origin!
+        </div>
     </div>
 
     <!-- Right: Configuration Panel -->
@@ -29,29 +53,33 @@
                     <small class="form-text">Pre/post satellite imagery pairs will be filtered around this date.</small>
                 </div>
 
-                <!-- Manual AOI Bounding Box Coordinates -->
-                <div class="form-group manual-coord-group">
-                    <label>AOI Bounding Box Coordinates (Editable)</label>
-                    <div class="bbox-grid">
-                        <div>
-                            <span class="coord-label">Min Lon (West):</span>
-                            <input type="number" step="0.0001" id="aoi-min-lon" class="form-control" value="85.1500" required>
+                <!-- Collapsible Advanced Coordinates -->
+                <details class="advanced-coords-details" id="details-coords">
+                    <summary class="advanced-coords-summary">
+                        <span>⚙️ Fine-Tune Coordinates (Optional)</span>
+                    </summary>
+                    <div class="form-group manual-coord-group">
+                        <div class="bbox-grid">
+                            <div>
+                                <span class="coord-label">Min Lon (West):</span>
+                                <input type="number" step="0.0001" id="aoi-min-lon" class="form-control" value="85.1500" required>
+                            </div>
+                            <div>
+                                <span class="coord-label">Min Lat (South):</span>
+                                <input type="number" step="0.0001" id="aoi-min-lat" class="form-control" value="27.9500" required>
+                            </div>
+                            <div>
+                                <span class="coord-label">Max Lon (East):</span>
+                                <input type="number" step="0.0001" id="aoi-max-lon" class="form-control" value="85.5500" required>
+                            </div>
+                            <div>
+                                <span class="coord-label">Max Lat (North):</span>
+                                <input type="number" step="0.0001" id="aoi-max-lat" class="form-control" value="28.4500" required>
+                            </div>
                         </div>
-                        <div>
-                            <span class="coord-label">Min Lat (South):</span>
-                            <input type="number" step="0.0001" id="aoi-min-lat" class="form-control" value="27.9500" required>
-                        </div>
-                        <div>
-                            <span class="coord-label">Max Lon (East):</span>
-                            <input type="number" step="0.0001" id="aoi-max-lon" class="form-control" value="85.5500" required>
-                        </div>
-                        <div>
-                            <span class="coord-label">Max Lat (North):</span>
-                            <input type="number" step="0.0001" id="aoi-max-lat" class="form-control" value="28.4500" required>
-                        </div>
+                        <small class="form-text">Coordinates automatically stay in sync with the interactive map box.</small>
                     </div>
-                    <small class="form-text">Type coordinates manually or draw on the map; both sync automatically.</small>
-                </div>
+                </details>
 
                 <div class="form-group">
                     <label class="checkbox-label">
@@ -87,7 +115,7 @@
 
                 <div id="aoi-status" class="aoi-status-box">
                     <span class="status-indicator"></span>
-                    <span id="aoi-status-text">AOI ready: Trishuli River Corridor (Nepal)</span>
+                    <span id="aoi-status-text">AOI ready: Selected Disaster Analysis Envelope</span>
                 </div>
 
                 <button type="submit" id="btn-submit" class="btn btn-primary btn-block">

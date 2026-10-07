@@ -129,31 +129,63 @@ class DamageAssessor:
             return "possibly_affected"
         return "not_affected"
 
-    def _calculate_linestring_overlap(self, line_coords: List[List[float]], poly_coords: List[List[float]]) -> float:
-        if not line_coords or not poly_coords:
-            return 0.0
-        min_lon = min(p[0] for p in poly_coords)
-        max_lon = max(p[0] for p in poly_coords)
-        min_lat = min(p[1] for p in poly_coords)
-        max_lat = max(p[1] for p in poly_coords)
+    def _point_in_polygon(self, x: float, y: float, poly: List[List[float]]) -> bool:
+        """
+        Ray-casting Point-in-Polygon (PIP) test.
+        Accurately determines whether point (x, y) is inside poly vertices.
+        """
+        n = len(poly)
+        if n < 3:
+            return False
+        inside = False
+        p1x, p1y = poly[0]
+        for i in range(n + 1):
+            p2x, p2y = poly[i % n]
+            if y > min(p1y, p2y):
+                if y <= max(p1y, p2y):
+                    if x <= max(p1x, p2x):
+                        if p1y != p2y:
+                            xinters = (y - p1y) * (p2x - p1x) / (p2y - p1y) + p1x
+                        if p1x == p2x or x <= xinters:
+                            inside = not inside
+            p1x, p1y = p2x, p2y
+        return inside
 
-        in_count = sum(1 for pt in line_coords if min_lon <= pt[0] <= max_lon and min_lat <= pt[1] <= max_lat)
-        ratio = in_count / len(line_coords)
-        return min(ratio * 100.0, 100.0)
+    def _calculate_linestring_overlap(self, line_coords: List[List[float]], poly_coords: List[List[float]]) -> float:
+        if not line_coords or not poly_coords or len(poly_coords) < 3:
+            return 0.0
+
+        # Sample points along the linestring to accurately calculate intersection percentage
+        in_count = 0
+        total_samples = 0
+        for i in range(len(line_coords) - 1):
+            p1 = line_coords[i]
+            p2 = line_coords[i+1]
+            # Test endpoints and intermediate subdivisions
+            for step in (0.0, 0.33, 0.66):
+                sx = p1[0] + step * (p2[0] - p1[0])
+                sy = p1[1] + step * (p2[1] - p1[1])
+                total_samples += 1
+                if self._point_in_polygon(sx, sy, poly_coords):
+                    in_count += 1
+
+        if total_samples == 0:
+            return 0.0
+        return min((in_count / total_samples) * 100.0, 100.0)
 
     def _calculate_polygon_overlap(self, bldg_coords: List[List[float]], poly_coords: List[List[float]]) -> float:
-        if not bldg_coords or not poly_coords:
+        if not bldg_coords or not poly_coords or len(poly_coords) < 3:
             return 0.0
         centroid_lon = sum(p[0] for p in bldg_coords) / len(bldg_coords)
         centroid_lat = sum(p[1] for p in bldg_coords) / len(bldg_coords)
 
-        min_lon = min(p[0] for p in poly_coords)
-        max_lon = max(p[0] for p in poly_coords)
-        min_lat = min(p[1] for p in poly_coords)
-        max_lat = max(p[1] for p in poly_coords)
-
-        if min_lon <= centroid_lon <= max_lon and min_lat <= centroid_lat <= max_lat:
-            return 85.0
+        # Check if building centroid is truly inside the flood polygon
+        if self._point_in_polygon(centroid_lon, centroid_lat, poly_coords):
+            return 90.0
+        # Check corners
+        corners_inside = sum(1 for pt in bldg_coords if self._point_in_polygon(pt[0], pt[1], poly_coords))
+        if corners_inside > 0:
+            return (corners_inside / len(bldg_coords)) * 100.0
         return 0.0
 
     def _calculate_linestring_length_km(self, coords: List[List[float]]) -> float:

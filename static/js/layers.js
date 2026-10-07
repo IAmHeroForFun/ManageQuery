@@ -7,7 +7,8 @@ const MapLayers = {
     buildings: null,
     cutoff: null,
     path: null,
-    unet: null
+    unet: null,
+    emsr927: null
 };
 
 // Map of village name -> { latlng, layer }
@@ -212,12 +213,35 @@ async function loadFloodPathLayer(map, jobId) {
             },
             onEachFeature: (feature, layer) => {
                 const p = feature.properties;
+                let etaHtml = '';
+                if (p.settlement_etas && p.settlement_etas.length > 0) {
+                    etaHtml = `
+                        <div style="margin-top:6px; border-top:1px solid #e2e8f0; padding-top:4px;">
+                            <strong>⏱️ Downstream Surge Arrival (ETA):</strong>
+                            <div style="max-height:110px; overflow-y:auto; margin-top:3px;">
+                                ${p.settlement_etas.map(s => `
+                                    <div style="display:flex; justify-content:space-between; font-size:11px; margin-bottom:2px;">
+                                        <span>📍 <strong>${s.name}</strong> (${s.distance_from_origin_km} km)</span>
+                                        <span style="color:#d97706; font-weight:700;">+${s.eta_formatted}</span>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+                    `;
+                } else if (p.settlements_on_path && p.settlements_on_path.length > 0) {
+                    etaHtml = `<strong>Settlements on trajectory:</strong><br>${p.settlements_on_path.join(', ')}`;
+                }
+
                 layer.bindPopup(`
-                    <div style="font-size:12px;">
-                        <strong style="color:#9333ea;">🟣 D8 Downhill Flow Path</strong><br>
-                        <strong>Length:</strong> ${p.path_length_km} km<br>
-                        <strong>Settlements on trajectory:</strong><br>
-                        ${(p.settlements_on_path || []).join(', ')}
+                    <div style="font-size:12px; min-width: 220px;">
+                        <strong style="color:#9333ea; font-size:13px;">🟣 Downhill Flow Corridor (OSM/D8)</strong><br>
+                        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:4px; margin: 5px 0; background:#faf5ff; padding:5px; border-radius:4px; font-size:11px;">
+                            <div><strong>Path Length:</strong><br>${p.path_length_km} km</div>
+                            <div><strong>Elevation Drop:</strong><br>📉 -${p.elevation_drop_m || '--'} m</div>
+                            <div><strong>Headwater Elev:</strong><br>🏔️ ${p.start_elevation_m || '--'} m</div>
+                            <div><strong>Surge Velocity:</strong><br>⚡ ~${p.avg_speed_kmh || '--'} km/h</div>
+                        </div>
+                        ${etaHtml}
                     </div>
                 `);
             }

@@ -24,10 +24,12 @@ Production deployment should add token auth via `djangorestframework-simplejwt`.
 | `GET` | `/api/analysis/{id}/flood-extent/` | GeoJSON of flood/debris extent |
 | `GET` | `/api/analysis/{id}/damaged-features/` | GeoJSON of damaged OSM features |
 | `GET` | `/api/analysis/{id}/cutoff-settlements/` | GeoJSON of cut-off settlements |
-| `GET` | `/api/analysis/{id}/flood-path/` | GeoJSON of traced flood path |
+| `GET` | `/api/analysis/{id}/flood-path/` | GeoJSON of traced flood path with elevation & ETAs |
 | `GET` | `/api/analysis/{id}/segmentation/` | U-Net segmentation result info |
 | `POST` | `/api/analysis/{id}/report/` | Trigger Gemini situation report generation |
 | `GET` | `/api/analysis/{id}/report/` | Fetch generated situation report |
+| `POST` | `/api/analysis/{id}/copilot-qa/` | Interactive Q&A copilot grounded in pipeline statistics |
+| `GET` | `/api/analysis/{id}/emsr927-validation/` | Official Copernicus EMS EMSR927 activation validation metrics |
 
 ---
 
@@ -372,20 +374,87 @@ Fetch a previously generated report.
 
 ---
 
-## URL Configuration (`analysis/urls.py`)
+### `POST /api/analysis/{id}/copilot-qa/`
+
+Interactive Q&A copilot designed for emergency responders. Answers natural language questions strictly grounded in the verified damage statistics snapshot.
+
+**Request body:**
+```json
+{
+  "question": "Which settlements lost road connectivity to medical facilities?"
+}
+```
+
+**Response `200 OK`:**
+```json
+{
+  "question": "Which settlements lost road connectivity to medical facilities?",
+  "answer": "Based on satellite and road network analysis, 3 settlements are currently cut off: Jalalpore, Maroli, and Jesiya Faliya. All intact road access to regional medical facilities has been severed. Prioritized emergency aerial rescue is recommended.",
+  "grounding_stats": {
+    "flood_date": "2026-08-26",
+    "area_name": "Matwad Valley / Regional Corridor",
+    "flood_area_km2": 274.2,
+    "buildings_affected": 15,
+    "roads_damaged_km": 71.9,
+    "settlements_cutoff": 3,
+    "cutoff_settlement_names": ["Jalalpore", "Maroli", "Jesiya Faliya"]
+  }
+}
+```
+
+---
+
+### `GET /api/analysis/{id}/emsr927-validation/`
+
+Retrieves Copernicus Emergency Management Service (EMS) EMSR927 activation reference validation benchmark metrics.
+
+**Response `200 OK`:**
+```json
+{
+  "activation_id": "EMSR927",
+  "event_title": "August 2026 Trishuli Flood & Debris Flow, Nepal",
+  "reference_agency": "Copernicus Emergency Management Service (EMS)",
+  "pipeline_flood_area_km2": 274.2,
+  "emsr927_reference_area_km2": 257.7,
+  "metrics": {
+    "intersection_over_union_iou": 0.81,
+    "precision": 0.86,
+    "recall": 0.84,
+    "f1_score": 0.85
+  },
+  "attribution": "European Union, Copernicus Emergency Management Service data (EMSR927, validation use only)."
+}
+```
+
+---
+
+## URL Configuration (`apps/analysis/urls.py`)
 
 ```python
 from django.urls import path
-from . import views
+from .views import (
+    AnalysisJobListCreateView,
+    AnalysisJobDetailView,
+    FloodExtentView,
+    DamagedFeaturesView,
+    CutoffSettlementsView,
+    FloodPathView,
+    SegmentationView,
+    SituationReportView,
+    RescuerCopilotQAView,
+    EMSR927ValidationView,
+)
 
 urlpatterns = [
-    path('analysis/', views.AnalysisJobListCreateView.as_view()),
-    path('analysis/<uuid:pk>/', views.AnalysisJobDetailView.as_view()),
-    path('analysis/<uuid:pk>/flood-extent/', views.FloodExtentView.as_view()),
-    path('analysis/<uuid:pk>/damaged-features/', views.DamagedFeaturesView.as_view()),
-    path('analysis/<uuid:pk>/cutoff-settlements/', views.CutoffSettlementsView.as_view()),
-    path('analysis/<uuid:pk>/flood-path/', views.FloodPathView.as_view()),
-    path('analysis/<uuid:pk>/segmentation/', views.SegmentationView.as_view()),
-    path('analysis/<uuid:pk>/report/', views.SituationReportView.as_view()),
+    path('analysis/', AnalysisJobListCreateView.as_view(), name='analysis-list-create'),
+    path('analysis/<uuid:pk>/', AnalysisJobDetailView.as_view(), name='analysis-detail'),
+    path('analysis/<uuid:pk>/flood-extent/', FloodExtentView.as_view(), name='analysis-flood-extent'),
+    path('analysis/<uuid:pk>/damaged-features/', DamagedFeaturesView.as_view(), name='analysis-damaged-features'),
+    path('analysis/<uuid:pk>/cutoff-settlements/', CutoffSettlementsView.as_view(), name='analysis-cutoff-settlements'),
+    path('analysis/<uuid:pk>/flood-path/', FloodPathView.as_view(), name='analysis-flood-path'),
+    path('analysis/<uuid:pk>/segmentation/', SegmentationView.as_view(), name='analysis-segmentation'),
+    path('analysis/<uuid:pk>/report/', SituationReportView.as_view(), name='analysis-report'),
+    path('analysis/<uuid:pk>/copilot-qa/', RescuerCopilotQAView.as_view(), name='analysis-copilot-qa'),
+    path('analysis/<uuid:pk>/emsr927-validation/', EMSR927ValidationView.as_view(), name='analysis-emsr927-validation'),
 ]
 ```

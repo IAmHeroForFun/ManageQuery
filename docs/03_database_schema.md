@@ -172,6 +172,11 @@ Downstream flood path from a given upstream source point.
 | `path_geojson` | TextField | GeoJSON LineString of traced path |
 | `settlements_on_path` | TextField | JSON array of settlement names along path |
 | `path_length_km` | FloatField | Total traced path length in km |
+| `start_elevation_m` | IntegerField | Elevation at upstream origin point (meters) |
+| `end_elevation_m` | IntegerField | Elevation at downstream terminus (meters) |
+| `elevation_drop_m` | IntegerField | Total vertical descent $\Delta h$ (meters) |
+| `avg_speed_kmh` | FloatField | Estimated hydrodynamic surge velocity (km/h) |
+| `settlement_etas` | TextField | JSON list of settlement arrival distances & ETAs |
 
 ---
 

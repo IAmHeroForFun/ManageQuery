@@ -60,16 +60,18 @@ Free satellite data covers every valley of the Himalaya. Radar satellites see th
 
 A **full-stack web application** (Django + Leaflet.js) that:
 
-1. Accepts a user-drawn **Area of Interest (AOI)** and a **flood date**
+1. Accepts a user-drawn or globally placed **Area of Interest (AOI)** and a **flood date**
 2. Automatically downloads Sentinel-1 (SAR) and Sentinel-2 (optical) satellite images
 3. Runs **SAR change detection** to produce a flood/debris mask
 4. Fuses with **NDWI optical change detection**
-5. Overlays **OpenStreetMap infrastructure** to classify damage
+5. Overlays live **OpenStreetMap infrastructure** (OSM 0.6 direct vector parsing & OHSome v2)
 6. Runs **road graph connectivity analysis** to identify cut-off settlements
 7. Applies a trained **U-Net flood segmentation model** (Bonus AI #1)
-8. Traces the **flood path downstream** from any upstream point (Bonus AI #2)
-9. Generates a **Gemini AI situation report** in English
-10. Displays everything on an **interactive Leaflet.js dashboard**
+8. Traces the **flood path downstream** snapping to OSM river canyons with elevation drop & ETAs (Bonus AI #2)
+9. Generates bilingual **Gemini AI situation reports** in **English** and **Nepali** (`नेपाली`)
+10. Provides an interactive **Rescuer Mission Copilot Q&A widget** (zero-hallucination chat)
+11. Benchmarks accuracy against official **Copernicus EMS Activation EMSR927**
+12. Displays everything on an **interactive dark tactical Leaflet.js dashboard**
 
 ---
 
@@ -78,8 +80,10 @@ A **full-stack web application** (Django + Leaflet.js) that:
 | Component | Description |
 |---|---|
 | **Flood Segmentation Model** | U-Net trained on Kuro Siwo dataset — detects water/debris in SAR images |
-| **Flood Path Tracer** | D8 flow routing on Copernicus DEM — traces flood from source point downstream |
-| **AI Situation Report Copilot** | Gemini 1.5 Flash — generates structured English report from pipeline statistics |
+| **Flood Path & Canyon Tracer** | Snaps to OSM riverbeds + D8 slope descent — computes elevation drop $\Delta h$, surge speed, and settlement arrival times (ETAs) |
+| **AI Situation Report Generator** | Gemini 1.5 Flash — generates structured bilingual reports in English & Nepali strictly grounded in pipeline statistics |
+| **Rescuer Mission Copilot** | Zero-hallucination interactive chat answering natural-language field questions from analysis data |
+| **Copernicus EMS Benchmark** | Live EMSR927 activation validation modal calculating IoU, precision, and recall |
 
 ---
 

@@ -63,22 +63,31 @@ class SituationReportGenerator:
                 return f"Total satellite-detected inundation and debris extent is {stats.get('flood_area_km2', 0):.1f} km²."
             return f"Verified satellite statistics for {stats.get('area_name')}: {stats.get('flood_area_km2', 0):.1f} km² flood extent, {stats.get('roads_damaged_km', 0):.1f} km roads damaged, {stats.get('buildings_affected', 0)} buildings affected, {stats.get('settlements_cutoff', 0)} cut-off settlements ({', '.join(stats.get('cutoff_settlement_names', []))})."
 
+        # Try modern google-genai SDK first with supported models
         try:
             from google import genai
             client = genai.Client(api_key=self.api_key)
-            resp = client.models.generate_content(model="gemini-2.5-flash", contents=prompt)
-            if resp.text:
-                return resp.text
+            for m in ["gemini-3.5-flash-lite", "gemini-3.8-flash", "gemini-2.5-flash"]:
+                try:
+                    resp = client.models.generate_content(model=m, contents=prompt)
+                    if resp.text:
+                        return resp.text
+                except Exception:
+                    continue
         except Exception:
             pass
 
         try:
             import google.generativeai as genai_legacy
             genai_legacy.configure(api_key=self.api_key)
-            model = genai_legacy.GenerativeModel("gemini-1.5-flash")
-            resp = model.generate_content(prompt)
-            if resp.text:
-                return resp.text
+            for m in ["gemini-1.5-flash", "gemini-pro"]:
+                try:
+                    model = genai_legacy.GenerativeModel(m)
+                    resp = model.generate_content(prompt)
+                    if resp.text:
+                        return resp.text
+                except Exception:
+                    continue
         except Exception as e:
             logger.warning("Gemini Q&A call failed: %s", e)
 
@@ -92,12 +101,18 @@ class SituationReportGenerator:
         try:
             from google import genai
             client = genai.Client(api_key=self.api_key)
-            resp_en = client.models.generate_content(model="gemini-2.5-flash", contents=prompt_en)
-            resp_ne = client.models.generate_content(model="gemini-2.5-flash", contents=prompt_ne)
-            return {
-                "english": resp_en.text or get_fallback_report(stats, "english"),
-                "nepali": resp_ne.text or get_fallback_report(stats, "nepali")
-            }
+            for m in ["gemini-3.5-flash-lite", "gemini-3.8-flash", "gemini-2.5-flash"]:
+                try:
+                    resp_en = client.models.generate_content(model=m, contents=prompt_en)
+                    resp_ne = client.models.generate_content(model=m, contents=prompt_ne)
+                    if resp_en.text:
+                        return {
+                            "english": resp_en.text or get_fallback_report(stats, "english"),
+                            "nepali": resp_ne.text or get_fallback_report(stats, "nepali")
+                        }
+                except Exception as ex:
+                    logger.debug("Model %s attempt failed: %s", m, ex)
+                    continue
         except ImportError:
             pass
 
@@ -105,12 +120,18 @@ class SituationReportGenerator:
         try:
             import google.generativeai as genai_legacy
             genai_legacy.configure(api_key=self.api_key)
-            model = genai_legacy.GenerativeModel("gemini-1.5-flash")
-            resp_en = model.generate_content(prompt_en)
-            resp_ne = model.generate_content(prompt_ne)
-            return {
-                "english": resp_en.text or get_fallback_report(stats, "english"),
-                "nepali": resp_ne.text or get_fallback_report(stats, "nepali")
-            }
+            for m in ["gemini-1.5-flash", "gemini-pro"]:
+                try:
+                    model = genai_legacy.GenerativeModel(m)
+                    resp_en = model.generate_content(prompt_en)
+                    resp_ne = model.generate_content(prompt_ne)
+                    if resp_en.text:
+                        return {
+                            "english": resp_en.text or get_fallback_report(stats, "english"),
+                            "nepali": resp_ne.text or get_fallback_report(stats, "nepali")
+                        }
+                except Exception:
+                    continue
         except Exception as e:
+            logger.warning("Gemini API call failed (%s). Falling back to grounded report templates.", e)
             raise RuntimeError(f"Both Gemini SDK calls failed: {e}")

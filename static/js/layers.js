@@ -71,25 +71,39 @@ async function loadDamagedFeaturesLayer(map, jobId) {
         const roadFeatures = data.features.filter(f => f.properties.osm_type === 'road' || f.properties.osm_type === 'bridge');
         const buildingFeatures = data.features.filter(f => f.properties.osm_type === 'building');
 
-        // Roads Layer
+        // Separate road segments and bridges for crisp styling
         MapLayers.roads = L.geoJSON({ type: "FeatureCollection", features: roadFeatures }, {
             style: (feature) => {
                 const status = feature.properties.status;
+                const isBridge = feature.properties.osm_type === 'bridge';
+                const isAffected = status === 'affected';
+                
                 return {
-                    color: status === 'affected' ? '#ef4444' : '#f97316',
-                    weight: status === 'affected' ? 4 : 2.5,
-                    dashArray: status === 'affected' ? null : '4, 4',
-                    opacity: 0.95
+                    color: isAffected ? '#ef4444' : '#f97316',
+                    weight: isBridge ? 5.5 : (isAffected ? 3.5 : 2.5),
+                    lineCap: 'round',
+                    lineJoin: 'round',
+                    dashArray: null, // Solid clean lines to avoid crossing dashes
+                    opacity: isBridge ? 1.0 : 0.92
                 };
             },
             onEachFeature: (feature, layer) => {
                 const p = feature.properties;
+                const isSevered = p.status === 'affected';
+                const isBridge = p.osm_type === 'bridge';
                 layer.bindPopup(`
-                    <div style="font-size:12px;">
-                        <strong style="color:#dc2626;">🛣️ ${p.osm_name || 'Infrastructure Segment'}</strong><br>
-                        <strong>Type:</strong> ${p.osm_type.toUpperCase()}<br>
-                        <strong>Status:</strong> <span style="font-weight:700; color:${p.status === 'affected' ? '#dc2626' : '#d97706'}">${p.status.toUpperCase()}</span><br>
-                        <strong>Flood Overlap:</strong> ${p.overlap_pct}%
+                    <div style="font-size:12px; min-width: 210px;">
+                        <strong style="color:${isSevered ? '#dc2626' : '#d97706'}; font-size:13px;">
+                            ${isBridge ? '🌉 ' + (isSevered ? 'SEVERED BRIDGE' : 'BRIDGE AT RISK') : (isSevered ? '🚫 SEVERED ROAD' : '⚠️ CAUTION: WATERLOGGED ROAD')}
+                        </strong><br>
+                        <strong>Name:</strong> ${p.osm_name || (isBridge ? 'River Crossing Bridge' : 'Corridor Road')}<br>
+                        <strong>Infrastructure:</strong> ${p.osm_type.toUpperCase()}<br>
+                        <strong>Vehicle Passability:</strong> 
+                        <span style="font-weight:700; color:${isSevered ? '#dc2626' : '#d97706'};">
+                            ${isSevered ? 'IMPASSABLE TO AMBULANCES' : 'SLOW / 4WD ONLY'}
+                        </span><br>
+                        <strong>Submerged Overlap:</strong> ${p.overlap_pct}%<br>
+                        <small style="color:#64748b;">Source: OpenStreetMap intersected with satellite radar footprint.</small>
                     </div>
                 `);
             }
@@ -107,13 +121,16 @@ async function loadDamagedFeaturesLayer(map, jobId) {
                 const p = feature.properties;
                 layer.bindPopup(`
                     <div style="font-size:12px;">
-                        <strong style="color:#991b1b;">🏚️ Building: ${p.osm_name || p.osm_id}</strong><br>
-                        <strong>Damage:</strong> ${p.status.toUpperCase()}<br>
-                        <strong>Overlap:</strong> ${p.overlap_pct}%
+                        <strong style="color:#991b1b; font-size:13px;">🏚️ Flood-Impacted Structure</strong><br>
+                        <strong>Building ID/Name:</strong> ${p.osm_name || p.osm_id}<br>
+                        <strong>Status:</strong> <span style="font-weight:700; color:#dc2626;">SUBMERGED / STRUCTURAL THREAT</span><br>
+                        <strong>Footprint Inundation:</strong> ${p.overlap_pct}%
                     </div>
                 `);
             }
-        }).addTo(map);
+        });
+
+        // Cutoff settlements layer
     } catch (e) {
         console.warn("Could not load damaged features layer:", e);
     }
@@ -147,14 +164,15 @@ async function loadCutoffSettlementsLayer(map, jobId) {
                 };
 
                 layer.bindPopup(`
-                    <div style="font-size:12px;">
-                        <strong style="color:${p.is_cutoff ? '#ef4444' : '#16a34a'};">
-                            ${p.is_cutoff ? '🚫 Isolated Settlement' : '✅ Connected Settlement'}
+                    <div style="font-size:12px; min-width: 220px;">
+                        <strong style="color:${p.is_cutoff ? '#ef4444' : '#16a34a'}; font-size:13px;">
+                            ${p.is_cutoff ? '🚨 PRIORITY 1: ISOLATED COMMUNITY' : '✅ GROUND EVACUATION ACCESSIBLE'}
                         </strong><br>
                         <strong>Village Name:</strong> ${p.name}<br>
-                        <strong>Medical Facility:</strong> ${p.nearest_hospital || 'Regional Hospital'}<br>
-                        <strong>Route Distance:</strong> ${p.pre_flood_distance_km || '--'} km<br>
-                        <strong>Road Status:</strong> ${p.is_cutoff ? '<span style="color:#ef4444;font-weight:700;">NO INTACT ROAD ACCESS</span>' : '<span style="color:#16a34a;font-weight:700;">DRIVABLE ACCESS OK</span>'}
+                        <strong>Nearest Medical Center:</strong> ${p.nearest_hospital || 'District Hospital'}<br>
+                        <strong>Pre-Flood Highway Distance:</strong> ${p.pre_flood_distance_km || '--'} km<br>
+                        <strong>Ground Accessibility:</strong> 
+                        ${p.is_cutoff ? '<span style="color:#ef4444;font-weight:700;">ALL ROADS SEVERED — REQUIRES AIRLIFT</span>' : '<span style="color:#16a34a;font-weight:700;">DRIVABLE ROAD ROUTE INTACT</span>'}
                     </div>
                 `);
             }

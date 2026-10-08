@@ -215,6 +215,11 @@ by the European Union and ESA; all rights reserved.
 
 Training data: Bountos et al., 2024 (Kuro Siwo, MIT License).
 NeurIPS 2024. https://github.com/Orion-AI-Lab/KuroSiwo
+
+Theoretical Foundation:
+Lillesand, T. M., Kiefer, R. W., & Chipman, J. W. (2015).
+Remote Sensing and Image Interpretation (7th ed.). John Wiley & Sons.
+ISBN: 978-1-118-34328-9.
 ```
 
 ---

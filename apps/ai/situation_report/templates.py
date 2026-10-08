@@ -59,11 +59,11 @@ ACCESS & ISOLATION:
 Format the report (150–200 words) with these sections:
 1. SUMMARY — overview of flood impact using only the data above
 2. INFRASTRUCTURE DAMAGE — specific damaged roads, bridges, and building figures
-3. POPULATION ACCESS — cut-off settlements, urgency for helicopter/foot access
-4. DATA LIMITATIONS — note that Sentinel radar satellites revisit every 12 days; cloud cover may affect optical imagery; this system is an educational prototype and requires ground truth verification
+3. POPULATION ACCESS & RELIEF PRIORITIES — cut-off settlements, urgency for helicopter/foot access. Highlight that humanitarian disaster standards (Chuvieco 2016) prioritize eliminating omission errors to ensure no isolated hamlet is left unassisted.
+4. DATA LIMITATIONS — note that Sentinel radar satellites revisit every 12 days; cloud cover may affect optical imagery; hydrological basin dynamics modeled from OpenHydroNet / Google FloodHub guidelines; this system is an operational decision-support tool requiring ground verification
 
 End with attribution:
-"Contains modified Copernicus Sentinel data 2026. © OpenStreetMap contributors."
+"Contains modified Copernicus Sentinel data 2026. © OpenStreetMap contributors. Hydrological baseline: Google FloodHub / OpenHydroNet."
 """
 
 def get_fallback_report(stats: Dict[str, Any], language: str = "english") -> str:

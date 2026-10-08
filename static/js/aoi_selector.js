@@ -12,27 +12,37 @@ document.addEventListener('DOMContentLoaded', () => {
     let activeRectLayer = null;
     let sourceMarker = null;
 
-    // Region Presets (Coordinates & Optimal Views for global floodplains)
+    // Fixed 1-Size Footprint: Locked to ~18 x 18 km (0.16° x 0.16°) for maximum satellite & DEM accuracy
+    const FIXED_SPAN_LON = 0.1600;
+    const FIXED_SPAN_LAT = 0.1600;
+    const HALF_SPAN_LON = FIXED_SPAN_LON / 2; // 0.0800
+    const HALF_SPAN_LAT = FIXED_SPAN_LAT / 2; // 0.0800
+
+    // Region Presets (Locked to exact 18 x 18 km high-accuracy operational box)
     const REGION_PRESETS = {
         trishuli: {
             name: "Trishuli Basin, Nepal",
-            minLon: 85.1500, minLat: 27.9500, maxLon: 85.5500, maxLat: 28.4500,
-            sourceLon: 85.4500, sourceLat: 28.3600
-        },
-        gujarat: {
-            name: "Gujarat Coast, India",
-            minLon: 72.8200, minLat: 20.8400, maxLon: 72.9800, maxLat: 20.9800,
-            sourceLon: 72.9400, sourceLat: 20.9600
+            floodDate: "2026-08-26",
+            minLon: 85.2700, minLat: 28.1000, maxLon: 85.4300, maxLat: 28.2600,
+            sourceLon: 85.4000, sourceLat: 28.2300
         },
         melamchi: {
             name: "Melamchi River Basin, Nepal",
-            minLon: 85.4800, minLat: 27.7800, maxLon: 85.6800, maxLat: 28.0800,
-            sourceLon: 85.6000, sourceLat: 28.0200
+            floodDate: "2021-06-15",
+            minLon: 85.5000, minLat: 27.8500, maxLon: 85.6600, maxLat: 28.0100,
+            sourceLon: 85.6000, sourceLat: 27.9800
+        },
+        gujarat: {
+            name: "Gujarat Coast, India",
+            floodDate: "2024-08-28",
+            minLon: 72.8200, minLat: 20.8300, maxLon: 72.9800, maxLat: 20.9900,
+            sourceLon: 72.9400, sourceLat: 20.9600
         },
         rhine: {
             name: "Rhine Valley, Europe",
-            minLon: 7.0000, minLat: 50.4500, maxLon: 7.2000, maxLat: 50.6000,
-            sourceLon: 7.1500, sourceLat: 50.5600
+            floodDate: "2021-07-14",
+            minLon: 7.0200, minLat: 50.4500, maxLon: 7.1800, maxLat: 50.6100,
+            sourceLon: 7.1400, sourceLat: 50.5700
         }
     };
 
@@ -67,35 +77,26 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const statusEl = document.getElementById('aoi-status-text');
         if (statusEl) {
-            const widthKm = ((maxLon - minLon) * 105).toFixed(1);
-            const heightKm = ((maxLat - minLat) * 111).toFixed(1);
-            statusEl.textContent = `AOI active: ~${widthKm} × ${heightKm} km box ready.`;
+            const widthKm = (Math.abs(maxLon - minLon) * 105).toFixed(1);
+            const heightKm = (Math.abs(maxLat - minLat) * 111).toFixed(1);
+            statusEl.innerHTML = `<strong>AOI Footprint:</strong> ~${widthKm} × ${heightKm} km &nbsp;|&nbsp; <span style="background:rgba(16,185,129,0.15);color:#059669;font-weight:600;padding:2px 8px;border-radius:4px;font-size:0.78rem;">🔒 Fixed High-Accuracy Box</span>`;
         }
     }
 
     /**
-     * Builds interactive drag & resize handles on top of the AOI bounding box
+     * Builds interactive move-only handle on top of the fixed AOI bounding box
      */
     function updateInteractiveHandles(bounds) {
         handlesGroup.clearLayers();
 
-        const southWest = bounds.getSouthWest();
-        const northEast = bounds.getNorthEast();
         const center = bounds.getCenter();
 
-        const corners = [
-            { pos: [northEast.lat, southWest.lng], role: 'nw', cursor: 'nwse-resize' },
-            { pos: [northEast.lat, northEast.lng], role: 'ne', cursor: 'nesw-resize' },
-            { pos: [southWest.lat, northEast.lng], role: 'se', cursor: 'nwse-resize' },
-            { pos: [southWest.lat, southWest.lng], role: 'sw', cursor: 'nesw-resize' }
-        ];
-
-        // 1. Center Move Handle
+        // 1. Center Move Handle (Move-Only: preserves exact fixed footprint)
         const centerIcon = L.divIcon({
             className: 'aoi-center-handle',
-            html: '<div class="handle-center-dot" title="Drag to MOVE the entire box">✥ MOVE</div>',
-            iconSize: [64, 26],
-            iconAnchor: [32, 13]
+            html: '<div class="handle-center-dot" title="Drag to MOVE the fixed box anywhere">✥ MOVE</div>',
+            iconSize: [68, 28],
+            iconAnchor: [34, 14]
         });
 
         const centerMarker = L.marker(center, {
@@ -132,64 +133,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 syncInputsFromCoords(b.getWest(), b.getSouth(), b.getEast(), b.getNorth());
                 currentAoiPolygon = createBboxPolygon(b.getWest(), b.getSouth(), b.getEast(), b.getNorth());
                 updateInteractiveHandles(b);
+                saveSessionState();
             }
-        });
-
-        // 2. Corner Resize Handles
-        corners.forEach(corner => {
-            const cornerIcon = L.divIcon({
-                className: `aoi-corner-handle corner-${corner.role}`,
-                html: '<div class="handle-corner-dot" title="Drag to RESIZE box"></div>',
-                iconSize: [16, 16],
-                iconAnchor: [8, 8]
-            });
-
-            const marker = L.marker(corner.pos, {
-                icon: cornerIcon,
-                draggable: true,
-                zIndexOffset: 900
-            }).addTo(handlesGroup);
-
-            marker.on('drag', (e) => {
-                const p = e.target.getLatLng();
-                const curBounds = activeRectLayer ? activeRectLayer.getBounds() : bounds;
-                let minLat = curBounds.getSouth();
-                let maxLat = curBounds.getNorth();
-                let minLon = curBounds.getWest();
-                let maxLon = curBounds.getEast();
-
-                if (corner.role === 'nw') {
-                    maxLat = p.lat;
-                    minLon = p.lng;
-                } else if (corner.role === 'ne') {
-                    maxLat = p.lat;
-                    maxLon = p.lng;
-                } else if (corner.role === 'se') {
-                    minLat = p.lat;
-                    maxLon = p.lng;
-                } else if (corner.role === 'sw') {
-                    minLat = p.lat;
-                    minLon = p.lng;
-                }
-
-                // Ensure bounds maintain positive dimensions
-                const validSw = L.latLng(Math.min(minLat, maxLat - 0.02), Math.min(minLon, maxLon - 0.02));
-                const validNe = L.latLng(Math.max(maxLat, minLat + 0.02), Math.max(maxLon, minLon + 0.02));
-                const updatedBounds = L.latLngBounds(validSw, validNe);
-
-                if (activeRectLayer) {
-                    activeRectLayer.setBounds(updatedBounds);
-                }
-            });
-
-            marker.on('dragend', () => {
-                if (activeRectLayer) {
-                    const b = activeRectLayer.getBounds();
-                    syncInputsFromCoords(b.getWest(), b.getSouth(), b.getEast(), b.getNorth());
-                    currentAoiPolygon = createBboxPolygon(b.getWest(), b.getSouth(), b.getEast(), b.getNorth());
-                    updateInteractiveHandles(b);
-                }
-            });
         });
     }
 
@@ -227,57 +172,36 @@ document.addEventListener('DOMContentLoaded', () => {
     function syncPolygonFromInputs() {
         const minLon = parseFloat(inputMinLon.value);
         const minLat = parseFloat(inputMinLat.value);
-        const maxLon = parseFloat(inputMaxLon.value);
-        const maxLat = parseFloat(inputMaxLat.value);
+        let maxLon = parseFloat(inputMaxLon.value);
+        let maxLat = parseFloat(inputMaxLat.value);
 
-        if (isNaN(minLon) || isNaN(minLat) || isNaN(maxLon) || isNaN(maxLat)) return;
-        if (minLon >= maxLon || minLat >= maxLat) return;
+        if (isNaN(minLon) || isNaN(minLat)) return;
 
-        const poly = createBboxPolygon(minLon, minLat, maxLon, maxLat);
+        // Preserve fixed footprint around center coordinates
+        const cLon = !isNaN(maxLon) ? (minLon + maxLon) / 2 : minLon + HALF_SPAN_LON;
+        const cLat = !isNaN(maxLat) ? (minLat + maxLat) / 2 : minLat + HALF_SPAN_LAT;
+
+        const finalMinLon = cLon - HALF_SPAN_LON;
+        const finalMaxLon = cLon + HALF_SPAN_LON;
+        const finalMinLat = cLat - HALF_SPAN_LAT;
+        const finalMaxLat = cLat + HALF_SPAN_LAT;
+
+        syncInputsFromCoords(finalMinLon, finalMinLat, finalMaxLon, finalMaxLat);
+        const poly = createBboxPolygon(finalMinLon, finalMinLat, finalMaxLon, finalMaxLat);
         renderAoiOnMap(poly, true);
     }
 
     // Manual input listeners
     [inputMinLon, inputMinLat, inputMaxLon, inputMaxLat].forEach(input => {
         if (input) {
-            input.addEventListener('input', syncPolygonFromInputs);
             input.addEventListener('change', syncPolygonFromInputs);
         }
-    });
-
-    // Leaflet Draw Control (for drawing new rectangles)
-    const drawControl = new L.Control.Draw({
-        draw: {
-            polygon: false,
-            polyline: false,
-            circle: false,
-            circlemarker: false,
-            marker: false,
-            rectangle: {
-                shapeOptions: {
-                    color: '#0284c7',
-                    weight: 2.5,
-                    fillColor: '#38bdf8',
-                    fillOpacity: 0.22
-                }
-            }
-        },
-        edit: false
-    });
-    map.addControl(drawControl);
-
-    map.on(L.Draw.Event.CREATED, (event) => {
-        const layer = event.layer;
-        const b = layer.getBounds();
-        syncInputsFromCoords(b.getWest(), b.getSouth(), b.getEast(), b.getNorth());
-        currentAoiPolygon = createBboxPolygon(b.getWest(), b.getSouth(), b.getEast(), b.getNorth());
-        renderAoiOnMap(currentAoiPolygon, false);
     });
 
     // Region Presets Button Click Handlers
     const presetChips = document.querySelectorAll('.preset-chip');
     presetChips.forEach(chip => {
-        chip.addEventListener('click', () => {
+        chip.addEventListener('click', (e) => {
             presetChips.forEach(c => c.classList.remove('active'));
             chip.classList.add('active');
 
@@ -285,6 +209,12 @@ document.addEventListener('DOMContentLoaded', () => {
             const preset = REGION_PRESETS[key];
             if (preset) {
                 applyPreset(preset);
+                
+                // If user clicked specifically on the Auto-Run badge, immediately trigger submission!
+                const isAutoRunClick = e.target.classList.contains('preset-run-badge') || e.target.closest('.preset-run-badge');
+                if (isAutoRunClick) {
+                    executeAnalysisSubmission();
+                }
             }
         });
     });
@@ -298,9 +228,15 @@ document.addEventListener('DOMContentLoaded', () => {
         if (inputSourceLon) inputSourceLon.value = preset.sourceLon.toFixed(4);
         if (inputSourceLat) inputSourceLat.value = preset.sourceLat.toFixed(4);
 
+        const dateInput = document.getElementById('flood-date');
+        if (dateInput && preset.floodDate) {
+            dateInput.value = preset.floodDate;
+        }
+
         const poly = createBboxPolygon(preset.minLon, preset.minLat, preset.maxLon, preset.maxLat);
         renderAoiOnMap(poly, true);
         setSourceMarker(preset.sourceLon, preset.sourceLat, false);
+        saveSessionState();
     }
 
     // "Center Box Here" Action Button
@@ -308,23 +244,26 @@ document.addEventListener('DOMContentLoaded', () => {
     if (btnRecenter) {
         btnRecenter.addEventListener('click', () => {
             const mapCenter = map.getCenter();
-            // Preserve current width & height of AOI, center around mapCenter
-            const curMinLon = parseFloat(inputMinLon.value) || 85.15;
-            const curMaxLon = parseFloat(inputMaxLon.value) || 85.55;
-            const curMinLat = parseFloat(inputMinLat.value) || 27.95;
-            const curMaxLat = parseFloat(inputMaxLat.value) || 28.45;
-
-            const halfWidth = Math.abs(curMaxLon - curMinLon) / 2;
-            const halfHeight = Math.abs(curMaxLat - curMinLat) / 2;
-
-            const newMinLon = mapCenter.lng - halfWidth;
-            const newMaxLon = mapCenter.lng + halfWidth;
-            const newMinLat = mapCenter.lat - halfHeight;
-            const newMaxLat = mapCenter.lat + halfHeight;
+            const newMinLon = mapCenter.lng - HALF_SPAN_LON;
+            const newMaxLon = mapCenter.lng + HALF_SPAN_LON;
+            const newMinLat = mapCenter.lat - HALF_SPAN_LAT;
+            const newMaxLat = mapCenter.lat + HALF_SPAN_LAT;
 
             syncInputsFromCoords(newMinLon, newMinLat, newMaxLon, newMaxLat);
             const poly = createBboxPolygon(newMinLon, newMinLat, newMaxLon, newMaxLat);
             renderAoiOnMap(poly, false);
+            saveSessionState();
+        });
+    }
+
+    // "Reset to Standard Box" Action Button
+    const btnResetAoi = document.getElementById('btn-reset-aoi');
+    if (btnResetAoi) {
+        btnResetAoi.addEventListener('click', () => {
+            const activeChip = document.querySelector('.preset-chip.active');
+            const key = activeChip ? activeChip.getAttribute('data-preset') : 'trishuli';
+            const preset = REGION_PRESETS[key] || REGION_PRESETS.trishuli;
+            applyPreset(preset);
         });
     }
 
@@ -372,6 +311,7 @@ document.addEventListener('DOMContentLoaded', () => {
         sourceMarker.on('dragend', (e) => {
             const pos = e.target.getLatLng();
             sourceMarker.setTooltipContent(updateTooltip(pos.lng, pos.lat));
+            saveSessionState();
         });
 
         if (pan) {
@@ -385,12 +325,13 @@ document.addEventListener('DOMContentLoaded', () => {
         const lat = parseFloat(inputSourceLat.value);
         if (!isNaN(lon) && !isNaN(lat)) {
             setSourceMarker(lon, lat, false);
+            saveSessionState();
         }
     }
 
     if (inputSourceLon && inputSourceLat) {
-        inputSourceLon.addEventListener('input', syncSourceMarkerFromInputs);
-        inputSourceLat.addEventListener('input', syncSourceMarkerFromInputs);
+        inputSourceLon.addEventListener('change', syncSourceMarkerFromInputs);
+        inputSourceLat.addEventListener('change', syncSourceMarkerFromInputs);
     }
 
     // Map click places the Upstream Origin Marker if flood path tracing is active
@@ -402,6 +343,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (inputSourceLon) inputSourceLon.value = lon.toFixed(4);
             if (inputSourceLat) inputSourceLat.value = lat.toFixed(4);
             setSourceMarker(lon, lat);
+            saveSessionState();
         }
     });
 
@@ -415,15 +357,27 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Save state to localStorage
+    // Save state to localStorage (preserves exact location where user left off)
     function saveSessionState() {
         if (!currentAoiPolygon) return;
+        const curMinLon = parseFloat(inputMinLon.value);
+        const curMaxLon = parseFloat(inputMaxLon.value);
+        const curMinLat = parseFloat(inputMinLat.value);
+        const curMaxLat = parseFloat(inputMaxLat.value);
+
+        const centerLon = (curMinLon + curMaxLon) / 2;
+        const centerLat = (curMinLat + curMaxLat) / 2;
+
         const state = {
-            minLon: parseFloat(inputMinLon.value),
-            minLat: parseFloat(inputMinLat.value),
-            maxLon: parseFloat(inputMaxLon.value),
-            maxLat: parseFloat(inputMaxLat.value),
-            sourceLon: parseFloat(inputSourceLon ? inputSourceLon.value : 85.45),
-            sourceLat: parseFloat(inputSourceLat ? inputSourceLat.value : 28.36),
+            centerLon: centerLon,
+            centerLat: centerLat,
+            minLon: curMinLon,
+            minLat: curMinLat,
+            maxLon: curMaxLon,
+            maxLat: curMaxLat,
+            sourceLon: parseFloat(inputSourceLon ? inputSourceLon.value : 85.40),
+            sourceLat: parseFloat(inputSourceLat ? inputSourceLat.value : 28.23),
+            floodDate: document.getElementById('flood-date') ? document.getElementById('flood-date').value : "2026-08-26",
             mapCenter: map.getCenter(),
             mapZoom: map.getZoom()
         };
@@ -434,70 +388,89 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // Restore state from localStorage or load Trishuli default
-    function restoreSessionState() {
-        let restored = false;
+    // Restore last user location or fall back to Trishuli default if first visit
+    function restoreLastOrPresetState() {
         try {
             const raw = localStorage.getItem('mfdfs_last_aoi_state');
             if (raw) {
                 const s = JSON.parse(raw);
-                if (!isNaN(s.minLon) && !isNaN(s.minLat) && !isNaN(s.maxLon) && !isNaN(s.maxLat)) {
-                    if (inputMinLon) inputMinLon.value = s.minLon.toFixed(4);
-                    if (inputMinLat) inputMinLat.value = s.minLat.toFixed(4);
-                    if (inputMaxLon) inputMaxLon.value = s.maxLon.toFixed(4);
-                    if (inputMaxLat) inputMaxLat.value = s.maxLat.toFixed(4);
-                    if (inputSourceLon) inputSourceLon.value = s.sourceLon.toFixed(4);
-                    if (inputSourceLat) inputSourceLat.value = s.sourceLat.toFixed(4);
+                const cLon = !isNaN(s.centerLon) ? s.centerLon : ((s.minLon + s.maxLon) / 2);
+                const cLat = !isNaN(s.centerLat) ? s.centerLat : ((s.minLat + s.maxLat) / 2);
 
-                    const poly = createBboxPolygon(s.minLon, s.minLat, s.maxLon, s.maxLat);
-                    renderAoiOnMap(poly, true);
-                    setSourceMarker(s.sourceLon, s.sourceLat, false);
+                if (!isNaN(cLon) && !isNaN(cLat)) {
+                    // Reconstruct locked 18x18 km box around saved center
+                    const minLon = cLon - HALF_SPAN_LON;
+                    const maxLon = cLon + HALF_SPAN_LON;
+                    const minLat = cLat - HALF_SPAN_LAT;
+                    const maxLat = cLat + HALF_SPAN_LAT;
+
+                    syncInputsFromCoords(minLon, minLat, maxLon, maxLat);
+                    const poly = createBboxPolygon(minLon, minLat, maxLon, maxLat);
+                    renderAoiOnMap(poly, false);
+
+                    const sLon = !isNaN(s.sourceLon) ? s.sourceLon : (cLon + 0.05);
+                    const sLat = !isNaN(s.sourceLat) ? s.sourceLat : (cLat + 0.05);
+                    if (inputSourceLon) inputSourceLon.value = sLon.toFixed(4);
+                    if (inputSourceLat) inputSourceLat.value = sLat.toFixed(4);
+                    setSourceMarker(sLon, sLat, false);
+
+                    const dateInput = document.getElementById('flood-date');
+                    if (dateInput && s.floodDate) {
+                        dateInput.value = s.floodDate;
+                    }
 
                     if (s.mapCenter && s.mapZoom) {
                         map.setView([s.mapCenter.lat, s.mapCenter.lng], s.mapZoom);
+                    } else {
+                        map.setView([cLat, cLon], 11);
                     }
-                    restored = true;
+                    return; // Successfully restored where user left off!
                 }
             }
         } catch (e) {
-            console.warn("Failed to parse saved map state", e);
+            console.warn("Could not restore last AOI state:", e);
         }
 
-        if (!restored) {
-            applyPreset(REGION_PRESETS.trishuli);
-        }
+        // If no prior session exists, default to Trishuli preset
+        applyPreset(REGION_PRESETS.trishuli);
     }
 
-    // Initial render: restore previous session or default to Trishuli
-    restoreSessionState();
+    // Initial render: restore where user left off last time
+    restoreLastOrPresetState();
 
-    // Attach session saving to input and map modifications
+    // Attach session saving only to explicit input modifications
     [inputMinLon, inputMinLat, inputMaxLon, inputMaxLat, inputSourceLon, inputSourceLat].forEach(inp => {
         if (inp) inp.addEventListener('change', saveSessionState);
     });
-    map.on('moveend', saveSessionState);
 
 
-    // Form Submission
+    // Form Submission & Auto-Run Execution
     const form = document.getElementById('form-analysis');
     const btnSubmit = document.getElementById('btn-submit');
 
-    form.addEventListener('submit', async (e) => {
-        e.preventDefault();
-
+    async function executeAnalysisSubmission() {
         if (!currentAoiPolygon) {
             alert("Please provide an Area of Interest using the interactive map or preset chips.");
             return;
         }
 
-        btnSubmit.disabled = true;
-        btnSubmit.textContent = "⏳ Initializing Satellite Pipeline...";
+        // Always remember current box location before executing
+        saveSessionState();
+
+        if (btnSubmit) {
+            btnSubmit.disabled = true;
+            btnSubmit.textContent = "⏳ Initializing Satellite Pipeline...";
+        }
+
+        const dateInput = document.getElementById('flood-date');
+        const segCheck = document.getElementById('use-segmentation');
+        const pathCheck = document.getElementById('trace-flood-path');
 
         const payload = {
             aoi: currentAoiPolygon,
-            flood_date: document.getElementById('flood-date').value,
-            use_segmentation: document.getElementById('use-segmentation').checked,
-            trace_flood_path: document.getElementById('trace-flood-path').checked,
+            flood_date: dateInput ? dateInput.value : "2026-08-26",
+            use_segmentation: segCheck ? segCheck.checked : true,
+            trace_flood_path: pathCheck ? pathCheck.checked : true,
         };
 
         if (payload.trace_flood_path && inputSourceLon && inputSourceLat) {
@@ -527,8 +500,15 @@ document.addEventListener('DOMContentLoaded', () => {
         } catch (error) {
             console.error("Submission failed:", error);
             alert("Failed to submit analysis: " + error.message);
-            btnSubmit.disabled = false;
-            btnSubmit.textContent = "🚀 Run Satellite Flood Analysis";
+            if (btnSubmit) {
+                btnSubmit.disabled = false;
+                btnSubmit.textContent = "🚀 Run Satellite Flood Analysis";
+            }
         }
+    }
+
+    form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        executeAnalysisSubmission();
     });
 });

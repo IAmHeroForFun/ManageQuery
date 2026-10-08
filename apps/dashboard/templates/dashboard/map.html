@@ -7,50 +7,27 @@
 {% endblock %}
 
 {% block content %}
-<div class="dashboard-layout">
-    <!-- Main Map Viewport -->
-    <div class="map-wrapper">
-        <div id="dashboard-map" class="map-viewport" style="height: 100%; min-height: 600px; width: 100%; display: block;"></div>
+<!-- Tactical Rescuer Situation Brief (Above the entire dashboard layout) -->
+<div class="tactical-mission-top-bar" id="mission-brief-banner">
+    <div class="mission-status-pill">
+        <span class="status-pulse"></span>
+        <strong>TACTICAL SITUATION BRIEF:</strong>
+    </div>
+    <div class="mission-brief-text" id="mission-brief-text">
+        🛰️ Loading verified satellite analysis telemetry...
+    </div>
+    <div class="mission-provenance-tag">
+        <span title="Copernicus Sentinel-1 (SAR) + Sentinel-2 (Optical) + OpenStreetMap">🛰️ All-Weather Satellite Radar Fusion</span>
+    </div>
+</div>
 
-        <!-- Floating Layer Controls Bar -->
-        <div class="layer-control-panel">
-            <span class="control-panel-title">Layers:</span>
-            <label class="layer-toggle-btn">
-                <input type="checkbox" id="toggle-flood" checked>
-                <span class="legend-color legend-yellow"></span> Flood & Debris (SAR/NDWI)
-            </label>
-            <label class="layer-toggle-btn">
-                <input type="checkbox" id="toggle-roads" checked>
-                <span class="legend-color legend-red"></span> Damaged Roads
-            </label>
-            <label class="layer-toggle-btn">
-                <input type="checkbox" id="toggle-buildings" checked>
-                <span class="legend-color legend-darkred"></span> Affected Buildings
-            </label>
-            <label class="layer-toggle-btn">
-                <input type="checkbox" id="toggle-cutoff" checked>
-                <span class="legend-color legend-blue"></span> Cut-off Settlements
-            </label>
-            {% if job.trace_flood_path %}
-            <label class="layer-toggle-btn">
-                <input type="checkbox" id="toggle-path" checked>
-                <span class="legend-color legend-purple"></span> Traced Flow Path
-            </label>
-            {% endif %}
-            {% if job.use_segmentation %}
-            <label class="layer-toggle-btn">
-                <input type="checkbox" id="toggle-unet" checked>
-                <span class="legend-color legend-green"></span> U-Net AI Segmentation
-            </label>
-            {% endif %}
-            <label class="layer-toggle-btn" style="border-left: 1px solid var(--border-color); padding-left: 0.5rem;">
-                <input type="checkbox" id="toggle-emsr927">
-                <span class="legend-color" style="background-color: #3b82f6; border: 1px dashed #1d4ed8;"></span> Copernicus EMSR927 Reference
-            </label>
-        </div>
+<div class="dashboard-layout">
+    <!-- Main Map Viewport (100% CLEAN - Only geospatial layers render here) -->
+    <div class="map-wrapper">
+        <div id="dashboard-map" class="map-viewport" style="height: 100%; min-height: 680px; width: 100%; display: block; border-radius: 8px;"></div>
     </div>
 
-    <!-- Right Sidebar Statistics & Tracking -->
+    <!-- Right Sidebar Statistics & Controls -->
     <aside class="sidebar-panel">
         <!-- Progress / Status Card -->
         <div id="progress-card" class="card progress-card">
@@ -66,29 +43,18 @@
 
         <!-- Summary Metrics Grid -->
         <div class="stats-grid">
-            <div class="stat-card stat-card-yellow">
-                <div class="stat-icon">🌊</div>
+            <div class="stat-card stat-card-blue">
+                <div class="stat-icon">🚫</div>
                 <div class="stat-data">
-                    <span id="stat-flood-area" class="stat-number">
-                        {% if job.flood_area_km2 %}{{ job.flood_area_km2|floatformat:1 }}{% else %}--{% endif %}
+                    <span id="stat-cutoff" class="stat-number">
+                        {% if job.settlements_cutoff %}{{ job.settlements_cutoff }}{% else %}--{% endif %}
                     </span>
-                    <span class="stat-unit">km²</span>
-                    <p class="stat-label">Inundated / Debris Area</p>
+                    <span class="stat-unit">villages</span>
+                    <p class="stat-label">Isolated (Cut-Off)</p>
                 </div>
             </div>
 
             <div class="stat-card stat-card-red">
-                <div class="stat-icon">🏚️</div>
-                <div class="stat-data">
-                    <span id="stat-buildings" class="stat-number">
-                        {% if job.buildings_affected %}{{ job.buildings_affected }}{% else %}--{% endif %}
-                    </span>
-                    <span class="stat-unit">units</span>
-                    <p class="stat-label">Buildings Affected</p>
-                </div>
-            </div>
-
-            <div class="stat-card stat-card-yellow">
                 <div class="stat-icon">🛣️</div>
                 <div class="stat-data">
                     <span id="stat-roads" class="stat-number">
@@ -99,15 +65,127 @@
                 </div>
             </div>
 
-            <div class="stat-card stat-card-blue">
-                <div class="stat-icon">🚫</div>
+            <div class="stat-card stat-card-yellow">
+                <div class="stat-icon">🌊</div>
                 <div class="stat-data">
-                    <span id="stat-cutoff" class="stat-number">
-                        {% if job.settlements_cutoff %}{{ job.settlements_cutoff }}{% else %}--{% endif %}
+                    <span id="stat-flood-area" class="stat-number">
+                        {% if job.flood_area_km2 %}{{ job.flood_area_km2|floatformat:1 }}{% else %}--{% endif %}
                     </span>
-                    <span class="stat-unit">villages</span>
-                    <p class="stat-label">Cut-Off Settlements</p>
+                    <span class="stat-unit">km²</span>
+                    <p class="stat-label">Inundated / Debris</p>
                 </div>
+            </div>
+
+            <div class="stat-card stat-card-red">
+                <div class="stat-icon">🏚️</div>
+                <div class="stat-data">
+                    <span id="stat-buildings" class="stat-number">
+                        {% if job.buildings_affected %}{{ job.buildings_affected }}{% else %}--{% endif %}
+                    </span>
+                    <span class="stat-unit">units</span>
+                    <p class="stat-label">Buildings Hit</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Operational View Presets & Layer Controls Card (Moved OUT of map) -->
+        <div class="card map-controls-sidebar-card">
+            <h4 style="margin: 0 0 0.5rem 0; font-size: 0.95rem;">🗺️ Map Controls & Presets</h4>
+            
+            <div class="sidebar-presets-group">
+                <span class="control-label-sm">Operational Presets:</span>
+                <div class="sidebar-preset-buttons">
+                    <button type="button" class="view-preset-btn active" id="btn-view-evac" title="Focus strictly on cut-off villages and severed roads">
+                        🚑 Evacuation
+                    </button>
+                    <button type="button" class="view-preset-btn" id="btn-view-extent" title="Focus on radar & optical flood inundation polygon">
+                        🌊 Flood Extent
+                    </button>
+                    {% if job.trace_flood_path %}
+                    <button type="button" class="view-preset-btn" id="btn-view-flow" title="Focus on gravity flow corridor and downstream village arrival ETAs">
+                        🧭 Flow Path
+                    </button>
+                    {% endif %}
+                    <button type="button" class="view-preset-btn" id="btn-view-all" title="View all available satellite, infrastructure and benchmark layers">
+                        🔍 All Layers
+                    </button>
+                </div>
+            </div>
+
+            <!-- Layer Toggles -->
+            <div class="sidebar-layer-toggles">
+                <span class="control-label-sm">Active Layers:</span>
+                <div class="sidebar-toggles-grid">
+                    <label class="layer-toggle-btn">
+                        <input type="checkbox" id="toggle-cutoff" checked>
+                        <span class="legend-color legend-blue"></span> Isolated Villages
+                    </label>
+                    <label class="layer-toggle-btn">
+                        <input type="checkbox" id="toggle-roads" checked>
+                        <span class="legend-color legend-red"></span> Damaged Roads
+                    </label>
+                    <label class="layer-toggle-btn">
+                        <input type="checkbox" id="toggle-flood">
+                        <span class="legend-color legend-yellow"></span> Flood / Debris (SAR)
+                    </label>
+                    <label class="layer-toggle-btn">
+                        <input type="checkbox" id="toggle-buildings">
+                        <span class="legend-color legend-darkred"></span> Buildings
+                    </label>
+                    {% if job.trace_flood_path %}
+                    <label class="layer-toggle-btn">
+                        <input type="checkbox" id="toggle-path">
+                        <span class="legend-color legend-purple"></span> Flow Corridor
+                    </label>
+                    {% endif %}
+                    {% if job.use_segmentation %}
+                    <label class="layer-toggle-btn">
+                        <input type="checkbox" id="toggle-unet">
+                        <span class="legend-color legend-green"></span> AI U-Net
+                    </label>
+                    {% endif %}
+                    <label class="layer-toggle-btn">
+                        <input type="checkbox" id="toggle-emsr927">
+                        <span class="legend-color" style="background-color: #3b82f6; border: 1px dashed #1d4ed8;"></span> Copernicus EMSR927
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Clean In-Sidebar Legend Card (Moved OUT of map) -->
+        <div class="card map-legend-sidebar-card">
+            <h4 style="margin: 0 0 0.5rem 0; font-size: 0.95rem;">📖 Color Key & Guide</h4>
+            <div class="sidebar-legend-list">
+                <div class="legend-guide-item">
+                    <span class="legend-dot" style="background:#ef4444; border: 2px solid #b91c1c;"></span>
+                    <div>
+                        <strong>Red Circle (🚫 Cut-off Village)</strong>
+                        <p>No drivable road routes to hospital. Priority for emergency airlifts.</p>
+                    </div>
+                </div>
+                <div class="legend-guide-item">
+                    <span class="legend-line" style="background:#ef4444; height: 4px;"></span>
+                    <div>
+                        <strong>Red Line (Severed Road)</strong>
+                        <p>Impassable to ambulances and rescue vehicles.</p>
+                    </div>
+                </div>
+                <div class="legend-guide-item">
+                    <span class="legend-poly" style="background:#fde047; border: 1px solid #ca8a04;"></span>
+                    <div>
+                        <strong>Yellow Area (Flood / Debris Corridor)</strong>
+                        <p>Detected via Sentinel-1 SAR radar backscatter drop.</p>
+                    </div>
+                </div>
+                {% if job.trace_flood_path %}
+                <div class="legend-guide-item">
+                    <span class="legend-line" style="background:#a855f7; height: 3px; border-top: 2px dashed #9333ea;"></span>
+                    <div>
+                        <strong>Purple Dashed Line (Flow Path)</strong>
+                        <p>Steepest downhill gravity path from elevation DEM.</p>
+                    </div>
+                </div>
+                {% endif %}
             </div>
         </div>
 
@@ -124,19 +202,60 @@
             </ul>
         </div>
 
+        <!-- Embedded Situation Report & Copilot (Official Track B Requirement) -->
+        <div class="card auto-report-card" id="embedded-report-card">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                <h4 style="margin: 0; font-size: 0.95rem;">📑 Auto Situation Briefing</h4>
+                <div class="mini-lang-tabs">
+                    <button type="button" id="tab-lang-en" class="mini-tab-btn active">EN</button>
+                    <button type="button" id="tab-lang-ne" class="mini-tab-btn">नेपाली</button>
+                </div>
+            </div>
+            <div id="embedded-report-content" style="max-height: 160px; overflow-y: auto; font-size: 0.82rem; background: var(--bg-secondary, #f8fafc); padding: 0.6rem; border-radius: 4px; border: 1px solid var(--border-color); line-height: 1.45; white-space: pre-wrap;">
+                Generating official disaster briefing grounded in verified satellite numbers...
+            </div>
+            <div style="margin-top: 0.5rem; display: flex; gap: 0.4rem;">
+                <a href="/dashboard/{{ job.id }}/report/" class="btn btn-primary btn-sm btn-block" style="text-align: center; text-decoration: none;">
+                    💬 Open Rescuer Copilot Q&A
+                </a>
+                <button type="button" id="btn-view-emsr927" class="btn btn-secondary btn-sm" title="View official European Union EMSR927 verification benchmark">
+                    🎯 EMSR927
+                </button>
+            </div>
+        </div>
+
         <!-- Action Card -->
         <div class="card action-card">
-            <button type="button" id="btn-view-emsr927" class="btn btn-secondary btn-block" style="margin-bottom: 0.5rem; background: rgba(59, 130, 246, 0.1); border: 1px solid #3b82f6; color: #2563eb; font-weight: 600;">
-                🎯 View EMSR927 Reference Benchmark
-            </button>
-            <a href="/dashboard/{{ job.id }}/report/" class="btn btn-primary btn-block">
-                📑 View / Generate Situation Report
-            </a>
-            <a href="/" class="btn btn-outline btn-block mt-2">
+            <a href="/" class="btn btn-outline btn-block">
                 🔄 Run New Analysis
             </a>
         </div>
     </aside>
+</div>
+
+<!-- Dedicated Copernicus EMSR927 Benchmark Modal -->
+<div id="emsr927-modal" class="modal-backdrop" style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(15, 23, 42, 0.65); z-index: 9999; align-items: center; justify-content: center; backdrop-filter: blur(4px);">
+    <div class="modal-dialog card" style="max-width: 580px; width: 92%; background: var(--card-bg, #ffffff); border-radius: 10px; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2); border: 1px solid var(--border-color); padding: 1.5rem; position: relative;">
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1rem; border-bottom: 1px solid var(--border-color); padding-bottom: 0.75rem;">
+            <div>
+                <h3 style="margin: 0; font-size: 1.15rem; color: #1e3a8a; display: flex; align-items: center; gap: 0.5rem;">
+                    🇪🇺 Copernicus Emergency Management Service
+                </h3>
+                <span style="font-size: 0.8rem; color: var(--text-muted);">Activation EMSR927 Ground-Truth Benchmark</span>
+            </div>
+            <button type="button" id="btn-close-emsr-modal" style="background: none; border: none; font-size: 1.4rem; cursor: pointer; color: var(--text-muted); line-height: 1;">&times;</button>
+        </div>
+
+        <div id="emsr-modal-body" style="font-size: 0.88rem; line-height: 1.5;">
+            <div style="text-align: center; padding: 2rem 0; color: var(--text-muted);">
+                ⏳ Fetching Copernicus reference data...
+            </div>
+        </div>
+
+        <div style="margin-top: 1.2rem; display: flex; justify-content: flex-end; gap: 0.5rem; border-top: 1px solid var(--border-color); padding-top: 0.75rem;">
+            <button type="button" id="btn-modal-close" class="btn btn-secondary btn-sm">Close</button>
+        </div>
+    </div>
 </div>
 {% endblock %}
 

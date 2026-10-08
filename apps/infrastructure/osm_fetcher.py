@@ -43,8 +43,20 @@ class OSMFetcher:
 
         bbox = self._extract_bbox(aoi_geojson)
 
-        # 1. Fetch or generate roads, buildings & waterways
-        roads_data, buildings_data, waterways_data = self._fetch_live_osm_data(bbox)
+        # 1. Fetch live infrastructure from Overpass API (supports arbitrary box sizes without node limits)
+        roads_data, buildings_data, waterways_data = self._fetch_overpass_infrastructure(bbox)
+
+        # 2. Resilient fallback to OSM 0.6 sub-tiling if Overpass produced no results
+        if not roads_data.get("features"):
+            roads_06, bldgs_06, waterways_06 = self._fetch_live_osm_data(bbox)
+            if roads_06.get("features"):
+                roads_data = roads_06
+            if bldgs_06.get("features") and not buildings_data.get("features"):
+                buildings_data = bldgs_06
+            if waterways_06.get("features") and not waterways_data.get("features"):
+                waterways_data = waterways_06
+
+        # 3. Offline / synthetic fallback only if internet queries produced no data
         if not roads_data.get("features"):
             roads_data = self._fetch_or_generate_roads(bbox)
         if not buildings_data.get("features"):
@@ -79,6 +91,107 @@ class OSMFetcher:
             "waterways": waterways_path
         }
 
+    def _fetch_overpass_infrastructure(self, bbox: List[float]) -> tuple[Dict[str, Any], Dict[str, Any], Dict[str, Any]]:
+        """
+        Queries official OpenStreetMap Overpass API for real road networks,
+        waterways, and buildings across the full bounding box without the 50,000 node limit of OSM 0.6.
+        """
+        if self._is_ocean_bbox(bbox):
+            return {"type": "FeatureCollection", "features": []}, {"type": "FeatureCollection", "features": []}, {"type": "FeatureCollection", "features": []}
+
+        min_lon, min_lat, max_lon, max_lat = bbox
+
+        endpoints = [
+            "https://overpass-api.de/api/interpreter",
+            "https://overpass.kumi.systems/api/interpreter",
+            "https://maps.mail.ru/osm/tools/overpass/api/interpreter"
+        ]
+
+        query = f"""
+[out:json][timeout:15];
+(
+  way["highway"~"motorway|trunk|primary|secondary|tertiary|residential|unclassified"]({min_lat:.5f},{min_lon:.5f},{max_lat:.5f},{max_lon:.5f});
+  way["waterway"~"river|stream"]({min_lat:.5f},{min_lon:.5f},{max_lat:.5f},{max_lon:.5f});
+  way["building"]({min_lat:.5f},{min_lon:.5f},{max_lat:.5f},{max_lon:.5f});
+);
+out tags geom 300;
+"""
+        headers = {
+            "User-Agent": "MfdfsDisasterResponse/1.0 (flood-hazard-analysis)",
+            "Accept": "application/json"
+        }
+
+        road_feats = []
+        bldg_feats = []
+        waterway_feats = []
+
+        for ep in endpoints:
+            try:
+                resp = requests.post(ep, data={"data": query}, headers=headers, timeout=8.0)
+                if resp.status_code == 200 and resp.content:
+                    data = resp.json()
+                    elements = data.get("elements", [])
+                    if elements:
+                        for el in elements:
+                            geom = el.get("geometry", [])
+                            tags = el.get("tags", {})
+                            way_id = el.get("id")
+                            if not geom or len(geom) < 2:
+                                continue
+
+                            coords = [[round(pt["lon"], 5), round(pt["lat"], 5)] for pt in geom]
+
+                            if "waterway" in tags:
+                                waterway_feats.append({
+                                    "type": "Feature",
+                                    "geometry": {"type": "LineString", "coordinates": coords},
+                                    "properties": {
+                                        "osm_id": f"way/{way_id}",
+                                        "name": tags.get("name", "Waterway"),
+                                        "waterway": tags["waterway"]
+                                    }
+                                })
+                            elif "highway" in tags:
+                                hw = tags["highway"]
+                                road_feats.append({
+                                    "type": "Feature",
+                                    "geometry": {"type": "LineString", "coordinates": coords},
+                                    "properties": {
+                                        "osm_id": f"way/{way_id}",
+                                        "name": tags.get("name", f"{hw.capitalize()} Highway"),
+                                        "highway": hw,
+                                        "surface": tags.get("surface", "paved")
+                                    }
+                                })
+                            elif "building" in tags and len(coords) >= 3:
+                                if coords[0] != coords[-1]:
+                                    coords.append(coords[0])
+                                bldg_feats.append({
+                                    "type": "Feature",
+                                    "geometry": {"type": "Polygon", "coordinates": [coords]},
+                                    "properties": {
+                                        "osm_id": f"way/{way_id}",
+                                        "name": tags.get("name", "Structure"),
+                                        "building": tags.get("building", "yes")
+                                    }
+                                })
+
+                        if road_feats or waterway_feats:
+                            logger.info(
+                                "Overpass API successfully retrieved %d real roads, %d buildings, %d waterways from %s",
+                                len(road_feats), len(bldg_feats), len(waterway_feats), ep
+                            )
+                            return (
+                                {"type": "FeatureCollection", "features": road_feats[:160]},
+                                {"type": "FeatureCollection", "features": bldg_feats[:180]},
+                                {"type": "FeatureCollection", "features": waterway_feats[:100]}
+                            )
+            except Exception as e:
+                logger.debug("Overpass endpoint %s query failed: %s", ep, e)
+                continue
+
+        return {"type": "FeatureCollection", "features": []}, {"type": "FeatureCollection", "features": []}, {"type": "FeatureCollection", "features": []}
+
     def _fetch_live_osm_data(self, bbox: List[float]) -> tuple[Dict[str, Any], Dict[str, Any], Dict[str, Any]]:
         """
         Attempts to fetch live OSM data directly from the OpenStreetMap 0.6 API
@@ -88,70 +201,95 @@ class OSMFetcher:
             return {"type": "FeatureCollection", "features": []}, {"type": "FeatureCollection", "features": []}, {"type": "FeatureCollection", "features": []}
 
         min_lon, min_lat, max_lon, max_lat = bbox
-        # Constrain bbox size for public 0.6 map endpoint (max ~0.15 deg)
-        c_lon = (min_lon + max_lon) / 2
-        c_lat = (min_lat + max_lat) / 2
-        span_lon = min(max_lon - min_lon, 0.12)
-        span_lat = min(max_lat - min_lat, 0.12)
-        query_bbox = f"{c_lon - span_lon/2:.4f},{c_lat - span_lat/2:.4f},{c_lon + span_lon/2:.4f},{c_lat + span_lat/2:.4f}"
+        d_lon = max_lon - min_lon
+        d_lat = max_lat - min_lat
 
-        try:
-            url = f"https://api.openstreetmap.org/api/0.6/map?bbox={query_bbox}"
-            headers = {"User-Agent": "MfdfsDisasterResponse/1.0"}
-            resp = requests.get(url, headers=headers, timeout=4.5)
-            if resp.status_code == 200 and resp.content:
-                root = ET.fromstring(resp.content)
-                nodes = {n.attrib['id']: (float(n.attrib['lon']), float(n.attrib['lat'])) for n in root.findall('node')}
-                
-                road_feats = []
-                bldg_feats = []
-                waterway_feats = []
+        # Define sub-tiles if box is larger than 0.15 deg so the ENTIRE box is queried
+        sub_tiles = []
+        if d_lon > 0.18 or d_lat > 0.18:
+            n_cols = max(1, min(3, int(d_lon / 0.14) + 1))
+            n_rows = max(1, min(3, int(d_lat / 0.14) + 1))
+            step_x = d_lon / n_cols
+            step_y = d_lat / n_rows
+            for c in range(n_cols):
+                for r in range(n_rows):
+                    sub_tiles.append([
+                        min_lon + c * step_x,
+                        min_lat + r * step_y,
+                        min_lon + (c + 1) * step_x,
+                        min_lat + (r + 1) * step_y
+                    ])
+        else:
+            sub_tiles.append([min_lon, min_lat, max_lon, max_lat])
 
-                for way in root.findall('way'):
-                    tags = {t.attrib['k']: t.attrib['v'] for t in way.findall('tag')}
-                    way_id = way.attrib['id']
-                    nds = [nodes[nd.attrib['ref']] for nd in way.findall('nd') if nd.attrib['ref'] in nodes]
+        road_feats = []
+        bldg_feats = []
+        waterway_feats = []
+        seen_ways = set()
 
-                    if 'waterway' in tags and len(nds) >= 2:
-                        waterway_feats.append({
-                            "type": "Feature",
-                            "geometry": {"type": "LineString", "coordinates": [[round(x, 5), round(y, 5)] for x, y in nds]},
-                            "properties": {
-                                "osm_id": f"way/{way_id}",
-                                "name": tags.get('name', 'Waterway'),
-                                "waterway": tags['waterway']
-                            }
-                        })
-                    elif 'highway' in tags and len(nds) >= 2:
-                        hw_type = tags['highway']
-                        # Filter to major or drivable road categories
-                        if hw_type in ('motorway', 'trunk', 'primary', 'secondary', 'tertiary', 'residential', 'unclassified', 'road'):
-                            road_feats.append({
+        for tile in sub_tiles:
+            t_min_lon, t_min_lat, t_max_lon, t_max_lat = tile
+            c_lon = (t_min_lon + t_max_lon) / 2
+            c_lat = (t_min_lat + t_max_lat) / 2
+            span_lon = min(t_max_lon - t_min_lon, 0.14)
+            span_lat = min(t_max_lat - t_min_lat, 0.14)
+            query_bbox = f"{c_lon - span_lon/2:.4f},{c_lat - span_lat/2:.4f},{c_lon + span_lon/2:.4f},{c_lat + span_lat/2:.4f}"
+
+            try:
+                url = f"https://api.openstreetmap.org/api/0.6/map?bbox={query_bbox}"
+                headers = {"User-Agent": "MfdfsDisasterResponse/1.0"}
+                resp = requests.get(url, headers=headers, timeout=4.0)
+                if resp.status_code == 200 and resp.content:
+                    root = ET.fromstring(resp.content)
+                    nodes = {n.attrib['id']: (float(n.attrib['lon']), float(n.attrib['lat'])) for n in root.findall('node')}
+
+                    for way in root.findall('way'):
+                        way_id = way.attrib['id']
+                        if way_id in seen_ways:
+                            continue
+                        seen_ways.add(way_id)
+                        tags = {t.attrib['k']: t.attrib['v'] for t in way.findall('tag')}
+                        nds = [nodes[nd.attrib['ref']] for nd in way.findall('nd') if nd.attrib['ref'] in nodes]
+
+                        if 'waterway' in tags and len(nds) >= 2:
+                            waterway_feats.append({
                                 "type": "Feature",
                                 "geometry": {"type": "LineString", "coordinates": [[round(x, 5), round(y, 5)] for x, y in nds]},
                                 "properties": {
                                     "osm_id": f"way/{way_id}",
-                                    "name": tags.get('name', f"{hw_type.capitalize()} Highway"),
-                                    "highway": hw_type,
-                                    "surface": tags.get('surface', 'paved')
+                                    "name": tags.get('name', 'Waterway'),
+                                    "waterway": tags['waterway']
                                 }
                             })
-                    elif 'building' in tags and len(nds) >= 3:
-                        bldg_feats.append({
-                            "type": "Feature",
-                            "geometry": {"type": "Polygon", "coordinates": [[[round(x, 5), round(y, 5)] for x, y in nds]],},
-                            "properties": {
-                                "osm_id": f"way/{way_id}",
-                                "name": tags.get('name', 'Structure'),
-                                "building": tags['building']
-                            }
-                        })
+                        elif 'highway' in tags and len(nds) >= 2:
+                            hw_type = tags['highway']
+                            if hw_type in ('motorway', 'trunk', 'primary', 'secondary', 'tertiary', 'residential', 'unclassified', 'road'):
+                                road_feats.append({
+                                    "type": "Feature",
+                                    "geometry": {"type": "LineString", "coordinates": [[round(x, 5), round(y, 5)] for x, y in nds]},
+                                    "properties": {
+                                        "osm_id": f"way/{way_id}",
+                                        "name": tags.get('name', f"{hw_type.capitalize()} Highway"),
+                                        "highway": hw_type,
+                                        "surface": tags.get('surface', 'paved')
+                                    }
+                                })
+                        elif 'building' in tags and len(nds) >= 3:
+                            bldg_feats.append({
+                                "type": "Feature",
+                                "geometry": {"type": "Polygon", "coordinates": [[[round(x, 5), round(y, 5)] for x, y in nds]],},
+                                "properties": {
+                                    "osm_id": f"way/{way_id}",
+                                    "name": tags.get('name', 'Structure'),
+                                    "building": tags['building']
+                                }
+                            })
+            except Exception as e:
+                logger.debug("Live OSM 0.6 sub-tile fetch fell back: %s", e)
 
-                if road_feats or waterway_feats:
-                    logger.info("Successfully fetched %d live roads, %d buildings, %d waterways from OpenStreetMap 0.6 API", len(road_feats), len(bldg_feats), len(waterway_feats))
-                    return {"type": "FeatureCollection", "features": road_feats[:60]}, {"type": "FeatureCollection", "features": bldg_feats[:80]}, {"type": "FeatureCollection", "features": waterway_feats[:50]}
-        except Exception as e:
-            logger.debug("Live OSM 0.6 fetch fell back: %s", e)
+        if road_feats or waterway_feats:
+            logger.info("Successfully fetched %d live roads, %d buildings, %d waterways across %d sub-tiles", len(road_feats), len(bldg_feats), len(waterway_feats), len(sub_tiles))
+            return {"type": "FeatureCollection", "features": road_feats[:150]}, {"type": "FeatureCollection", "features": bldg_feats[:180]}, {"type": "FeatureCollection", "features": waterway_feats[:100]}
 
         return {"type": "FeatureCollection", "features": []}, {"type": "FeatureCollection", "features": []}, {"type": "FeatureCollection", "features": []}
 
@@ -392,12 +530,23 @@ class OSMFetcher:
         for idx, road in enumerate(roads.get("features", [])):
             coords = road["geometry"]["coordinates"]
             if len(coords) >= 2:
-                mid_pt = coords[len(coords) // 2]
+                # Sample a small span along the actual road line rather than slicing across it
+                mid_idx = len(coords) // 2
+                pt_a = coords[max(0, mid_idx - 1)]
+                pt_b = coords[min(len(coords) - 1, mid_idx)]
+                if pt_a == pt_b and len(coords) > 2:
+                    pt_b = coords[min(len(coords) - 1, mid_idx + 1)]
+
+                # Short segment along the road's true vector
+                b_geom = [
+                    [round(pt_a[0], 5), round(pt_a[1], 5)],
+                    [round(pt_b[0], 5), round(pt_b[1], 5)]
+                ]
                 features.append({
                     "type": "Feature",
                     "geometry": {
                         "type": "LineString",
-                        "coordinates": [[mid_pt[0] - 0.001, mid_pt[1] - 0.001], [mid_pt[0] + 0.001, mid_pt[1] + 0.001]]
+                        "coordinates": b_geom
                     },
                     "properties": {
                         "osm_id": f"way/bridge_{idx+10}",
@@ -453,69 +602,59 @@ class OSMFetcher:
         except Exception:
             pass
 
+        names = []
         if len(live_settlements) >= 2:
-            features = []
-            for idx, item in enumerate(live_settlements[:4]):
-                pt_lon, pt_lat = item["lon"], item["lat"]
-                # If road points are available, optionally snap to nearest road node if close
-                if road_pts:
-                    nearest_road = min(road_pts, key=lambda rp: (rp[0]-pt_lon)**2 + (rp[1]-pt_lat)**2)
-                    dist_to_road = ((nearest_road[0]-pt_lon)**2 + (nearest_road[1]-pt_lat)**2)**0.5
-                    if dist_to_road < 0.03:  # within ~3km
-                        pt_lon, pt_lat = nearest_road[0], nearest_road[1]
+            names = [s["name"] for s in live_settlements[:4]]
 
-                pop = 4000 if idx == 0 else 600 + (idx * 250)
-                features.append({
-                    "type": "Feature",
-                    "geometry": {"type": "Point", "coordinates": [pt_lon, pt_lat]},
-                    "properties": {"name": item["name"], "place": item["type"], "population": pop}
-                })
-            return {"type": "FeatureCollection", "features": features}
+        if not names:
+            # 1. Check if the AOI is located in the Nepal Himalayan region
+            is_nepal = (80.0 <= mid_lon <= 88.5 and 26.0 <= mid_lat <= 30.8)
 
-        # 1. Check if the AOI is located in the Nepal Himalayan region
-        is_nepal = (80.0 <= mid_lon <= 88.5 and 26.0 <= mid_lat <= 30.8)
-
-        if is_nepal:
-            if 85.0 <= mid_lon <= 85.6 and 27.8 <= mid_lat <= 28.5:
-                names = ["Bidur / Trishuli Center", "Betrawati", "Dhunche", "Syabrubesi"]
-            elif 85.4 <= mid_lon <= 85.8 and 27.6 <= mid_lat <= 28.1:
-                names = ["Melamchi Bazaar", "Helambu", "Talamarang", "Chanaute"]
-            elif 85.8 <= mid_lon <= 86.2 and 27.7 <= mid_lat <= 28.2:
-                names = ["Bahrabise Hub", "Larcha", "Tatopani", "Lipigad"]
-            elif 85.2 <= mid_lon <= 85.5 and 27.5 <= mid_lat <= 27.8:
-                names = ["Kathmandu Core", "Patan / Lalitpur", "Bhaktapur", "Sundarijal"]
+            if is_nepal:
+                if 85.0 <= mid_lon <= 85.6 and 27.8 <= mid_lat <= 28.5:
+                    names = ["Bidur / Trishuli Center", "Betrawati", "Dhunche", "Syabrubesi"]
+                elif 85.4 <= mid_lon <= 85.8 and 27.6 <= mid_lat <= 28.1:
+                    names = ["Melamchi Bazaar", "Helambu", "Talamarang", "Chanaute"]
+                elif 85.8 <= mid_lon <= 86.2 and 27.7 <= mid_lat <= 28.2:
+                    names = ["Bahrabise Hub", "Larcha", "Tatopani", "Lipigad"]
+                elif 85.2 <= mid_lon <= 85.5 and 27.5 <= mid_lat <= 27.8:
+                    names = ["Kathmandu Core", "Patan / Lalitpur", "Bhaktapur", "Sundarijal"]
+                else:
+                    names = ["District Headquarters", "Lower River Town", "Upper Hill Village", "High Mountain Hamlet"]
             else:
-                names = ["District Headquarters", "Lower River Town", "Upper Hill Village", "High Mountain Hamlet"]
-        else:
-            local_name = ""
-            try:
-                url = f"https://api.bigdatacloud.net/data/reverse-geocode-client?latitude={mid_lat}&longitude={mid_lon}&localityLanguage=en"
-                resp = requests.get(url, timeout=2.5)
-                if resp.status_code == 200:
-                    data = resp.json()
-                    city = data.get("city") or data.get("locality")
-                    subdiv = data.get("principalSubdivision") or data.get("countryName")
-                    if city:
-                        local_name = f"{city}"
-                    elif subdiv:
-                        local_name = f"{subdiv}"
-            except Exception:
-                pass
+                local_name = ""
+                try:
+                    url = f"https://api.bigdatacloud.net/data/reverse-geocode-client?latitude={mid_lat}&longitude={mid_lon}&localityLanguage=en"
+                    resp = requests.get(url, timeout=2.5)
+                    if resp.status_code == 200:
+                        data = resp.json()
+                        city = data.get("city") or data.get("locality")
+                        subdiv = data.get("principalSubdivision") or data.get("countryName")
+                        if city:
+                            local_name = f"{city}"
+                        elif subdiv:
+                            local_name = f"{subdiv}"
+                except Exception:
+                    pass
 
-            if local_name:
-                names = [
-                    f"{local_name} Central District",
-                    f"{local_name} South Basin",
-                    f"{local_name} North Riverway",
-                    f"{local_name} Heights"
-                ]
-            else:
-                names = [
-                    "Regional Medical Center",
-                    "Lower Basin Township",
-                    "Mid-Valley Village",
-                    "Upper Gorge Settlement"
-                ]
+                if local_name:
+                    names = [
+                        f"{local_name} Central District",
+                        f"{local_name} South Basin",
+                        f"{local_name} North Riverway",
+                        f"{local_name} Heights"
+                    ]
+                else:
+                    names = [
+                        "Regional Medical Center",
+                        "Lower Basin Township",
+                        "Mid-Valley Village",
+                        "Upper Gorge Settlement"
+                    ]
+
+        # Pad names to 4 if needed
+        while len(names) < 4:
+            names.append(f"Valley Settlement {len(names) + 1}")
 
         # Use road nodes to place settlements directly along drivable corridors
         if road_pts and len(road_pts) >= 4:

@@ -50,3 +50,6 @@ data/training/*
 data/models/*.pth
 data/models/*.pt
 !data/models/.gitkeep
+
+# Study materials, research papers & reference codebases
+study/

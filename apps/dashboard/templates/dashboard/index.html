@@ -9,36 +9,39 @@
         <div class="map-header">
             <div>
                 <h2>Select Area of Interest (AOI)</h2>
-                <p>Drag the box or its corner handles on the map, choose a preset, or click map to reposition.</p>
+                <p>Locked to optimal 18 × 18 km high-accuracy analysis box. Slide the box anywhere on Earth or pick a preset.</p>
             </div>
             <div class="map-quick-actions">
-                <button type="button" id="btn-recenter-aoi" class="btn btn-secondary btn-sm" title="Center box at current map view">
+                <button type="button" id="btn-recenter-aoi" class="btn btn-secondary btn-sm" title="Center fixed box at current map view">
                     🎯 Center Box Here
+                </button>
+                <button type="button" id="btn-reset-aoi" class="btn btn-outline btn-sm" title="Reset box to calibrated regional center">
+                    🔄 Reset Box Position
                 </button>
             </div>
         </div>
 
-        <!-- Quick Region Presets Bar -->
+        <!-- Quick Region Presets Bar with 1-Click Auto Run -->
         <div class="preset-chips-bar">
-            <span class="chips-label">Quick Regions:</span>
-            <button type="button" class="preset-chip active" data-preset="trishuli">
-                🏔️ Trishuli Basin, Nepal
+            <span class="chips-label">Quick Presets (1-Click Auto Run):</span>
+            <button type="button" class="preset-chip active" data-preset="trishuli" title="Trishuli Basin, Nepal — 26 Aug 2026">
+                🏔️ Trishuli Basin (2026) <span class="preset-run-badge">⚡ Auto-Run</span>
             </button>
-            <button type="button" class="preset-chip" data-preset="gujarat">
-                🌊 Gujarat Coast, India
+            <button type="button" class="preset-chip" data-preset="melamchi" title="Melamchi Basin, Nepal — 15 Jun 2021">
+                🌊 Melamchi Basin (2021) <span class="preset-run-badge">⚡ Auto-Run</span>
             </button>
-            <button type="button" class="preset-chip" data-preset="melamchi">
-                🌊 Melamchi Basin, Nepal
+            <button type="button" class="preset-chip" data-preset="gujarat" title="Gujarat Coast, India — 28 Aug 2024">
+                🌊 Gujarat Coast (2024) <span class="preset-run-badge">⚡ Auto-Run</span>
             </button>
-            <button type="button" class="preset-chip" data-preset="rhine">
-                🏞️ Rhine Valley, Europe
+            <button type="button" class="preset-chip" data-preset="rhine" title="Rhine Valley, Europe — 14 Jul 2021">
+                🏞️ Rhine Valley (2021) <span class="preset-run-badge">⚡ Auto-Run</span>
             </button>
         </div>
 
         <div id="map" class="map-container" style="min-height: 600px; height: 600px; width: 100%; display: block;"></div>
         
         <div class="map-helper-tip">
-            💡 <strong>Pro-Tip:</strong> Grab the <strong>white center handle (✥)</strong> to slide the entire box anywhere on Earth, or drag the <strong>corner circles (⚪)</strong> to resize. Click the map anytime to place the purple Upstream Origin!
+            💡 <strong>High-Accuracy Footprint (18 × 18 km):</strong> Grab the <strong>white center handle (✥ MOVE)</strong> to reposition the box anywhere, or click <strong>🎯 Center Box Here</strong>. Click anywhere on the map to place the upstream flood origin point.
         </div>
     </div>
 

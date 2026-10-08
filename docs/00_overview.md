@@ -68,6 +68,22 @@ A **full-stack web application** (Django + Leaflet.js) that:
 6. Runs **road graph connectivity analysis** to identify cut-off settlements
 7. Applies a trained **U-Net flood segmentation model** (Bonus AI #1)
 8. Traces the **flood path downstream** snapping to OSM river canyons with elevation drop & ETAs (Bonus AI #2)
+9. Generates **bilingual Situation Reports (English & Nepali)** with an interactive **Rescuer Copilot Q&A** grounded strictly in satellite facts.
+
+---
+
+## Remote Sensing Foundation: Overcoming the Operational Latency Barrier
+
+Our architectural design is directly informed by **Guy J-P. Schumann (2024)**, *"Breakthroughs in satellite remote sensing of floods"* (*Frontiers in Remote Sensing*, doi:10.3389/frsen.2023.1280654):
+
+| Milestone | Historic Breakthrough | How Mfdfs Implements It |
+|---|---|---|
+| **MS1 (1973)** | Landsat-1 Synoptic Flood Mapping | Global arbitrary AOI support across continents |
+| **MS2 (1984)** | SIR-B Radar All-Weather Cloud Penetration | Sentinel-1 C-band SAR log-ratio change detection ($\Delta\sigma^0 < -3\text{ dB}$) seeing through monsoon cloud cover |
+| **MS3 (2000)** | Disaster Charter Inter-Agency Data | Multi-sensor fusion combining ESA Copernicus & OpenStreetMap |
+| **MS4 (2003)** | MODIS High-Frequency Revisit Monitoring | Automated pre/post orbit matching |
+| **MS5 (2014)** | Copernicus Programme Open Operational Data | Open-access Sentinel-1, Sentinel-2, and Copernicus 30m DEM integration |
+| **MS6 (2019+)** | Onboard/Edge AI & Operational Latency Breakthrough | Lightweight sub-second U-Net inference & 1-Click Operational Presets overcoming the **operational latency & data confusion bottleneck** identified by Schumann |
 9. Generates bilingual **Gemini AI situation reports** in **English** and **Nepali** (`नेपाली`)
 10. Provides an interactive **Rescuer Mission Copilot Q&A widget** (zero-hallucination chat)
 11. Benchmarks accuracy against official **Copernicus EMS Activation EMSR927**

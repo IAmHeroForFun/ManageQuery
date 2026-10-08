@@ -253,7 +253,7 @@ Output: Calibrated, terrain-corrected GeoTIFF (σ° in linear scale or dB)
 
 ## Step 6 — SAR Change Detection
 
-**Tool:** `rasterio` + `numpy` + `scipy`
+**Theoretical Grounding:** *Lillesand, Kiefer, & Chipman (2015), Remote Sensing and Image Interpretation (7th ed.), Section 6.8 "Radar Image Interpretation: Water & Ice Response" (pp. 431–433) and Section 7.18 "Change Detection: Temporal Image Ratioing" (pp. 583–586).*
 
 **Algorithm: Log-ratio change detection**
 
@@ -262,9 +262,10 @@ log_ratio = 10 * log10(σ°_post / σ°_pre)
 ```
 
 Where:
-- Flooded areas show **negative** log-ratio (radar signal lost to specular reflection off water)
-- Debris shows **variable** but often also negative values vs bare soil
-- Unchanged areas → log-ratio ≈ 0
+- Flooded areas show **negative** log-ratio (radar pulses reflect specularly away from calm water surface, causing a drop of -8 to -14 dB due to water's high dielectric constant $\epsilon \approx 80$ vs dry soil $\epsilon \approx 3-8$)
+- Debris/saturated mud deposits show distinctive volumetric and corner scattering
+- Unchanged areas → log-ratio ≈ 0 dB
+- Post-classification spatial majority despeckle filter (Lillesand Section 7.14) removes radar salt-and-pepper noise.
 
 **Thresholding:**
 

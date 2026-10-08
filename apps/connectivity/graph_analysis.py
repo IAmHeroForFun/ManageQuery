@@ -76,7 +76,11 @@ class ConnectivityAnalyzer:
                 distance_km = 0.5
             else:
                 s_node = self._find_nearest_node(G, settlement_pt)
-                if s_node and hub_node and nx.has_path(G, s_node, hub_node):
+                dist_to_intact_road = (
+                    (((s_node[0]-settlement_pt[0])**2 + (s_node[1]-settlement_pt[1])**2)**0.5 * 105.0)
+                    if s_node else 999.0
+                )
+                if s_node and hub_node and dist_to_intact_road <= 2.5 and nx.has_path(G, s_node, hub_node):
                     is_isolated = False
                     distance_km = round(nx.shortest_path_length(G, s_node, hub_node, weight='weight'), 1)
                 else:

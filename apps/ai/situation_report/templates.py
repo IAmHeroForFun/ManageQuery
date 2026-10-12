@@ -1,3 +1,6 @@
+from __future__ import annotations
+from typing import Dict, Any
+
 def build_qa_prompt(stats: Dict[str, Any], question: str) -> str:
     return f"""You are an emergency disaster response copilot assisting field rescue teams and coordinators.
 STRICT ZERO-HALLUCINATION GROUNDING RULE:
@@ -23,7 +26,6 @@ RESCUER QUESTION:
 
 Provide a concise, direct, operational response (under 100 words). Be helpful and mission-critical."""
 
-from typing import Dict, Any
 
 def build_prompt(stats: Dict[str, Any], language: str = "english") -> str:
     lang_instruction = {

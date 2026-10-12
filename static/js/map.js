@@ -9,23 +9,23 @@ function initLeafletMap(containerId, centerCoords = [28.25, 85.35], zoomLevel = 
         attributionControl: true
     }).setView(centerCoords, zoomLevel);
 
+    // ESRI World Imagery (High-res satellite imagery - DEFAULT BASEMAP)
+    const esriSatellite = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+        maxZoom: 18,
+        attribution: 'Tiles &copy; Esri &mdash; Source: Esri, Maxar, Earthstar Geographics'
+    }).addTo(map);
+
     // ESRI World Street Map (Guaranteed 100% reliable, zero API key required, crisp roads & labels)
     const esriStreet = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}', {
         maxZoom: 18,
         attribution: 'Tiles &copy; Esri &mdash; Source: Esri, DeLorme, NAVTEQ'
-    }).addTo(map);
+    });
 
     // OpenTopoMap (Topographic contours & rivers, zero API key required)
     const openTopo = L.tileLayer('https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png', {
         maxZoom: 17,
         subdomains: 'abc',
         attribution: 'Map: &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, <a href="https://opentopomap.org">OpenTopoMap</a>'
-    });
-
-    // ESRI World Imagery (High-res satellite imagery)
-    const esriSatellite = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
-        maxZoom: 18,
-        attribution: 'Tiles &copy; Esri &mdash; Source: Esri, Maxar, Earthstar Geographics'
     });
 
     // CartoDB Voyager (Optional CARTO basemap)
@@ -36,9 +36,9 @@ function initLeafletMap(containerId, centerCoords = [28.25, 85.35], zoomLevel = 
     });
 
     const baseMaps = {
-        "Street Map (ESRI)": esriStreet,
-        "Topographic Map (OpenTopo)": openTopo,
-        "Satellite Imagery": esriSatellite,
+        "🛰️ Satellite Imagery": esriSatellite,
+        "🗺️ Street Map (ESRI)": esriStreet,
+        "🏔️ Topographic Map": openTopo,
         "CartoDB Streets": cartoVoyager
     };
 

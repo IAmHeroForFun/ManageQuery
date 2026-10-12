@@ -23,6 +23,9 @@
             </div>
         </div>
 
+        <!-- Status / Alert Banner -->
+        <div id="report-status-banner" style="display: none; padding: 0.85rem 1.25rem; border-radius: 8px; font-size: 0.9rem; font-weight: 500; border: 1px solid transparent; margin-bottom: 0.5rem;"></div>
+
         <!-- Language Selector Tabs -->
         <div class="tabs-container">
             <button class="tab-btn active" data-lang="english">
@@ -38,18 +41,18 @@
             <!-- English Pane -->
             <div id="pane-english" class="report-pane active">
                 <div class="report-text-wrapper">
-                    <pre id="text-english" class="report-text">
+                    <div id="text-english" class="report-text">
 {% if report and report.report_english %}{{ report.report_english }}{% else %}Click "Generate / Refresh AI Briefing" above to synthesize the official disaster briefing grounded in verified satellite statistics.{% endif %}
-                    </pre>
+                    </div>
                 </div>
             </div>
 
             <!-- Nepali Pane -->
             <div id="pane-nepali" class="report-pane">
                 <div class="report-text-wrapper">
-                    <pre id="text-nepali" class="report-text">
+                    <div id="text-nepali" class="report-text">
 {% if report and report.report_nepali %}{{ report.report_nepali }}{% else %}माथिको "Generate / Refresh AI Briefing" बटन थिचेर उपग्रह विश्लेषणमा आधारित आधिकारिक नेपाली स्थिति रिपोर्ट तयार गर्नुहोस्।{% endif %}
-                    </pre>
+                    </div>
                 </div>
             </div>
         </div>
@@ -68,7 +71,7 @@
                 <div><span>Isolated Villages:</span> <strong>{{ job.settlements_cutoff }} settlements</strong></div>
                 <div><span>Sensors:</span> <strong>Sentinel-1 SAR + Sentinel-2 Optical</strong></div>
             </div>
-            <div class="grounding-note" style="margin-top: 1rem; padding: 0.75rem 1rem; background-color: rgba(2, 132, 199, 0.1); border-left: 3px solid var(--color-blue); border-radius: 4px;">
+            <div class="grounding-note">
                 <p style="margin: 0; font-size: 0.85rem;">
                     🔒 <strong>Zero Hallucination Guarantee:</strong> When the AI model writes the report above, it is strictly forbidden from inventing numbers. It can only structure and summarize the verified measurements listed in this table.
                 </p>
@@ -100,7 +103,7 @@
             </div>
 
             <!-- Q&A Input Form -->
-            <form id="copilot-qa-form" style="display: flex; gap: 0.5rem;">
+            <form id="copilot-qa-form" action="javascript:void(0);" style="display: flex; gap: 0.5rem;">
                 <input type="text" id="copilot-qa-input" placeholder="Ask the mission copilot (e.g., Which settlements are isolated?)..." style="flex: 1; padding: 0.65rem 0.9rem; border: 1px solid var(--border-color); border-radius: 6px; font-size: 0.9rem; outline: none;" required>
                 <button type="submit" id="btn-copilot-ask" class="btn btn-primary" style="padding: 0.65rem 1.25rem; font-weight: 600; white-space: nowrap;">
                     💬 Ask Copilot
@@ -115,5 +118,5 @@
 <script>
     window.JOB_ID = "{{ job.id }}";
 </script>
-<script src="/static/js/report.js"></script>
+<script src="/static/js/report.js?v=20261011_fix_ref_and_scroll"></script>
 {% endblock %}

@@ -1,38 +1,39 @@
 :root {
-    /* Color Palette: Green, White, Blue, Yellow */
-    --color-blue: #0284c7;
-    --color-blue-hover: #0369a1;
-    --color-blue-light: #e0f2fe;
-    --color-blue-glow: rgba(2, 132, 199, 0.25);
-
+    /* Color Palette: High-Contrast Daylight Yellow & Crisp Spring Green */
     --color-green: #16a34a;
     --color-green-hover: #15803d;
     --color-green-light: #dcfce7;
+    --color-green-glow: rgba(22, 163, 74, 0.25);
 
-    --color-yellow: #eab308;
-    --color-yellow-hover: #ca8a04;
+    --color-yellow: #ca8a04;
+    --color-yellow-hover: #a16207;
     --color-yellow-light: #fef9c3;
+    --color-yellow-glow: rgba(202, 138, 4, 0.25);
 
     --color-white: #ffffff;
     --color-slate-50: #f8fafc;
     --color-slate-100: #f1f5f9;
     --color-slate-200: #e2e8f0;
+    --color-slate-300: #cbd5e1;
+    --color-slate-400: #94a3b8;
+    --color-slate-500: #64748b;
+    --color-slate-600: #475569;
     --color-slate-700: #334155;
     --color-slate-800: #1e293b;
     --color-slate-900: #0f172a;
-    --color-navy-950: #081225;
 
-    --color-red: #ef4444;
+    --color-red: #dc2626;
     --color-darkred: #991b1b;
     --color-purple: #9333ea;
 
-    /* Theme Tokens */
-    --bg-page: #081225;
-    --bg-card: #0f213d;
-    --bg-card-alt: #162b4d;
-    --border-color: #1e3a63;
-    --text-primary: #ffffff;
-    --text-muted: #94a3b8;
+    /* 100% Light Theme Design Tokens (Zero Dark / Zero Navy) */
+    --bg-page: #f8fafc;
+    --bg-card: #ffffff;
+    --bg-card-alt: #f1f5f9;
+    --border-color: #e2e8f0;
+    --border-input: #cbd5e1;
+    --text-primary: #0f172a;
+    --text-muted: #64748b;
     --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     --font-mono: 'JetBrains Mono', monospace;
 }
@@ -55,13 +56,13 @@ body {
 
 /* Header */
 .app-header {
-    background-color: rgba(8, 18, 37, 0.96);
-    border-bottom: 2px solid var(--color-blue);
-    padding: 0.85rem 1.5rem;
+    background-color: #ffffff;
+    border-bottom: 2px solid var(--color-green);
+    padding: 0.65rem 1.25rem;
     position: sticky;
     top: 0;
     z-index: 1000;
-    backdrop-filter: blur(10px);
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
 }
 
 .header-container {
@@ -70,31 +71,62 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    gap: 0.75rem;
 }
 
 .brand-link {
     display: flex;
     align-items: center;
-    gap: 0.85rem;
+    gap: 0.65rem;
     text-decoration: none;
     color: inherit;
+    min-width: 0;
 }
 
 .satellite-icon {
-    font-size: 2.2rem;
+    font-size: 1.85rem;
+    flex-shrink: 0;
 }
 
 .brand-title {
-    font-size: 1.25rem;
+    font-size: 1.15rem;
     font-weight: 800;
-    letter-spacing: 0.04em;
-    color: var(--color-white);
+    letter-spacing: 0.02em;
+    color: var(--text-primary);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .brand-subtitle {
-    font-size: 0.75rem;
+    font-size: 0.725rem;
     color: var(--color-yellow);
-    font-weight: 500;
+    font-weight: 600;
+    display: block;
+}
+
+@media (max-width: 768px) {
+    .app-header {
+        padding: 0.5rem 0.85rem;
+    }
+
+    .brand-title {
+        font-size: 0.95rem;
+        letter-spacing: normal;
+    }
+
+    .brand-subtitle {
+        display: none; /* Hide heavy subtitle on mobile to give screen back to the map */
+    }
+
+    .satellite-icon {
+        font-size: 1.5rem;
+    }
+
+    .nav-item {
+        padding: 0.4rem 0.7rem;
+        font-size: 0.8rem;
+    }
 }
 
 .header-nav {
@@ -104,7 +136,7 @@ body {
 }
 
 .nav-item {
-    color: var(--color-white);
+    color: var(--text-primary);
     text-decoration: none;
     font-size: 0.875rem;
     font-weight: 600;
@@ -116,17 +148,20 @@ body {
 }
 
 .nav-item:hover {
-    background-color: var(--color-blue);
-    border-color: var(--color-blue);
+    background-color: var(--color-green-light);
+    border-color: var(--color-green);
+    color: var(--color-green);
 }
 
 .btn-report-nav {
-    background-color: var(--color-blue);
-    color: var(--color-white);
-    border-color: var(--color-blue);
+    background-color: var(--color-green);
+    color: #ffffff;
+    border-color: var(--color-green);
+    font-weight: 700;
 }
 .btn-report-nav:hover {
-    background-color: var(--color-blue-hover);
+    background-color: var(--color-green-hover);
+    color: #ffffff;
 }
 
 /* Main */
@@ -138,7 +173,7 @@ body {
 
 /* Footer */
 .app-footer {
-    background-color: var(--color-navy-950);
+    background-color: #f1f5f9;
     border-top: 1px solid var(--border-color);
     padding: 1.25rem 1.5rem;
     font-size: 0.75rem;
@@ -160,14 +195,14 @@ body {
     border: 1px solid var(--border-color);
     border-radius: 10px;
     padding: 1.35rem;
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
 }
 
 .panel-heading {
     font-size: 1.05rem;
     font-weight: 700;
-    color: var(--color-white);
-    border-bottom: 2px solid var(--color-blue);
+    color: var(--text-primary);
+    border-bottom: 2px solid var(--color-green);
     padding-bottom: 0.4rem;
     margin-bottom: 1rem;
 }
@@ -188,39 +223,46 @@ body {
 }
 
 .btn-primary {
-    background-color: var(--color-blue);
-    color: var(--color-white);
+    background-color: var(--color-green);
+    color: #ffffff;
+    font-weight: 700;
 }
 .btn-primary:hover {
-    background-color: var(--color-blue-hover);
-    box-shadow: 0 0 12px var(--color-blue-glow);
+    background-color: var(--color-green-hover);
+    color: #ffffff;
+    box-shadow: 0 0 12px var(--color-green-glow);
 }
 
 .btn-preset {
-    background-color: var(--color-green);
-    color: var(--color-white);
+    background-color: var(--color-yellow-light);
+    color: #713f12;
+    border: 1px solid var(--color-yellow);
+    font-weight: 700;
 }
 .btn-preset:hover {
-    background-color: var(--color-green-hover);
+    background-color: var(--color-yellow);
+    color: #ffffff;
 }
 
 .btn-secondary {
-    background-color: var(--bg-card-alt);
-    color: var(--color-white);
-    border: 1px solid var(--border-color);
+    background-color: #f1f5f9;
+    color: var(--text-primary);
+    border: 1px solid var(--border-input);
 }
 .btn-secondary:hover {
-    background-color: #1e3a63;
+    background-color: #e2e8f0;
+    border-color: #94a3b8;
 }
 
 .btn-outline {
     background: transparent;
-    border: 1px solid var(--color-blue);
-    color: var(--color-blue);
+    border: 1px solid var(--color-yellow);
+    color: #a16207;
+    font-weight: 600;
 }
 .btn-outline:hover {
-    background-color: var(--color-blue);
-    color: var(--color-white);
+    background-color: var(--color-yellow-light);
+    color: #713f12;
 }
 
 .btn-block {
@@ -237,24 +279,24 @@ body {
     font-size: 0.825rem;
     font-weight: 600;
     margin-bottom: 0.4rem;
-    color: var(--color-white);
+    color: var(--text-primary);
 }
 
 .form-control {
     width: 100%;
     padding: 0.6rem 0.75rem;
-    background-color: #060e1a;
-    border: 1px solid var(--border-color);
+    background-color: #ffffff;
+    border: 1px solid var(--border-input);
     border-radius: 6px;
-    color: var(--color-white);
+    color: var(--text-primary);
     font-size: 0.875rem;
-    transition: border 0.15s ease;
+    transition: border 0.15s ease, box-shadow 0.15s ease;
 }
 
 .form-control:focus {
     outline: none;
-    border-color: var(--color-blue);
-    box-shadow: 0 0 0 2px var(--color-blue-glow);
+    border-color: var(--color-green);
+    box-shadow: 0 0 0 3px var(--color-green-glow);
 }
 
 .form-text {
@@ -271,6 +313,7 @@ body {
     cursor: pointer;
     font-weight: 500;
     font-size: 0.85rem;
+    color: var(--text-primary);
 }
 
 .checkbox-label input[type="checkbox"] {
@@ -287,11 +330,11 @@ body {
     letter-spacing: 0.05em;
 }
 
-.badge-completed { background-color: rgba(22, 163, 74, 0.25); color: #4ade80; border: 1px solid #16a34a; }
-.badge-processing { background-color: rgba(2, 132, 199, 0.25); color: #38bdf8; border: 1px solid #0284c7; }
-.badge-downloading { background-color: rgba(234, 179, 8, 0.25); color: #fde047; border: 1px solid #eab308; }
-.badge-queued { background-color: rgba(148, 163, 184, 0.25); color: #cbd5e1; border: 1px solid #475569; }
-.badge-failed { background-color: rgba(239, 68, 68, 0.25); color: #f87171; border: 1px solid #ef4444; }
+.badge-completed { background-color: #dcfce7; color: #15803d; border: 1px solid #86efac; }
+.badge-processing { background-color: #fef9c3; color: #854d0e; border: 1px solid #fde047; }
+.badge-downloading { background-color: #fef08a; color: #713f12; border: 1px solid #facc15; }
+.badge-queued { background-color: #f1f5f9; color: #475569; border: 1px solid #cbd5e1; }
+.badge-failed { background-color: #fee2e2; color: #b91c1c; border: 1px solid #fca5a5; }
 
 /* Global Map Dimensions */
 #map, #dashboard-map, .map-container, .map-viewport {
@@ -300,7 +343,7 @@ body {
     width: 100%;
     display: block;
     position: relative;
-    background-color: #07111e;
+    background-color: #e2e8f0;
     border-radius: 8px;
     border: 1px solid var(--border-color);
 }

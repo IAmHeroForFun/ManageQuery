@@ -1,0 +1,36 @@
+# Build & version control
+.git
+.gitignore
+.dockerignore
+Dockerfile*
+docker-compose*
+*.md
+
+# Virtual environment & Python cache
+venv/
+.venv/
+__pycache__/
+*.py[cod]
+*$py.class
+*.pytest_cache/
+.coverage
+htmlcov/
+
+# Local databases & testing data
+*.sqlite3
+*.db
+local_test*
+study/
+
+# Temporary media & data
+media/*
+!media/.gitkeep
+data/*
+!data/.gitkeep
+staticfiles/*
+
+# IDE and OS
+.idea/
+.vscode/
+.DS_Store
+*.log

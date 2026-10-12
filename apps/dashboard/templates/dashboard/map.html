@@ -234,11 +234,11 @@
 </div>
 
 <!-- Dedicated Copernicus EMSR927 Benchmark Modal -->
-<div id="emsr927-modal" class="modal-backdrop" style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(15, 23, 42, 0.65); z-index: 9999; align-items: center; justify-content: center; backdrop-filter: blur(4px);">
-    <div class="modal-dialog card" style="max-width: 580px; width: 92%; background: var(--card-bg, #ffffff); border-radius: 10px; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2); border: 1px solid var(--border-color); padding: 1.5rem; position: relative;">
+<div id="emsr927-modal" class="modal-backdrop" style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0, 0, 0, 0.4); z-index: 9999; align-items: center; justify-content: center; backdrop-filter: blur(4px);">
+    <div class="modal-dialog card" style="max-width: 580px; width: 92%; background: #ffffff; border-radius: 10px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15); border: 1px solid var(--border-color); padding: 1.5rem; position: relative;">
         <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1rem; border-bottom: 1px solid var(--border-color); padding-bottom: 0.75rem;">
             <div>
-                <h3 style="margin: 0; font-size: 1.15rem; color: #1e3a8a; display: flex; align-items: center; gap: 0.5rem;">
+                <h3 style="margin: 0; font-size: 1.15rem; color: var(--text-primary); display: flex; align-items: center; gap: 0.5rem;">
                     🇪🇺 Copernicus Emergency Management Service
                 </h3>
                 <span style="font-size: 0.8rem; color: var(--text-muted);">Activation EMSR927 Ground-Truth Benchmark</span>
@@ -266,8 +266,8 @@
     window.JOB_PROGRESS = {{ job.progress }};
     window.JOB_AOI = {{ job.aoi_geojson|safe }};
 </script>
-<script src="/static/js/map.js"></script>
-<script src="/static/js/layers.js"></script>
-<script src="/static/js/polling.js"></script>
-<script src="/static/js/layer_controls.js"></script>
+<script src="/static/js/map.js?v=20261011_sat"></script>
+<script src="/static/js/layers.js?v=20261011_sat"></script>
+<script src="/static/js/polling.js?v=20261011_sat"></script>
+<script src="/static/js/layer_controls.js?v=20261011_sat"></script>
 {% endblock %}

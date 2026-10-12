@@ -6,42 +6,54 @@
 <div class="index-layout">
     <!-- Left: Map Container -->
     <div class="map-section">
-        <div class="map-header">
-            <div>
-                <h2>Select Area of Interest (AOI)</h2>
-                <p>Locked to optimal 18 × 18 km high-accuracy analysis box. Slide the box anywhere on Earth or pick a preset.</p>
-            </div>
-            <div class="map-quick-actions">
-                <button type="button" id="btn-recenter-aoi" class="btn btn-secondary btn-sm" title="Center fixed box at current map view">
-                    🎯 Center Box Here
-                </button>
-                <button type="button" id="btn-reset-aoi" class="btn btn-outline btn-sm" title="Reset box to calibrated regional center">
-                    🔄 Reset Box Position
-                </button>
-            </div>
-        </div>
+        <div class="map-card-wrapper">
+            <!-- Compact Integrated Map Toolbar (Flush with Map) -->
+            <div class="map-toolbar">
+                <div class="map-toolbar-top">
+                    <div class="map-title-chip">
+                        <span class="icon">📍</span>
+                        <span class="title">Select Area of Interest (AOI)</span>
+                        <span class="footprint-pill">18 × 18 km</span>
+                    </div>
+                    <div class="map-toolbar-buttons">
+                        <button type="button" id="btn-recenter-aoi" class="btn btn-secondary btn-sm" title="Center box at current view">
+                            🎯 Center
+                        </button>
+                        <button type="button" id="btn-reset-aoi" class="btn btn-outline btn-sm" title="Reset box to calibrated position">
+                            🔄 Reset
+                        </button>
+                        <button type="submit" form="form-analysis" id="btn-submit" class="btn btn-primary btn-run-direct">
+                            🚀 Run Analysis
+                        </button>
+                    </div>
+                </div>
 
-        <!-- Quick Region Presets Bar with 1-Click Auto Run -->
-        <div class="preset-chips-bar">
-            <span class="chips-label">Quick Presets (1-Click Auto Run):</span>
-            <button type="button" class="preset-chip active" data-preset="trishuli" title="Trishuli Basin, Nepal — 26 Aug 2026">
-                🏔️ Trishuli Basin (2026) <span class="preset-run-badge">⚡ Auto-Run</span>
-            </button>
-            <button type="button" class="preset-chip" data-preset="melamchi" title="Melamchi Basin, Nepal — 15 Jun 2021">
-                🌊 Melamchi Basin (2021) <span class="preset-run-badge">⚡ Auto-Run</span>
-            </button>
-            <button type="button" class="preset-chip" data-preset="gujarat" title="Gujarat Coast, India — 28 Aug 2024">
-                🌊 Gujarat Coast (2024) <span class="preset-run-badge">⚡ Auto-Run</span>
-            </button>
-            <button type="button" class="preset-chip" data-preset="rhine" title="Rhine Valley, Europe — 14 Jul 2021">
-                🏞️ Rhine Valley (2021) <span class="preset-run-badge">⚡ Auto-Run</span>
-            </button>
-        </div>
+                <!-- Compact Region Presets Strip (Attached directly beneath toolbar buttons) -->
+                <div class="map-toolbar-presets">
+                    <span class="presets-label">Presets:</span>
+                    <div class="preset-chips-scroll">
+                        <button type="button" class="preset-chip active" data-preset="trishuli" title="Trishuli Basin, Nepal — 26 Aug 2026">
+                            🏔️ Trishuli (2026) <span class="preset-run-badge">⚡ Auto</span>
+                        </button>
+                        <button type="button" class="preset-chip" data-preset="melamchi" title="Melamchi Basin, Nepal — 15 Jun 2021">
+                            🌊 Melamchi (2021) <span class="preset-run-badge">⚡ Auto</span>
+                        </button>
+                        <button type="button" class="preset-chip" data-preset="gujarat" title="Gujarat Coast, India — 28 Aug 2024">
+                            🌊 Gujarat (2024) <span class="preset-run-badge">⚡ Auto</span>
+                        </button>
+                        <button type="button" class="preset-chip" data-preset="rhine" title="Rhine Valley, Europe — 14 Jul 2021">
+                            🏞️ Rhine (2021) <span class="preset-run-badge">⚡ Auto</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
 
-        <div id="map" class="map-container" style="min-height: 600px; height: 600px; width: 100%; display: block;"></div>
+            <!-- The Leaflet Map Canvas (Attached directly flush below toolbar) -->
+            <div id="map" class="map-container"></div>
+        </div>
         
         <div class="map-helper-tip">
-            💡 <strong>High-Accuracy Footprint (18 × 18 km):</strong> Grab the <strong>white center handle (✥ MOVE)</strong> to reposition the box anywhere, or click <strong>🎯 Center Box Here</strong>. Click anywhere on the map to place the upstream flood origin point.
+            💡 <strong>Interactive Box:</strong> Drag the <strong>center handle (✥ MOVE)</strong> to position the box anywhere. Tap <strong>🚀 Run Analysis</strong> right above the map to begin.
         </div>
     </div>
 
@@ -120,10 +132,6 @@
                     <span class="status-indicator"></span>
                     <span id="aoi-status-text">AOI ready: Selected Disaster Analysis Envelope</span>
                 </div>
-
-                <button type="submit" id="btn-submit" class="btn btn-primary btn-block">
-                    🚀 Run Satellite Flood Analysis
-                </button>
             </form>
         </div>
 
@@ -148,6 +156,6 @@
 {% endblock %}
 
 {% block extra_js %}
-<script src="/static/js/map.js"></script>
-<script src="/static/js/aoi_selector.js"></script>
+<script src="/static/js/map.js?v=20261011_sat"></script>
+<script src="/static/js/aoi_selector.js?v=20261011_sat"></script>
 {% endblock %}

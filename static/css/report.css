@@ -16,13 +16,15 @@
     justify-content: space-between;
     align-items: center;
     gap: 1.5rem;
-    border-top: 3px solid var(--color-blue);
+    border-top: 3px solid var(--color-green);
+    background-color: #ffffff;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
 }
 
 .report-meta h2 {
     font-size: 1.35rem;
     margin-bottom: 0.25rem;
-    color: var(--color-white);
+    color: var(--text-primary);
 }
 
 .report-meta p {
@@ -49,7 +51,7 @@
 }
 
 .tab-btn:hover {
-    color: var(--color-white);
+    color: var(--text-primary);
 }
 
 .tab-btn.active {
@@ -58,10 +60,11 @@
 }
 
 .report-content-card {
-    background-color: var(--bg-card);
+    background-color: #ffffff;
     border-radius: 10px;
     padding: 2.25rem;
     border: 1px solid var(--border-color);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
 }
 
 .report-pane {
@@ -78,7 +81,7 @@
     line-height: 1.8;
     white-space: pre-wrap;
     word-break: break-word;
-    color: #f1f5f9;
+    color: var(--text-primary);
 }
 
 .grounding-grid {
@@ -93,7 +96,7 @@
     display: flex;
     justify-content: space-between;
     padding: 0.5rem 0.75rem;
-    background-color: #060e1a;
+    background-color: #f8fafc;
     border-radius: 6px;
     border: 1px solid var(--border-color);
 }
@@ -104,14 +107,15 @@
 
 .grounding-grid div strong {
     color: var(--color-yellow);
+    font-weight: 700;
 }
 
 .grounding-note {
     margin-top: 1rem;
     font-size: 0.8rem;
-    color: var(--color-white);
-    background-color: rgba(2, 132, 199, 0.15);
-    border-left: 3px solid var(--color-blue);
+    color: #14532d;
+    background-color: var(--color-green-light);
+    border-left: 3px solid var(--color-green);
     padding: 0.65rem 0.85rem;
     border-radius: 0 6px 6px 0;
 }

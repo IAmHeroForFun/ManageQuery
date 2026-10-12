@@ -208,9 +208,18 @@ class SituationReportView(APIView):
 
     def post(self, request, pk):
         job = get_object_or_404(AnalysisJob, pk=pk)
-        if job.status != 'completed':
+        
+        # Check if job has measurable stats or is completed
+        has_stats = (job.flood_area_km2 is not None and job.flood_area_km2 > 0) or job.cutoff_settlements.exists()
+        if job.status != 'completed' and not has_stats:
+            status_desc = {
+                'queued': 'queued for satellite retrieval',
+                'downloading': 'fetching Sentinel-1/Sentinel-2 tiles from Copernicus',
+                'processing': 'running flood segmentation & road network topology',
+                'failed': 'encountered an error during processing'
+            }.get(job.status, job.status)
             return Response(
-                {"detail": "Analysis must be completed before generating a situation report."},
+                {"detail": f"Satellite analysis is currently {status_desc}. Please wait for flood detection to complete before generating the briefing."},
                 status=status.HTTP_400_BAD_REQUEST
             )
 
@@ -235,8 +244,15 @@ class SituationReportView(APIView):
             "analysis_date": str(job.updated_at.date() if job.updated_at else job.created_at.date()),
         }
 
-        generator = SituationReportGenerator()
-        report_data = generator.generate(stats)
+        try:
+            generator = SituationReportGenerator()
+            report_data = generator.generate(stats)
+        except Exception as e:
+            from apps.ai.situation_report.templates import get_fallback_report
+            report_data = {
+                "english": get_fallback_report(stats, language="english"),
+                "nepali": get_fallback_report(stats, language="nepali")
+            }
 
         report, _ = SituationReport.objects.update_or_create(
             job=job,

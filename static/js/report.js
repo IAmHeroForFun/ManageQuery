@@ -8,8 +8,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const textEnglish = document.getElementById('text-english');
     const textNepali = document.getElementById('text-nepali');
-
     const btnGenerate = document.getElementById('btn-generate-report');
+    const statusBanner = document.getElementById('report-status-banner');
 
     // Tab Switching
     tabButtons.forEach(btn => {
@@ -28,11 +28,80 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
+    function showStatus(message, type = 'info') {
+        if (!statusBanner) return;
+        statusBanner.style.display = 'block';
+        if (type === 'error') {
+            statusBanner.style.backgroundColor = '#fef2f2';
+            statusBanner.style.color = '#991b1b';
+            statusBanner.style.borderColor = '#fecaca';
+            statusBanner.innerHTML = `⚠️ <strong>Notice:</strong> ${message}`;
+        } else if (type === 'success') {
+            statusBanner.style.backgroundColor = '#f0fdf4';
+            statusBanner.style.color = '#166534';
+            statusBanner.style.borderColor = '#bbf7d0';
+            statusBanner.innerHTML = `✅ <strong>Success:</strong> ${message}`;
+        } else {
+            statusBanner.style.backgroundColor = '#eff6ff';
+            statusBanner.style.color = '#1e40af';
+            statusBanner.style.borderColor = '#bfdbfe';
+            statusBanner.innerHTML = `ℹ️ ${message}`;
+        }
+    }
+
+    function formatMarkdown(text) {
+        if (!text) return '';
+        // Escape basic HTML tags to prevent XSS
+        let html = text
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;');
+
+        // Headers
+        html = html.replace(/^### (.*$)/gim, '<h4 style="margin: 1.1rem 0 0.4rem; font-size: 1.05rem; color: #1e293b; font-weight: 700;">$1</h4>');
+        html = html.replace(/^## (.*$)/gim, '<h3 style="margin: 1.3rem 0 0.5rem; font-size: 1.15rem; color: #1e293b; font-weight: 700;">$1</h3>');
+        html = html.replace(/^# (.*$)/gim, '<h2 style="margin: 1.5rem 0 0.6rem; font-size: 1.3rem; color: #1e293b; font-weight: 700;">$1</h2>');
+
+        // Bold
+        html = html.replace(/\*\*(.*?)\*\*/g, '<strong style="color: #0f172a;">$1</strong>');
+        html = html.replace(/__(.*?)__/g, '<strong style="color: #0f172a;">$1</strong>');
+
+        // Italic
+        html = html.replace(/\*(.*?)\*/g, '<em>$1</em>');
+
+        // Bullet lists
+        html = html.replace(/^\s*[-*]\s+(.*$)/gim, '<li style="margin-left: 1.25rem; margin-bottom: 0.35rem;">$1</li>');
+
+        // Numbered lists
+        html = html.replace(/^\s*(\d+)\.\s+(.*$)/gim, '<li style="margin-left: 1.25rem; margin-bottom: 0.35rem;"><strong>$1.</strong> $2</li>');
+
+        // Paragraphs & newlines
+        html = html.replace(/\n\n+/g, '</p><p style="margin-bottom: 0.85rem; line-height: 1.65;">');
+        html = html.replace(/\n/g, '<br/>');
+
+        return `<div class="formatted-report-content" style="line-height: 1.65; color: #334155;"><p style="margin-bottom: 0.85rem; line-height: 1.65;">${html}</p></div>`;
+    }
+
+    // Format any initial pre-loaded report text
+    if (textEnglish && textEnglish.textContent.trim()) {
+        const raw = textEnglish.textContent.trim();
+        if (!raw.startsWith('Click "Generate')) {
+            textEnglish.innerHTML = formatMarkdown(raw);
+        }
+    }
+    if (textNepali && textNepali.textContent.trim()) {
+        const raw = textNepali.textContent.trim();
+        if (!raw.startsWith('माथिको "Generate')) {
+            textNepali.innerHTML = formatMarkdown(raw);
+        }
+    }
+
     // Generate Report Button
     if (btnGenerate && window.JOB_ID) {
         btnGenerate.addEventListener('click', async () => {
             btnGenerate.disabled = true;
             btnGenerate.textContent = "⏳ Generating Grounded Report with Gemini...";
+            if (statusBanner) statusBanner.style.display = 'none';
 
             try {
                 const resp = await fetch(`/api/analysis/${window.JOB_ID}/report/`, {
@@ -46,17 +115,19 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
 
                 const data = await resp.json();
-                if (textEnglish) textEnglish.textContent = data.report_english || '';
-                if (textNepali) textNepali.textContent = data.report_nepali || '';
+                if (textEnglish) textEnglish.innerHTML = formatMarkdown(data.report_english || '');
+                if (textNepali) textNepali.innerHTML = formatMarkdown(data.report_nepali || '');
 
                 btnGenerate.textContent = "✅ Report Generated Successfully";
+                showStatus("Official Disaster Situation Report synthesized successfully grounded in Sentinel satellite radar and optical imagery.", "success");
                 setTimeout(() => {
                     btnGenerate.disabled = false;
-                    btnGenerate.textContent = "⚡ Generate / Refresh AI Report (Gemini)";
+                    btnGenerate.textContent = "⚡ Generate / Refresh AI Briefing (Gemini)";
                 }, 3000);
             } catch (e) {
-                alert("Could not generate report: " + e.message);
-                btnGenerate.textContent = "⚡ Generate / Refresh AI Report (Gemini)";
+                showStatus(e.message, "error");
+                btnGenerate.disabled = false;
+                btnGenerate.textContent = "⚡ Generate / Refresh AI Briefing (Gemini)";
             }
         });
     }

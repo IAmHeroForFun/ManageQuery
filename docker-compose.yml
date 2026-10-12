@@ -1,0 +1,115 @@
+version: '3.8'
+
+services:
+  # ----------------------------------------------------------------------------
+  # 1. PostgreSQL 16 Database (Isolated private network, no host port conflict)
+  # ----------------------------------------------------------------------------
+  mfdfs-db:
+    image: postgres:16-alpine
+    container_name: mfdfs-db
+    restart: always
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-mfdfs_db}
+      POSTGRES_USER: ${POSTGRES_USER:-mfdfs_user}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-mfdfs_secure_password_2026}
+    volumes:
+      - mfdfs_postgres_data:/var/lib/postgresql/data
+    networks:
+      - mfdfs_internal
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-mfdfs_user} -d ${POSTGRES_DB:-mfdfs_db}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  # ----------------------------------------------------------------------------
+  # 2. Redis 7 (Task Queue & Cache)
+  # ----------------------------------------------------------------------------
+  mfdfs-redis:
+    image: redis:7-alpine
+    container_name: mfdfs-redis
+    restart: always
+    command: redis-server --appendonly yes
+    volumes:
+      - mfdfs_redis_data:/data
+    networks:
+      - mfdfs_internal
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  # ----------------------------------------------------------------------------
+  # 3. Django Web Application (Gunicorn)
+  # ----------------------------------------------------------------------------
+  mfdfs-web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: mfdfs-web
+    restart: always
+    depends_on:
+      mfdfs-db:
+        condition: service_healthy
+      mfdfs-redis:
+        condition: service_healthy
+    env_file:
+      - .env
+    environment:
+      - DJANGO_SETTINGS_MODULE=config.settings.production
+      - DATABASE_URL=postgres://${POSTGRES_USER:-mfdfs_user}:${POSTGRES_PASSWORD:-mfdfs_secure_password_2026}@mfdfs-db:5432/${POSTGRES_DB:-mfdfs_db}
+      - CELERY_BROKER_URL=redis://mfdfs-redis:6379/0
+      - CELERY_RESULT_BACKEND=redis://mfdfs-redis:6379/0
+      - MEDIA_ROOT=/app/media
+      - DATA_DIR=/app/data
+    ports:
+      # Bound to localhost so existing omvi_blog-nginx-1 can proxy to it safely
+      - "127.0.0.1:8001:8000"
+    volumes:
+      - mfdfs_static_volume:/app/staticfiles
+      - mfdfs_media_volume:/app/media
+      - mfdfs_data_volume:/app/data
+    networks:
+      - mfdfs_internal
+
+  # ----------------------------------------------------------------------------
+  # 4. Celery Worker (Asynchronous Satellite Retrieval & Flood Segmentation)
+  # ----------------------------------------------------------------------------
+  mfdfs-celery:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: mfdfs-celery
+    restart: always
+    command: celery -A config worker --loglevel=info --concurrency=2
+    depends_on:
+      mfdfs-db:
+        condition: service_healthy
+      mfdfs-redis:
+        condition: service_healthy
+    env_file:
+      - .env
+    environment:
+      - DJANGO_SETTINGS_MODULE=config.settings.production
+      - DATABASE_URL=postgres://${POSTGRES_USER:-mfdfs_user}:${POSTGRES_PASSWORD:-mfdfs_secure_password_2026}@mfdfs-db:5432/${POSTGRES_DB:-mfdfs_db}
+      - CELERY_BROKER_URL=redis://mfdfs-redis:6379/0
+      - CELERY_RESULT_BACKEND=redis://mfdfs-redis:6379/0
+      - MEDIA_ROOT=/app/media
+      - DATA_DIR=/app/data
+    volumes:
+      - mfdfs_media_volume:/app/media
+      - mfdfs_data_volume:/app/data
+    networks:
+      - mfdfs_internal
+
+volumes:
+  mfdfs_postgres_data:
+  mfdfs_redis_data:
+  mfdfs_static_volume:
+  mfdfs_media_volume:
+  mfdfs_data_volume:
+
+networks:
+  mfdfs_internal:
+    driver: bridge

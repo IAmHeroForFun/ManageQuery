@@ -1,7 +1,17 @@
 from .base import *
 
 DEBUG = False
-ALLOWED_HOSTS = env.list('DJANGO_ALLOWED_HOSTS', default=['*'])
+
+# Resilient host parsing: supports custom hosts from env, while always allowing omvihub subdomains, localhost, and proxy forwards
+_raw_hosts = env.list('DJANGO_ALLOWED_HOSTS', default=['*'])
+ALLOWED_HOSTS = list(set([
+    '*',
+    '.omvihub.in',
+    'omvihub.in',
+    'localhost',
+    '127.0.0.1',
+    '0.0.0.0',
+] + [h.strip() for h in _raw_hosts if h.strip()]))
 
 DATABASES = {
     'default': env.db(
@@ -18,16 +28,17 @@ USE_X_FORWARDED_HOST = True
 USE_X_FORWARDED_PORT = True
 
 # CSRF Trusted Origins (Configurable via env, defaults to omvihub domains)
-CSRF_TRUSTED_ORIGINS = env.list(
-    'CSRF_TRUSTED_ORIGINS',
-    default=[
-        'https://*.omvihub.in',
-        'http://*.omvihub.in',
-        'https://omvihub.in',
-        'http://localhost',
-        'http://127.0.0.1:8001',
-    ]
-)
+_raw_origins = env.list('CSRF_TRUSTED_ORIGINS', default=[])
+CSRF_TRUSTED_ORIGINS = list(set([
+    'https://*.omvihub.in',
+    'http://*.omvihub.in',
+    'https://omvihub.in',
+    'http://omvihub.in',
+    'http://localhost',
+    'http://localhost:8001',
+    'http://127.0.0.1',
+    'http://127.0.0.1:8001',
+] + [o.strip() for o in _raw_origins if o.strip()]))
 
 # Security Headers
 SECURE_BROWSER_XSS_FILTER = True

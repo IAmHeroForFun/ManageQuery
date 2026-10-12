@@ -48,30 +48,51 @@ class SituationReportGenerator:
         prompt = build_qa_prompt(stats, question)
 
         if not self.api_key:
-            # Deterministic zero-hallucination factual answer from snapshot
+            # Deterministic zero-hallucination factual answer from rich snapshot
             q_lower = question.lower()
-            if "road" in q_lower or "highway" in q_lower:
-                return f"Satellite analysis confirms {stats.get('roads_damaged_km', 0):.1f} km of road network damaged or severed in {stats.get('area_name', 'the area')}."
-            elif "building" in q_lower or "house" in q_lower:
-                return f"A total of {stats.get('buildings_affected', 0)} buildings are confirmed affected, with {stats.get('buildings_possibly_affected', 0)} possibly damaged."
+            roads_named = ", ".join(stats.get('damaged_road_names', []))
+            bldgs_named = ", ".join(stats.get('damaged_building_names', []))
+            flow_info = stats.get('flow_path_info') or {}
+
+            if "road" in q_lower or "highway" in q_lower or "drive" in q_lower or "route" in q_lower:
+                msg = f"Satellite radar confirms {stats.get('roads_damaged_km', 0):.1f} km of road network severed in {stats.get('area_name', 'the area')}."
+                if roads_named:
+                    msg += f" Confirmed affected roads include: {roads_named}."
+                return msg
+            elif "building" in q_lower or "house" in q_lower or "structure" in q_lower:
+                msg = f"A total of {stats.get('buildings_affected', 0)} buildings are confirmed inundated."
+                if bldgs_named:
+                    msg += f" Affected facilities include: {bldgs_named}."
+                return msg
             elif "bridge" in q_lower:
-                return f"{stats.get('bridges_damaged', 0)} bridge(s) have been confirmed damaged or destroyed."
-            elif "cut off" in q_lower or "isolated" in q_lower or "hospital" in q_lower:
+                return f"{stats.get('bridges_damaged', 0)} bridge(s) have been confirmed damaged or destroyed along key river crossings."
+            elif "hospital" in q_lower or "medical" in q_lower or "clinic" in q_lower or "evacuat" in q_lower:
+                details = stats.get('cutoff_details', [])
+                if details:
+                    return f"Hospital access analysis:\n• " + "\n• ".join(details)
                 names = ", ".join(stats.get('cutoff_settlement_names', []))
                 return f"{stats.get('settlements_cutoff', 0)} settlement(s) lost road access to nearest hospital: {names}."
+            elif "speed" in q_lower or "flow" in q_lower or "eta" in q_lower or "surge" in q_lower:
+                if flow_info and flow_info.get('avg_speed_kmh'):
+                    return f"Downstream flood flow is estimated at {flow_info.get('avg_speed_kmh')} km/h along a {flow_info.get('path_length_km')} km corridor. Settlement arrival timeline: {flow_info.get('settlement_etas')}."
+                return f"No active flow path surge corridor was recorded for this specific AOI."
+            elif "cut off" in q_lower or "isolated" in q_lower or "village" in q_lower:
+                names = ", ".join(stats.get('cutoff_settlement_names', []))
+                return f"{stats.get('settlements_cutoff', 0)} settlement(s) are completely isolated without intact road routes: {names}. Emergency airlifts recommended."
             elif "area" in q_lower or "extent" in q_lower or "km" in q_lower:
-                return f"Total satellite-detected inundation and debris extent is {stats.get('flood_area_km2', 0):.1f} km²."
-            return f"Verified satellite statistics for {stats.get('area_name')}: {stats.get('flood_area_km2', 0):.1f} km² flood extent, {stats.get('roads_damaged_km', 0):.1f} km roads damaged, {stats.get('buildings_affected', 0)} buildings affected, {stats.get('settlements_cutoff', 0)} cut-off settlements ({', '.join(stats.get('cutoff_settlement_names', []))})."
+                return f"Total satellite-detected inundation and debris extent is {stats.get('flood_area_km2', 0):.1f} km² grounded in Sentinel-1 SAR backscatter."
+
+            return f"Satellite telemetry for {stats.get('area_name')}: {stats.get('flood_area_km2', 0):.1f} km² flood extent, {stats.get('roads_damaged_km', 0):.1f} km roads damaged, {stats.get('settlements_cutoff', 0)} isolated settlements ({', '.join(stats.get('cutoff_settlement_names', []))})."
 
         # Try modern google-genai SDK first with supported models
         try:
             from google import genai
             client = genai.Client(api_key=self.api_key)
-            for m in ["gemini-3.5-flash-lite", "gemini-3.8-flash", "gemini-2.5-flash"]:
+            for m in ["gemini-2.5-flash", "gemini-2.5-flash-lite", "gemini-3.5-flash-lite", "gemini-flash-latest"]:
                 try:
                     resp = client.models.generate_content(model=m, contents=prompt)
                     if resp.text:
-                        return resp.text
+                        return resp.text.strip()
                 except Exception:
                     continue
         except Exception:
@@ -85,13 +106,15 @@ class SituationReportGenerator:
                     model = genai_legacy.GenerativeModel(m)
                     resp = model.generate_content(prompt)
                     if resp.text:
-                        return resp.text
+                        return resp.text.strip()
                 except Exception:
                     continue
         except Exception as e:
             logger.warning("Gemini Q&A call failed: %s", e)
 
-        return f"Verified data for {stats.get('area_name')}: {stats.get('roads_damaged_km', 0):.1f} km roads damaged, {stats.get('settlements_cutoff', 0)} cut-off villages ({', '.join(stats.get('cutoff_settlement_names', []))})."
+        # Factual grounded fallback if remote API is throttled
+        roads_named = ", ".join(stats.get('damaged_road_names', []))
+        return f"Verified data for {stats.get('area_name')}: {stats.get('roads_damaged_km', 0):.1f} km roads damaged{f' (including {roads_named})' if roads_named else ''}, {stats.get('settlements_cutoff', 0)} cut-off settlements ({', '.join(stats.get('cutoff_settlement_names', []))})."
 
     def _call_gemini(self, stats: Dict[str, Any]) -> Dict[str, str]:
         prompt_en = build_prompt(stats, language="english")

@@ -15,6 +15,9 @@
                         <span class="title">Select Area of Interest (AOI)</span>
                         <span class="footprint-pill">18 × 18 km</span>
                     </div>
+                    <div class="map-search-wrapper" style="flex: 1; max-width: 320px; min-width: 180px;">
+                        <input type="text" id="aoi-place-search" placeholder="🔍 Search place (e.g. Mumbai, Pokhara)..." style="width: 100%; padding: 0.35rem 0.65rem; border-radius: 20px; border: 1px solid var(--border-input); font-size: 0.8rem; outline: none; background: #f8fafc;" />
+                    </div>
                     <div class="map-toolbar-buttons">
                         <button type="button" id="btn-recenter-aoi" class="btn btn-secondary btn-sm" title="Center box at current view">
                             🎯 Center
@@ -41,6 +44,9 @@
                         <button type="button" class="preset-chip" data-preset="gujarat" title="Gujarat Coast, India — 28 Aug 2024">
                             🌊 Gujarat (2024) <span class="preset-run-badge">⚡ Auto</span>
                         </button>
+                        <button type="button" class="preset-chip" data-preset="mumbai" title="Mumbai Suburban Corridor, India — 26 Aug 2026">
+                            🇮🇳 Mumbai (2026) <span class="preset-run-badge">⚡ Auto</span>
+                        </button>
                         <button type="button" class="preset-chip" data-preset="rhine" title="Rhine Valley, Europe — 14 Jul 2021">
                             🏞️ Rhine (2021) <span class="preset-run-badge">⚡ Auto</span>
                         </button>
@@ -53,7 +59,7 @@
         </div>
         
         <div class="map-helper-tip">
-            💡 <strong>Interactive Box:</strong> Drag the <strong>center handle (✥ MOVE)</strong> to position the box anywhere. Tap <strong>🚀 Run Analysis</strong> right above the map to begin.
+            💡 <strong>Quick Positioning:</strong> <strong>Click/tap anywhere on the map</strong> to instantly jump the box there, or drag anywhere inside the blue area. Use <strong>🔍 Search</strong> or presets to jump directly to any city or river basin.
         </div>
     </div>
 

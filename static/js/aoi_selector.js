@@ -11,6 +11,10 @@ document.addEventListener('DOMContentLoaded', () => {
     let currentAoiPolygon = null;
     let activeRectLayer = null;
     let sourceMarker = null;
+    let isDraggingBox = false;
+    let dragStartLatLng = null;
+    let dragStartBounds = null;
+    let justFinishedDragging = false;
 
     // Fixed 1-Size Footprint: Locked to ~18 x 18 km (0.16° x 0.16°) for maximum satellite & DEM accuracy
     const FIXED_SPAN_LON = 0.1600;
@@ -37,6 +41,12 @@ document.addEventListener('DOMContentLoaded', () => {
             floodDate: "2024-08-28",
             minLon: 72.8200, minLat: 20.8300, maxLon: 72.9800, maxLat: 20.9900,
             sourceLon: 72.9400, sourceLat: 20.9600
+        },
+        mumbai: {
+            name: "Mumbai Suburban Corridor, India",
+            floodDate: "2026-08-26",
+            minLon: 72.8200, minLat: 19.1200, maxLon: 72.9800, maxLat: 19.2800,
+            sourceLon: 72.9100, sourceLat: 19.2400
         },
         rhine: {
             name: "Rhine Valley, Europe",
@@ -159,13 +169,63 @@ document.addEventListener('DOMContentLoaded', () => {
             weight: 2.5,
             fillColor: "#38bdf8",
             fillOpacity: 0.22,
-            dashArray: "4, 4"
+            dashArray: "4, 4",
+            className: "draggable-aoi-box"
         }).addTo(drawnItems);
+
+        // Direct surface dragging: drag anywhere inside the blue box
+        activeRectLayer.on('mousedown', (e) => {
+            isDraggingBox = true;
+            dragStartLatLng = e.latlng;
+            dragStartBounds = activeRectLayer.getBounds();
+            map.dragging.disable();
+            L.DomEvent.stopPropagation(e);
+        });
+
+        activeRectLayer.on('touchstart', (e) => {
+            if (e.latlng) {
+                isDraggingBox = true;
+                dragStartLatLng = e.latlng;
+                dragStartBounds = activeRectLayer.getBounds();
+                map.dragging.disable();
+                L.DomEvent.stopPropagation(e);
+            }
+        });
 
         updateInteractiveHandles(bounds);
 
         if (fit) {
             map.fitBounds(bounds, { padding: [35, 35] });
+        }
+    }
+
+    /**
+     * Positions the fixed 18 x 18 km AOI box centered at (cLng, cLat)
+     */
+    function moveBoxToCenter(cLng, cLat, pan = false) {
+        if (isNaN(cLng) || isNaN(cLat)) return;
+        const newMinLon = cLng - HALF_SPAN_LON;
+        const newMaxLon = cLng + HALF_SPAN_LON;
+        const newMinLat = cLat - HALF_SPAN_LAT;
+        const newMaxLat = cLat + HALF_SPAN_LAT;
+
+        syncInputsFromCoords(newMinLon, newMinLat, newMaxLon, newMaxLat);
+        const poly = createBboxPolygon(newMinLon, newMinLat, newMaxLon, newMaxLat);
+        renderAoiOnMap(poly, false);
+
+        // Keep origin marker positioned logically near upstream edge of new AOI
+        const traceCheckbox = document.getElementById('trace-flood-path');
+        if (traceCheckbox && traceCheckbox.checked) {
+            const sLon = cLng + 0.03;
+            const sLat = cLat + 0.03;
+            if (inputSourceLon) inputSourceLon.value = sLon.toFixed(4);
+            if (inputSourceLat) inputSourceLat.value = sLat.toFixed(4);
+            setSourceMarker(sLon, sLat, false);
+        }
+
+        saveSessionState();
+        if (pan) {
+            map.panTo([cLat, cLng]);
         }
     }
 
@@ -244,15 +304,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (btnRecenter) {
         btnRecenter.addEventListener('click', () => {
             const mapCenter = map.getCenter();
-            const newMinLon = mapCenter.lng - HALF_SPAN_LON;
-            const newMaxLon = mapCenter.lng + HALF_SPAN_LON;
-            const newMinLat = mapCenter.lat - HALF_SPAN_LAT;
-            const newMaxLat = mapCenter.lat + HALF_SPAN_LAT;
-
-            syncInputsFromCoords(newMinLon, newMinLat, newMaxLon, newMaxLat);
-            const poly = createBboxPolygon(newMinLon, newMinLat, newMaxLon, newMaxLat);
-            renderAoiOnMap(poly, false);
-            saveSessionState();
+            moveBoxToCenter(mapCenter.lng, mapCenter.lat, false);
         });
     }
 
@@ -334,18 +386,109 @@ document.addEventListener('DOMContentLoaded', () => {
         inputSourceLat.addEventListener('change', syncSourceMarkerFromInputs);
     }
 
-    // Map click places the Upstream Origin Marker if flood path tracing is active
-    map.on('click', (e) => {
-        const traceCheckbox = document.getElementById('trace-flood-path');
-        if (traceCheckbox && traceCheckbox.checked) {
-            const lon = parseFloat(e.latlng.lng.toFixed(4));
-            const lat = parseFloat(e.latlng.lat.toFixed(4));
-            if (inputSourceLon) inputSourceLon.value = lon.toFixed(4);
-            if (inputSourceLat) inputSourceLat.value = lat.toFixed(4);
-            setSourceMarker(lon, lat);
-            saveSessionState();
+    // Dragging handlers for direct box dragging (mouse + touch)
+    const onMapMoveBox = (e) => {
+        if (!isDraggingBox || !dragStartBounds || !dragStartLatLng) return;
+        const dLat = e.latlng.lat - dragStartLatLng.lat;
+        const dLng = e.latlng.lng - dragStartLatLng.lng;
+        const newSw = L.latLng(dragStartBounds.getSouth() + dLat, dragStartBounds.getWest() + dLng);
+        const newNe = L.latLng(dragStartBounds.getNorth() + dLat, dragStartBounds.getEast() + dLng);
+        if (activeRectLayer) {
+            activeRectLayer.setBounds(L.latLngBounds(newSw, newNe));
         }
+    };
+
+    const endBoxDrag = () => {
+        if (isDraggingBox) {
+            isDraggingBox = false;
+            map.dragging.enable();
+            justFinishedDragging = true;
+            setTimeout(() => { justFinishedDragging = false; }, 250);
+            if (activeRectLayer) {
+                const b = activeRectLayer.getBounds();
+                const center = b.getCenter();
+                moveBoxToCenter(center.lng, center.lat, false);
+            }
+        }
+    };
+
+    map.on('mousemove', onMapMoveBox);
+    map.on('touchmove', onMapMoveBox);
+    map.on('mouseup', endBoxDrag);
+    map.on('touchend', endBoxDrag);
+    if (map.getContainer()) {
+        map.getContainer().addEventListener('mouseleave', endBoxDrag);
+    }
+
+    // 1-Click / 1-Tap AOI Positioning: Click anywhere on the map to jump the 18x18 km box immediately!
+    map.on('click', (e) => {
+        if (justFinishedDragging) return;
+        // Don't reposition if user clicked an interactive handle or marker
+        if (e.originalEvent && e.originalEvent.target &&
+            (e.originalEvent.target.closest('.upstream-source-marker') ||
+             e.originalEvent.target.closest('.aoi-center-handle'))) {
+            return;
+        }
+        moveBoxToCenter(e.latlng.lng, e.latlng.lat, false);
     });
+
+    // Place & City Live Geocoding Search Bar
+    const COMMON_LOCATIONS = {
+        "mumbai": { lat: 19.2000, lng: 72.9000 },
+        "trishuli": { lat: 28.1800, lng: 85.3500 },
+        "melamchi": { lat: 27.9300, lng: 85.5800 },
+        "kathmandu": { lat: 27.7172, lng: 85.3240 },
+        "pokhara": { lat: 28.2096, lng: 83.9856 },
+        "gujarat": { lat: 20.9100, lng: 72.9000 },
+        "surat": { lat: 21.1702, lng: 72.8311 },
+        "delhi": { lat: 28.6139, lng: 77.2090 },
+        "rhine": { lat: 50.5300, lng: 7.1000 },
+        "kolkata": { lat: 22.5726, lng: 88.3639 },
+        "chennai": { lat: 13.0827, lng: 80.2707 },
+        "dhaka": { lat: 23.8103, lng: 90.4125 },
+        "patna": { lat: 25.5941, lng: 85.1376 },
+        "guwahati": { lat: 26.1445, lng: 91.7362 }
+    };
+
+    const searchInput = document.getElementById('aoi-place-search');
+    if (searchInput) {
+        searchInput.addEventListener('keydown', async (e) => {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                const q = searchInput.value.trim().toLowerCase();
+                if (!q) return;
+
+                // 1. Fast match from local presets and major cities
+                for (const [k, v] of Object.entries(COMMON_LOCATIONS)) {
+                    if (q.includes(k) || k.includes(q)) {
+                        map.flyTo([v.lat, v.lng], 11, { duration: 1.0 });
+                        moveBoxToCenter(v.lng, v.lat, false);
+                        return;
+                    }
+                }
+
+                // 2. Fall back to OpenStreetMap Nominatim geocoding
+                try {
+                    searchInput.placeholder = "🔍 Searching...";
+                    const res = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(q)}&limit=1`);
+                    const data = await res.json();
+                    if (data && data.length > 0) {
+                        const lat = parseFloat(data[0].lat);
+                        const lng = parseFloat(data[0].lon);
+                        map.flyTo([lat, lng], 11, { duration: 1.0 });
+                        moveBoxToCenter(lng, lat, false);
+                    } else {
+                        alert(`Location "${searchInput.value}" not found. Try another city or place name.`);
+                    }
+                } catch (err) {
+                    console.error("Geocoding failed:", err);
+                    alert("Place search temporarily unavailable. You can click anywhere on the map to jump the box there.");
+                } finally {
+                    searchInput.placeholder = "🔍 Search place (e.g. Mumbai, Pokhara)...";
+                }
+            }
+        });
+    }
 
     // Toggle source point display container
     const tracePathToggle = document.getElementById('trace-flood-path');

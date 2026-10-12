@@ -146,7 +146,21 @@ async function loadCutoffSettlementsLayer(map, jobId) {
 
         MapLayers.cutoff = L.geoJSON(data, {
             pointToLayer: (feature, latlng) => {
-                const isCutoff = feature.properties.is_cutoff;
+                const p = feature.properties;
+                const isCutoff = p.is_cutoff;
+                const isHosp = p.is_hospital || (p.place === 'hospital') || (p.name && (p.name.includes('Hospital') || p.name.includes('Medical')));
+
+                if (isHosp) {
+                    return L.marker(latlng, {
+                        icon: L.divIcon({
+                            className: 'custom-hosp-marker',
+                            html: `<div style="background:#2563eb; color:#fff; border-radius:50%; width:24px; height:24px; display:flex; align-items:center; justify-content:center; font-size:13px; border:2px solid #fff; box-shadow:0 2px 6px rgba(0,0,0,0.3);">🏥</div>`,
+                            iconSize: [24, 24],
+                            iconAnchor: [12, 12]
+                        })
+                    });
+                }
+
                 return L.circleMarker(latlng, {
                     radius: isCutoff ? 8 : 6,
                     color: isCutoff ? '#ef4444' : '#16a34a',
@@ -163,16 +177,17 @@ async function loadCutoffSettlementsLayer(map, jobId) {
                     layer: layer
                 };
 
+                const isHosp = p.is_hospital || (p.place === 'hospital');
                 layer.bindPopup(`
                     <div style="font-size:12px; min-width: 220px;">
-                        <strong style="color:${p.is_cutoff ? '#ef4444' : '#16a34a'}; font-size:13px;">
-                            ${p.is_cutoff ? '🚨 PRIORITY 1: ISOLATED COMMUNITY' : '✅ GROUND EVACUATION ACCESSIBLE'}
+                        <strong style="color:${isHosp ? '#2563eb' : (p.is_cutoff ? '#ef4444' : '#16a34a')}; font-size:13px;">
+                            ${isHosp ? '🏥 REGIONAL MEDICAL FACILITY' : (p.is_cutoff ? '🚨 PRIORITY 1: ISOLATED COMMUNITY' : '✅ GROUND EVACUATION ACCESSIBLE')}
                         </strong><br>
-                        <strong>Village Name:</strong> ${p.name}<br>
-                        <strong>Nearest Medical Center:</strong> ${p.nearest_hospital || 'District Hospital'}<br>
-                        <strong>Pre-Flood Highway Distance:</strong> ${p.pre_flood_distance_km || '--'} km<br>
-                        <strong>Ground Accessibility:</strong> 
-                        ${p.is_cutoff ? '<span style="color:#ef4444;font-weight:700;">ALL ROADS SEVERED — REQUIRES AIRLIFT</span>' : '<span style="color:#16a34a;font-weight:700;">DRIVABLE ROAD ROUTE INTACT</span>'}
+                        <strong>${isHosp ? 'Facility Name' : 'Community'}:</strong> ${p.name}<br>
+                        ${!isHosp ? `<strong>Assigned Hospital:</strong> ${p.nearest_hospital || 'Emergency Hospital'}<br>` : ''}
+                        <strong>Highway Distance:</strong> ${p.pre_flood_distance_km || '--'} km<br>
+                        <strong>Accessibility Status:</strong> 
+                        ${isHosp ? '<span style="color:#2563eb;font-weight:700;">REGIONAL MEDICAL BASE</span>' : (p.is_cutoff ? '<span style="color:#ef4444;font-weight:700;">ALL ROADS SEVERED — REQUIRES AIRLIFT</span>' : '<span style="color:#16a34a;font-weight:700;">DRIVABLE ROAD ROUTE INTACT</span>')}
                     </div>
                 `);
             }

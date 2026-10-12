@@ -291,6 +291,24 @@ class RescuerCopilotQAView(APIView):
         else:
             detected_area = "Regional Flood Zone"
 
+        # Fine-grained infrastructure grounding for tactical Q&A
+        damaged_roads = list(job.damaged_features.filter(osm_type='road', status='affected').values_list('osm_name', flat=True)[:10])
+        damaged_buildings = list(job.damaged_features.filter(osm_type='building', status='affected').values_list('osm_name', flat=True)[:10])
+        cutoff_details = [
+            f"{cs.name} (Hospital: {cs.nearest_hospital}, pre-flood distance: {cs.pre_flood_distance_km} km)"
+            for cs in job.cutoff_settlements.filter(is_cutoff=True)[:8]
+        ]
+
+        flow_info = {}
+        if job.trace_flood_path and hasattr(job, 'flood_path') and job.flood_path:
+            fp = job.flood_path
+            flow_info = {
+                "avg_speed_kmh": fp.avg_speed_kmh,
+                "path_length_km": fp.path_length_km,
+                "elevation_drop_m": fp.elevation_drop_m,
+                "settlement_etas": fp.settlement_etas
+            }
+
         stats = {
             "flood_date": str(job.flood_date),
             "area_name": detected_area,
@@ -301,6 +319,10 @@ class RescuerCopilotQAView(APIView):
             "bridges_damaged": job.bridges_damaged or 0,
             "settlements_cutoff": job.settlements_cutoff or 0,
             "cutoff_settlement_names": cutoff_names or (all_settlements[1:] if len(all_settlements) > 1 else ["Isolated Local Hamlets"]),
+            "cutoff_details": cutoff_details,
+            "damaged_road_names": [r for r in damaged_roads if r and r != "Unnamed Road"][:8],
+            "damaged_building_names": [b for b in damaged_buildings if b and b != "Structure"][:8],
+            "flow_path_info": flow_info,
             "data_source": "Sentinel-1 SAR + Sentinel-2 Optical Imagery",
             "analysis_date": str(job.updated_at.date() if job.updated_at else job.created_at.date()),
         }

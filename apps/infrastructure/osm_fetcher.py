@@ -108,13 +108,14 @@ class OSMFetcher:
         ]
 
         query = f"""
-[out:json][timeout:15];
+[out:json][timeout:12];
 (
   way["highway"~"motorway|trunk|primary|secondary|tertiary|residential|unclassified"]({min_lat:.5f},{min_lon:.5f},{max_lat:.5f},{max_lon:.5f});
-  way["waterway"~"river|stream"]({min_lat:.5f},{min_lon:.5f},{max_lat:.5f},{max_lon:.5f});
-  way["building"]({min_lat:.5f},{min_lon:.5f},{max_lat:.5f},{max_lon:.5f});
+  way["waterway"~"river|stream|canal"]({min_lat:.5f},{min_lon:.5f},{max_lat:.5f},{max_lon:.5f});
+  way["building"~"hospital|apartments|residential|commercial|school|yes"]({min_lat:.5f},{min_lon:.5f},{max_lat:.5f},{max_lon:.5f});
+  node["amenity"~"hospital|clinic"]({min_lat:.5f},{min_lon:.5f},{max_lat:.5f},{max_lon:.5f});
 );
-out tags geom 300;
+out tags geom 250;
 """
         headers = {
             "User-Agent": "MfdfsDisasterResponse/1.0 (flood-hazard-analysis)",
@@ -136,6 +137,25 @@ out tags geom 300;
                             geom = el.get("geometry", [])
                             tags = el.get("tags", {})
                             way_id = el.get("id")
+
+                            # Handle hospital/clinic nodes
+                            if el.get("type") == "node" and "amenity" in tags and ("lon" in el and "lat" in el):
+                                n_lon, n_lat = el["lon"], el["lat"]
+                                sz = 0.0012
+                                bldg_feats.append({
+                                    "type": "Feature",
+                                    "geometry": {
+                                        "type": "Polygon",
+                                        "coordinates": [[[n_lon, n_lat], [n_lon+sz, n_lat], [n_lon+sz, n_lat+sz], [n_lon, n_lat+sz], [n_lon, n_lat]]]
+                                    },
+                                    "properties": {
+                                        "osm_id": f"node/{way_id}",
+                                        "name": tags.get("name", "Medical Facility"),
+                                        "building": "hospital"
+                                    }
+                                })
+                                continue
+
                             if not geom or len(geom) < 2:
                                 continue
 
@@ -176,7 +196,7 @@ out tags geom 300;
                                     }
                                 })
 
-                        if road_feats or waterway_feats:
+                        if road_feats or waterway_feats or bldg_feats:
                             logger.info(
                                 "Overpass API successfully retrieved %d real roads, %d buildings, %d waterways from %s",
                                 len(road_feats), len(bldg_feats), len(waterway_feats), ep
@@ -577,123 +597,141 @@ out tags geom 300;
                     if len(pt) >= 2 and min_lon <= pt[0] <= max_lon and min_lat <= pt[1] <= max_lat:
                         road_pts.append((pt[0], pt[1]))
 
-        # Try live Nominatim OpenStreetMap query for real settlements/villages within this AOI
+        # Try live Nominatim OpenStreetMap query for real settlements, suburbs, and hospitals within this AOI
         live_settlements = []
         try:
             viewbox = f"{min_lon},{max_lat},{max_lon},{min_lat}"
             headers = {"User-Agent": "MfdfsDisasterResponse/1.0"}
-            resp = requests.get(
-                f"https://nominatim.openstreetmap.org/search?format=json&viewbox={viewbox}&bounded=1&q=village&limit=6",
-                headers=headers,
-                timeout=3.0
-            )
-            if resp.status_code == 200:
-                for item in resp.json():
-                    v_name = item.get("name") or item.get("display_name", "").split(",")[0]
-                    v_lat = float(item.get("lat", 0.0))
-                    v_lon = float(item.get("lon", 0.0))
-                    if v_name and min_lon <= v_lon <= max_lon and min_lat <= v_lat <= max_lat:
-                        live_settlements.append({
-                            "name": v_name,
-                            "lat": round(v_lat, 4),
-                            "lon": round(v_lon, 4),
-                            "type": item.get("type", "village")
-                        })
+            
+            # Query for villages, suburbs, towns, and hospitals
+            for q_term in ["village", "suburb", "town", "hospital"]:
+                try:
+                    resp = requests.get(
+                        f"https://nominatim.openstreetmap.org/search?format=json&viewbox={viewbox}&bounded=1&q={q_term}&limit=12",
+                        headers=headers,
+                        timeout=3.5
+                    )
+                    if resp.status_code == 200:
+                        for item in resp.json():
+                            v_name = item.get("name") or item.get("display_name", "").split(",")[0]
+                            v_lat = float(item.get("lat", 0.0))
+                            v_lon = float(item.get("lon", 0.0))
+                            if v_name and min_lon <= v_lon <= max_lon and min_lat <= v_lat <= max_lat:
+                                if not any(s["name"].lower() == v_name.lower() for s in live_settlements):
+                                    live_settlements.append({
+                                        "name": v_name,
+                                        "lat": round(v_lat, 4),
+                                        "lon": round(v_lon, 4),
+                                        "type": item.get("type", q_term),
+                                        "is_hospital": (q_term == "hospital" or "hospital" in v_name.lower() or "medical" in v_name.lower())
+                                    })
+                except Exception:
+                    pass
         except Exception:
             pass
 
+        features = []
+        if len(live_settlements) >= 3:
+            hosp_list = [s for s in live_settlements if s.get("is_hospital") and s["name"].lower() != "hospital"]
+            comm_list = [s for s in live_settlements if not s.get("is_hospital")]
+
+            # Include up to 4 primary hospitals and up to 6 surrounding communities
+            selected = hosp_list[:4] + comm_list[:6]
+            if len(selected) < 4:
+                selected = live_settlements[:10]
+
+            for s in selected:
+                is_hosp = s.get("is_hospital", False)
+                features.append({
+                    "type": "Feature",
+                    "geometry": {"type": "Point", "coordinates": [s["lon"], s["lat"]]},
+                    "properties": {
+                        "name": s["name"],
+                        "place": "hospital" if is_hosp else s.get("type", "village"),
+                        "is_hospital": is_hosp,
+                        "population": 1500 if not is_hosp else 300
+                    }
+                })
+            return {"type": "FeatureCollection", "features": features}
+
+        # Regional presets fallback when offline or no Nominatim results
         names = []
-        if len(live_settlements) >= 2:
-            names = [s["name"] for s in live_settlements[:4]]
+        is_nepal = (80.0 <= mid_lon <= 88.5 and 26.0 <= mid_lat <= 30.8)
 
-        if not names:
-            # 1. Check if the AOI is located in the Nepal Himalayan region
-            is_nepal = (80.0 <= mid_lon <= 88.5 and 26.0 <= mid_lat <= 30.8)
-
-            if is_nepal:
-                if 85.0 <= mid_lon <= 85.6 and 27.8 <= mid_lat <= 28.5:
-                    names = ["Bidur / Trishuli Center", "Betrawati", "Dhunche", "Syabrubesi"]
-                elif 85.4 <= mid_lon <= 85.8 and 27.6 <= mid_lat <= 28.1:
-                    names = ["Melamchi Bazaar", "Helambu", "Talamarang", "Chanaute"]
-                elif 85.8 <= mid_lon <= 86.2 and 27.7 <= mid_lat <= 28.2:
-                    names = ["Bahrabise Hub", "Larcha", "Tatopani", "Lipigad"]
-                elif 85.2 <= mid_lon <= 85.5 and 27.5 <= mid_lat <= 27.8:
-                    names = ["Kathmandu Core", "Patan / Lalitpur", "Bhaktapur", "Sundarijal"]
-                else:
-                    names = ["District Headquarters", "Lower River Town", "Upper Hill Village", "High Mountain Hamlet"]
+        if is_nepal:
+            if 85.0 <= mid_lon <= 85.6 and 27.8 <= mid_lat <= 28.5:
+                names = ["Trishuli District Hospital", "Bidur / Trishuli Center", "Betrawati", "Dhunche", "Syabrubesi", "Kalikasthan"]
+            elif 85.4 <= mid_lon <= 85.8 and 27.6 <= mid_lat <= 28.1:
+                names = ["Melamchi Primary Health Center", "Melamchi Bazaar", "Helambu", "Talamarang", "Chanaute", "Kiul"]
+            elif 85.8 <= mid_lon <= 86.2 and 27.7 <= mid_lat <= 28.2:
+                names = ["Bahrabise Regional Hospital", "Bahrabise Hub", "Larcha", "Tatopani", "Lipigad"]
+            elif 85.2 <= mid_lon <= 85.5 and 27.5 <= mid_lat <= 27.8:
+                names = ["Bir Hospital Center", "Kathmandu Core", "Patan / Lalitpur", "Bhaktapur", "Sundarijal", "Kirtipur"]
             else:
-                local_name = ""
-                try:
-                    url = f"https://api.bigdatacloud.net/data/reverse-geocode-client?latitude={mid_lat}&longitude={mid_lon}&localityLanguage=en"
-                    resp = requests.get(url, timeout=2.5)
-                    if resp.status_code == 200:
-                        data = resp.json()
-                        city = data.get("city") or data.get("locality")
-                        subdiv = data.get("principalSubdivision") or data.get("countryName")
-                        if city:
-                            local_name = f"{city}"
-                        elif subdiv:
-                            local_name = f"{subdiv}"
-                except Exception:
-                    pass
+                names = ["District General Hospital", "Lower River Town", "Upper Hill Village", "High Mountain Hamlet", "Valley Spur Settlement"]
+        else:
+            # Regional city reverse-geocoding
+            local_name = ""
+            try:
+                url = f"https://api.bigdatacloud.net/data/reverse-geocode-client?latitude={mid_lat}&longitude={mid_lon}&localityLanguage=en"
+                resp = requests.get(url, timeout=2.5)
+                if resp.status_code == 200:
+                    data = resp.json()
+                    city = data.get("city") or data.get("locality")
+                    subdiv = data.get("principalSubdivision") or data.get("countryName")
+                    local_name = city or subdiv or ""
+            except Exception:
+                pass
 
-                if local_name:
-                    names = [
-                        f"{local_name} Central District",
-                        f"{local_name} South Basin",
-                        f"{local_name} North Riverway",
-                        f"{local_name} Heights"
-                    ]
-                else:
-                    names = [
-                        "Regional Medical Center",
-                        "Lower Basin Township",
-                        "Mid-Valley Village",
-                        "Upper Gorge Settlement"
-                    ]
-
-        # Pad names to 4 if needed
-        while len(names) < 4:
-            names.append(f"Valley Settlement {len(names) + 1}")
+            if local_name:
+                names = [
+                    f"{local_name} Civic General Hospital",
+                    f"{local_name} Central District",
+                    f"{local_name} South Basin",
+                    f"{local_name} North Riverway",
+                    f"{local_name} West Heights",
+                    f"{local_name} East Corridor"
+                ]
+            else:
+                names = [
+                    "Regional Emergency Hospital",
+                    "Lower Basin Township",
+                    "Mid-Valley Village",
+                    "Upper Gorge Settlement",
+                    "River Bend Community"
+                ]
 
         # Use road nodes to place settlements directly along drivable corridors
-        if road_pts and len(road_pts) >= 4:
-            # Sort road points from South-West to North-East
+        target_count = len(names)
+        if road_pts and len(road_pts) >= target_count:
             road_pts_sorted = sorted(road_pts, key=lambda p: p[0] + p[1])
-            step = max(1, len(road_pts_sorted) // 4)
-            chosen_pts = [road_pts_sorted[min(i * step, len(road_pts_sorted) - 1)] for i in range(4)]
+            step = max(1, len(road_pts_sorted) // target_count)
+            chosen_pts = [road_pts_sorted[min(i * step, len(road_pts_sorted) - 1)] for i in range(target_count)]
         else:
             seed_val = int(abs(min_lon * 1000 + min_lat * 100)) % 10000
             rng = random.Random(seed_val + 99)
-            chosen_pts = [
-                (round(min_lon + rng.uniform(0.12, 0.22) * d_lon, 4), round(min_lat + rng.uniform(0.1, 0.2) * d_lat, 4)),
-                (round(min_lon + rng.uniform(0.3, 0.42) * d_lon, 4), round(min_lat + rng.uniform(0.35, 0.48) * d_lat, 4)),
-                (round(min_lon + rng.uniform(0.5, 0.62) * d_lon, 4), round(min_lat + rng.uniform(0.55, 0.68) * d_lat, 4)),
-                (round(min_lon + rng.uniform(0.7, 0.85) * d_lon, 4), round(min_lat + rng.uniform(0.75, 0.9) * d_lat, 4))
-            ]
+            chosen_pts = []
+            for i in range(target_count):
+                f_t = (i + 1) / (target_count + 1)
+                chosen_pts.append((
+                    round(min_lon + (f_t + rng.uniform(-0.06, 0.06)) * d_lon, 4),
+                    round(min_lat + (f_t + rng.uniform(-0.06, 0.06)) * d_lat, 4)
+                ))
 
-        features = [
-            {
+        for idx, name in enumerate(names):
+            pt = chosen_pts[idx]
+            is_hosp = ("hospital" in name.lower() or "health" in name.lower() or "medical" in name.lower())
+            features.append({
                 "type": "Feature",
-                "geometry": {"type": "Point", "coordinates": [chosen_pts[0][0], chosen_pts[0][1]]},
-                "properties": {"name": names[0], "place": "town", "population": 4200}
-            },
-            {
-                "type": "Feature",
-                "geometry": {"type": "Point", "coordinates": [chosen_pts[1][0], chosen_pts[1][1]]},
-                "properties": {"name": names[1], "place": "village", "population": 850}
-            },
-            {
-                "type": "Feature",
-                "geometry": {"type": "Point", "coordinates": [chosen_pts[2][0], chosen_pts[2][1]]},
-                "properties": {"name": names[2], "place": "village", "population": 490}
-            },
-            {
-                "type": "Feature",
-                "geometry": {"type": "Point", "coordinates": [chosen_pts[3][0], chosen_pts[3][1]]},
-                "properties": {"name": names[3], "place": "hamlet", "population": 210}
-            }
-        ]
+                "geometry": {"type": "Point", "coordinates": [pt[0], pt[1]]},
+                "properties": {
+                    "name": name,
+                    "place": "hospital" if is_hosp else ("town" if idx == 0 else "village"),
+                    "is_hospital": is_hosp,
+                    "population": 3500 if idx == 0 else max(200, 1200 - idx * 150)
+                }
+            })
+
         return {"type": "FeatureCollection", "features": features}
 
     def _generate_regional_waterways(self, bbox: List[float]) -> Dict[str, Any]:

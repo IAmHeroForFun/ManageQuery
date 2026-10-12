@@ -167,6 +167,16 @@
     border-radius: 0;
 }
 
+.draggable-aoi-box {
+    cursor: move !important;
+}
+
+.map-search-wrapper input:focus {
+    border-color: var(--color-green) !important;
+    background: #ffffff !important;
+    box-shadow: 0 0 0 2px var(--color-green-light) !important;
+}
+
 /* Draggable Handles Styling */
 .aoi-center-handle {
     cursor: move !important;
@@ -361,20 +371,22 @@
 .dashboard-layout {
     display: grid;
     grid-template-columns: 1fr 430px;
-    height: calc(100vh - 110px);
+    height: calc(100dvh - 120px);
+    min-height: 600px;
     width: 100%;
     background-color: var(--bg-page);
+    overflow: hidden;
 }
 
 .map-wrapper {
     position: relative;
     height: 100%;
     width: 100%;
+    min-width: 0;
 }
 
 .map-viewport {
     height: 100%;
-    min-height: 600px;
     width: 100%;
     background-color: #e2e8f0;
 }

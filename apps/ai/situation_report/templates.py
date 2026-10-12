@@ -2,29 +2,42 @@ from __future__ import annotations
 from typing import Dict, Any
 
 def build_qa_prompt(stats: Dict[str, Any], question: str) -> str:
-    return f"""You are an emergency disaster response copilot assisting field rescue teams and coordinators.
+    road_names = ", ".join(stats.get('damaged_road_names', [])) or "Specific local road segments"
+    bldg_names = ", ".join(stats.get('damaged_building_names', [])) or "Local residential and commercial units"
+    cutoff_list = "\n- ".join(stats.get('cutoff_details', [])) or ", ".join(stats.get('cutoff_settlement_names', []))
+
+    flow_info = stats.get('flow_path_info') or {}
+    flow_str = "Not active for this analysis"
+    if flow_info and flow_info.get('avg_speed_kmh'):
+        flow_str = f"Speed: {flow_info.get('avg_speed_kmh')} km/h, Path Length: {flow_info.get('path_length_km')} km, ETAs: {flow_info.get('settlement_etas')}"
+
+    return f"""You are an emergency disaster response copilot assisting field rescue teams and incident commanders.
 STRICT ZERO-HALLUCINATION GROUNDING RULE:
 You must answer the rescuer's question using ONLY the verified facts and satellite figures below.
+Focus directly and specifically on what the user is asking. If they ask about roads, discuss the road network and named severed roads. If they ask about medical evacuation or hospitals, cite the nearest facilities and isolation distances. If they ask about flood surge or water arrival, cite the hydrodynamic speed and village ETAs.
 If the answer is not in the data, state clearly: "That information is not available in the current satellite analysis."
-Never guess, speculate, or invent numbers.
+Never guess, extrapolate, or invent figures.
 
 --- SATELLITE DISASTER METRICS & MAP DATA ---
 Location: {stats.get('area_name', 'Disaster Zone')}
 Event Date: {stats.get('flood_date')}
 Inundated & Debris Area: {stats.get('flood_area_km2', 0):.1f} km²
-Damaged / Severed Roads: {stats.get('roads_damaged_km', 0):.1f} km
-Confirmed Affected Buildings: {stats.get('buildings_affected', 0)}
+Damaged / Severed Roads Total: {stats.get('roads_damaged_km', 0):.1f} km
+Confirmed Severed Road Segments: {road_names}
+Confirmed Affected Buildings: {stats.get('buildings_affected', 0)} ({bldg_names})
 Possibly Damaged Buildings: {stats.get('buildings_possibly_affected', 0)}
 Damaged Bridges: {stats.get('bridges_damaged', 0)}
-Cut-off Settlements (lost road access to medical facility): {stats.get('settlements_cutoff', 0)}
-Names of Cut-off Settlements: {', '.join(stats.get('cutoff_settlement_names', []))}
-Data Sensors: Sentinel-1 SAR + Sentinel-2 Optical + OpenStreetMap
+Cut-off Settlements (lost road connectivity to emergency hospital): {stats.get('settlements_cutoff', 0)}
+Settlement Evacuation Logistics:
+- {cutoff_list}
+Downstream Flood Flow Corridor & ETAs: {flow_str}
+Data Sensors: Sentinel-1 SAR Radar + Sentinel-2 Optical + OpenStreetMap Network
 --- END VERIFIED DATA ---
 
 RESCUER QUESTION:
 {question}
 
-Provide a concise, direct, operational response (under 100 words). Be helpful and mission-critical."""
+Provide a direct, helpful, and concise operational answer (under 120 words). Address the question directly."""
 
 
 def build_prompt(stats: Dict[str, Any], language: str = "english") -> str:

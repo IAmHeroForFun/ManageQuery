@@ -50,7 +50,7 @@ class ConnectivityAnalyzer:
                 dist = ((u[0]-v[0])**2 + (u[1]-v[1])**2)**0.5 * 105.0  # km approx
                 G.add_edge(u, v, weight=dist)
 
-        # 2. Check each settlement
+        # 2. Identify all medical facilities / hospitals and candidate community nodes
         with open(osm_paths["settlements"], "r", encoding="utf-8") as f:
             settlements_data = json.load(f)
 
@@ -58,42 +58,81 @@ class ConnectivityAnalyzer:
         if not settlement_feats:
             return []
 
-        # The first settlement or dedicated medical node acts as the base hub / district hospital
-        hub_coords = settlement_feats[0]["geometry"]["coordinates"]
-        hub_node = self._find_nearest_node(G, (round(hub_coords[0], 4), round(hub_coords[1], 4)))
-        raw_name = settlement_feats[0]["properties"]["name"]
-        hub_name = raw_name if ("Hospital" in raw_name or "Medical" in raw_name or "Clinic" in raw_name) else f"{raw_name} District Medical Center"
+        # Find all facilities that are marked as hospitals or contain hospital in their name
+        hospitals = []
+        communities = []
+        for feat in settlement_feats:
+            p = feat["properties"]
+            raw_n = p.get("name", "")
+            if p.get("is_hospital") or "hospital" in raw_n.lower() or "medical" in raw_n.lower() or "clinic" in raw_n.lower():
+                h_coords = feat["geometry"]["coordinates"]
+                h_node = self._find_nearest_node(G, (round(h_coords[0], 4), round(h_coords[1], 4)))
+                hospitals.append({
+                    "name": raw_n if ("Hospital" in raw_n or "Medical" in raw_n or "Clinic" in raw_n) else f"{raw_n} District Hospital",
+                    "coords": h_coords,
+                    "node": h_node,
+                    "feat": feat
+                })
+            else:
+                communities.append(feat)
+
+        # Fallback: if no dedicated hospital tag found, designate the first settlement as primary hospital
+        if not hospitals:
+            first_f = settlement_feats[0]
+            first_coords = first_f["geometry"]["coordinates"]
+            first_node = self._find_nearest_node(G, (round(first_coords[0], 4), round(first_coords[1], 4)))
+            raw_n = first_f["properties"]["name"]
+            hospitals.append({
+                "name": f"{raw_n} Emergency Center",
+                "coords": first_coords,
+                "node": first_node,
+                "feat": first_f
+            })
+            communities = settlement_feats[1:]
 
         results = []
-        for idx, feature in enumerate(settlement_feats):
+
+        # For every community settlement, find nearest reachable hospital
+        for feature in communities:
             name = feature["properties"]["name"]
             coords = feature["geometry"]["coordinates"]
             settlement_pt = (round(coords[0], 4), round(coords[1], 4))
+            s_node = self._find_nearest_node(G, settlement_pt)
 
-            if idx == 0:
-                # The hub is always connected to itself
-                is_isolated = False
-                distance_km = 0.5
-            else:
-                s_node = self._find_nearest_node(G, settlement_pt)
-                dist_to_intact_road = (
-                    (((s_node[0]-settlement_pt[0])**2 + (s_node[1]-settlement_pt[1])**2)**0.5 * 105.0)
-                    if s_node else 999.0
+            dist_to_road = (
+                (((s_node[0]-settlement_pt[0])**2 + (s_node[1]-settlement_pt[1])**2)**0.5 * 105.0)
+                if s_node else 999.0
+            )
+
+            best_hospital = None
+            best_dist = 999.0
+            is_connected = False
+
+            # Check reachability to ALL hospitals in network
+            for hosp in hospitals:
+                h_node = hosp["node"]
+                if s_node and h_node and dist_to_road <= 3.0 and nx.has_path(G, s_node, h_node):
+                    path_len = round(nx.shortest_path_length(G, s_node, h_node, weight='weight'), 1)
+                    if path_len < best_dist:
+                        best_dist = path_len
+                        best_hospital = hosp
+                        is_connected = True
+
+            # If isolated from all hospitals, find geographically closest hospital for straight-line evacuation
+            if not is_connected:
+                closest_hosp = min(
+                    hospitals,
+                    key=lambda h: ((settlement_pt[0]-h["coords"][0])**2 + (settlement_pt[1]-h["coords"][1])**2)
                 )
-                if s_node and hub_node and dist_to_intact_road <= 2.5 and nx.has_path(G, s_node, hub_node):
-                    is_isolated = False
-                    distance_km = round(nx.shortest_path_length(G, s_node, hub_node, weight='weight'), 1)
-                else:
-                    is_isolated = True
-                    # Estimate straight line distance when severed
-                    distance_km = round(((settlement_pt[0]-hub_coords[0])**2 + (settlement_pt[1]-hub_coords[1])**2)**0.5 * 105.0, 1)
+                best_hospital = closest_hosp
+                best_dist = round(((settlement_pt[0]-closest_hosp["coords"][0])**2 + (settlement_pt[1]-closest_hosp["coords"][1])**2)**0.5 * 105.0, 1)
 
             results.append({
                 "name": name,
-                "is_cutoff": is_isolated,
-                "nearest_hospital": f"{hub_name} Emergency Center",
-                "nearest_hospital_geojson": json.dumps({"type": "Point", "coordinates": hub_coords}),
-                "pre_flood_distance_km": distance_km,
+                "is_cutoff": not is_connected,
+                "nearest_hospital": best_hospital["name"],
+                "nearest_hospital_geojson": json.dumps({"type": "Point", "coordinates": best_hospital["coords"]}),
+                "pre_flood_distance_km": best_dist,
                 "population_estimate": feature["properties"].get("population", 500),
                 "geometry_geojson": json.dumps(feature["geometry"])
             })
@@ -102,7 +141,7 @@ class ConnectivityAnalyzer:
             json.dump(results, f, indent=2)
 
         isolated_count = sum(1 for r in results if r["is_cutoff"])
-        logger.info("Connectivity analysis complete: %d / %d settlements cut off.", isolated_count, len(results))
+        logger.info("Connectivity analysis complete: %d / %d communities cut off across %d hospital facilities.", isolated_count, len(results), len(hospitals))
         return results
 
     def _find_nearest_node(self, G: nx.Graph, point: tuple) -> Any:

@@ -4,19 +4,29 @@
 document.addEventListener('DOMContentLoaded', () => {
     if (!window.JOB_ID) return;
 
+    // Initialize map with default center, then immediately lock onto analyzed AOI bounds
     const map = initLeafletMap('dashboard-map', [28.25, 85.35], 11);
     window.dashboardMap = map;
 
-    // Display AOI bounding boundary initially
+    // Display AOI bounding boundary initially and center directly on analyzed region
     if (window.JOB_AOI) {
-        L.geoJSON(window.JOB_AOI, {
+        const aoiLayer = L.geoJSON(window.JOB_AOI, {
             style: {
                 color: '#3b82f6',
-                weight: 1.5,
+                weight: 2,
                 dashArray: '4, 4',
                 fillOpacity: 0.05
             }
         }).addTo(map);
+
+        try {
+            const bounds = aoiLayer.getBounds();
+            if (bounds.isValid()) {
+                map.fitBounds(bounds, { padding: [25, 25], maxZoom: 13 });
+            }
+        } catch (e) {
+            console.warn("Could not fit map bounds to AOI:", e);
+        }
     }
 
     const progressBar = document.getElementById('progress-bar-fill');
@@ -105,12 +115,18 @@ document.addEventListener('DOMContentLoaded', () => {
         try {
             reportContentEl.textContent = "Synthesizing official disaster situation report (grounded in verified satellite metrics)...";
             let resp = await fetch(`/api/analysis/${jobId}/report/`);
-            let data = await resp.json();
+            let contentType = resp.headers.get('content-type') || '';
+            let data = contentType.includes('application/json') ? await resp.json() : null;
 
             // If not yet generated, trigger generation immediately
-            if (!data.report_english) {
+            if (!data || !data.report_english) {
                 resp = await fetch(`/api/analysis/${jobId}/report/`, { method: 'POST' });
-                data = await resp.json();
+                contentType = resp.headers.get('content-type') || '';
+                if (contentType.includes('application/json')) {
+                    data = await resp.json();
+                } else {
+                    throw new Error("Invalid response format");
+                }
             }
 
             cachedReport = data;

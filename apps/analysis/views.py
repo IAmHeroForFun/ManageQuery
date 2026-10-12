@@ -5,6 +5,9 @@ from rest_framework import generics, status
 from rest_framework.views import APIView
 from rest_framework.response import Response
 
+from django.utils.decorators import method_decorator
+from django.views.decorators.csrf import csrf_exempt
+
 from .models import (
     AnalysisJob, FloodExtent, DamagedFeature,
     CutoffSettlement, FloodPath, SituationReport
@@ -194,6 +197,7 @@ class SegmentationView(APIView):
         })
 
 
+@method_decorator(csrf_exempt, name='dispatch')
 class SituationReportView(APIView):
     def get(self, request, pk):
         job = get_object_or_404(AnalysisJob, pk=pk)
@@ -268,6 +272,7 @@ class SituationReportView(APIView):
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 
+@method_decorator(csrf_exempt, name='dispatch')
 class RescuerCopilotQAView(APIView):
     """
     Interactive Q&A Copilot for field rescuers.

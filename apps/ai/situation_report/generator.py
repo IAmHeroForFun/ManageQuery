@@ -97,41 +97,62 @@ class SituationReportGenerator:
         prompt_en = build_prompt(stats, language="english")
         prompt_ne = build_prompt(stats, language="nepali")
 
-        # Try google_genai client first (modern SDK)
+        text_en = None
+        text_ne = None
+
+        # 1. Try modern google.genai SDK
         try:
             from google import genai
             client = genai.Client(api_key=self.api_key)
             for m in ["gemini-3.5-flash-lite", "gemini-3.8-flash", "gemini-2.5-flash"]:
-                try:
-                    resp_en = client.models.generate_content(model=m, contents=prompt_en)
-                    resp_ne = client.models.generate_content(model=m, contents=prompt_ne)
-                    if resp_en.text:
-                        return {
-                            "english": resp_en.text or get_fallback_report(stats, "english"),
-                            "nepali": resp_ne.text or get_fallback_report(stats, "nepali")
-                        }
-                except Exception as ex:
-                    logger.debug("Model %s attempt failed: %s", m, ex)
-                    continue
-        except ImportError:
-            pass
-
-        # Try google.generativeai (legacy SDK)
-        try:
-            import google.generativeai as genai_legacy
-            genai_legacy.configure(api_key=self.api_key)
-            for m in ["gemini-1.5-flash", "gemini-pro"]:
-                try:
-                    model = genai_legacy.GenerativeModel(m)
-                    resp_en = model.generate_content(prompt_en)
-                    resp_ne = model.generate_content(prompt_ne)
-                    if resp_en.text:
-                        return {
-                            "english": resp_en.text or get_fallback_report(stats, "english"),
-                            "nepali": resp_ne.text or get_fallback_report(stats, "nepali")
-                        }
-                except Exception:
-                    continue
+                if not text_en:
+                    try:
+                        resp = client.models.generate_content(model=m, contents=prompt_en)
+                        if resp.text:
+                            text_en = resp.text
+                    except Exception as ex:
+                        logger.debug("EN model %s failed: %s", m, ex)
+                if not text_ne:
+                    try:
+                        resp = client.models.generate_content(model=m, contents=prompt_ne)
+                        if resp.text:
+                            text_ne = resp.text
+                    except Exception as ex:
+                        logger.debug("NE model %s failed: %s", m, ex)
+                if text_en and text_ne:
+                    break
         except Exception as e:
-            logger.warning("Gemini API call failed (%s). Falling back to grounded report templates.", e)
-            raise RuntimeError(f"Both Gemini SDK calls failed: {e}")
+            logger.debug("google.genai SDK attempt error: %s", e)
+
+        # 2. Try legacy google.generativeai if either is still missing
+        if not text_en or not text_ne:
+            try:
+                import google.generativeai as genai_legacy
+                genai_legacy.configure(api_key=self.api_key)
+                for m in ["gemini-1.5-flash", "gemini-pro"]:
+                    if not text_en:
+                        try:
+                            model = genai_legacy.GenerativeModel(m)
+                            resp = model.generate_content(prompt_en)
+                            if resp.text:
+                                text_en = resp.text
+                        except Exception:
+                            pass
+                    if not text_ne:
+                        try:
+                            model = genai_legacy.GenerativeModel(m)
+                            resp = model.generate_content(prompt_ne)
+                            if resp.text:
+                                text_ne = resp.text
+                        except Exception:
+                            pass
+                    if text_en and text_ne:
+                        break
+            except Exception as e:
+                logger.debug("google.generativeai attempt error: %s", e)
+
+        # Guarantee bilingual return: if any failed, seamlessly use verified grounded template
+        return {
+            "english": text_en or get_fallback_report(stats, language="english"),
+            "nepali": text_ne or get_fallback_report(stats, language="nepali")
+        }

@@ -109,12 +109,19 @@ document.addEventListener('DOMContentLoaded', () => {
                     headers: { 'Content-Type': 'application/json' }
                 });
 
-                if (!resp.ok) {
-                    const err = await resp.json();
-                    throw new Error(err.detail || "Report generation failed.");
+                const contentType = resp.headers.get('content-type') || '';
+                let data = null;
+                if (contentType.includes('application/json')) {
+                    data = await resp.json();
+                } else {
+                    const text = await resp.text();
+                    throw new Error(`Server returned status ${resp.status}: ${text.slice(0, 100)}`);
                 }
 
-                const data = await resp.json();
+                if (!resp.ok) {
+                    throw new Error((data && data.detail) || "Report generation failed.");
+                }
+
                 if (textEnglish) textEnglish.innerHTML = formatMarkdown(data.report_english || '');
                 if (textNepali) textNepali.innerHTML = formatMarkdown(data.report_nepali || '');
 

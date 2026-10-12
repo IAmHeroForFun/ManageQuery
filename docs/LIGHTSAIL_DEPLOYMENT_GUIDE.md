@@ -68,10 +68,7 @@ Save with `Ctrl+O`, then exit with `Ctrl+X`.
 ### Step 3: Issue SSL Certificate for the Subdomain
 Using Certbot on your host (or through your existing Certbot container):
 ```bash
-# Example with certbot on host using webroot or standalone:
-sudo certbot certonly --webroot -w /var/www/certbot -d flood.omvihub.in
-# OR if using DNS challenge:
-sudo certbot certonly --manual --preferred-challenges dns -d flood.omvihub.in
+sudo certbot certonly --standalone -d nutriwise.omvihub.in
 ```
 Ensure your DNS provider (e.g. Cloudflare / Route53 / Namecheap) has an `A` record pointing `flood.omvihub.in` to your Lightsail public IP.
 

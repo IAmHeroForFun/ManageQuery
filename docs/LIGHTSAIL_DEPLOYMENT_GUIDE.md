@@ -87,7 +87,9 @@ Scroll to the bottom and paste the block below (also available in `docker/nginx/
 # Mfdfs Satellite Flood Damage Analysis
 # ==============================================================================
 upstream mfdfs_app {
-    server 127.0.0.1:8001;
+    # NOTE: Since Nginx runs in a container, 127.0.0.1 refers to the Nginx container itself.
+    # To reach the host from inside Nginx, use your Lightsail host private IP:
+    server 172.26.1.124:8001;
 }
 
 server {

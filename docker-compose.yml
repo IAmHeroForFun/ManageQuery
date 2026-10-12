@@ -64,8 +64,8 @@ services:
       - MEDIA_ROOT=/app/media
       - DATA_DIR=/app/data
     ports:
-      # Bound to localhost so existing omvi_blog-nginx-1 can proxy to it safely
-      - "127.0.0.1:8001:8000"
+      # Expose port 8001 so Nginx container can proxy via host IP/gateway (172.17.0.1 or 172.26.1.124)
+      - "8001:8000"
     volumes:
       - mfdfs_static_volume:/app/staticfiles
       - mfdfs_media_volume:/app/media

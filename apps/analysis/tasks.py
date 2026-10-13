@@ -89,7 +89,13 @@ def run_flood_analysis(job_id: str, *args, **kwargs):
         # ---------------------------------------------------------------------
         update_job_progress(job, 35, "Running Sentinel-1 SAR log-ratio change detection...", status='processing')
         sar_proc = SARProcessor(despeckle=True)
-        sar_result = sar_proc.compute_change_mask(s1_files['pre'], s1_files['post'], aoi, paths['processed'])
+        sar_result = sar_proc.compute_change_mask(
+            s1_files['pre'],
+            s1_files['post'],
+            aoi,
+            paths['processed'],
+            waterways_path=osm_paths.get('waterways')
+        )
 
         # ---------------------------------------------------------------------
         # STEP 3: Optical NDWI & Sensor Fusion (50% - 55%)

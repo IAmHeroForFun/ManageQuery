@@ -832,8 +832,39 @@ out tags geom 250;
             hosp_list = [s for s in live_settlements if s.get("is_hospital")]
             comm_list = [s for s in live_settlements if not s.get("is_hospital")]
 
-            # Include real hospitals and surrounding communities
-            selected = hosp_list[:20] + comm_list[:20]
+            # -----------------------------------------------------------------
+            # Spatial Stratification (3x3 grid) to prevent localized clumping
+            # Distributes settlements & hospitals across the entire AOI bounding box
+            # -----------------------------------------------------------------
+            def _stratify_spatial(items: List[Dict[str, Any]], max_items: int) -> List[Dict[str, Any]]:
+                if len(items) <= max_items:
+                    return items
+                # Partition into 3x3 grid cells
+                grid_cells = [[] for _ in range(9)]
+                for it in items:
+                    gx = min(2, max(0, int((it["lon"] - min_lon) / max(1e-5, d_lon) * 3)))
+                    gy = min(2, max(0, int((it["lat"] - min_lat) / max(1e-5, d_lat) * 3)))
+                    cell_idx = gy * 3 + gx
+                    grid_cells[cell_idx].append(it)
+
+                chosen = []
+                # Round-robin pick from each grid cell
+                step = 0
+                while len(chosen) < max_items and step < 50:
+                    added_any = False
+                    for cell in grid_cells:
+                        if len(cell) > step and len(chosen) < max_items:
+                            chosen.append(cell[step])
+                            added_any = True
+                    step += 1
+                    if not added_any:
+                        break
+                return chosen
+
+            stratified_hosp = _stratify_spatial(hosp_list, 20)
+            stratified_comm = _stratify_spatial(comm_list, 20)
+            selected = stratified_hosp + stratified_comm
+
             if len(selected) < 4:
                 selected = live_settlements[:30]
 

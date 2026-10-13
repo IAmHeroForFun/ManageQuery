@@ -21,6 +21,9 @@ async function loadAllDashboardLayers(map, jobId) {
         loadCutoffSettlementsLayer(map, jobId),
         loadFloodPathLayer(map, jobId)
     ]);
+    if (window.syncLayersWithControls) {
+        window.syncLayersWithControls();
+    }
 }
 
 async function loadFloodLayer(map, jobId) {
@@ -29,7 +32,9 @@ async function loadFloodLayer(map, jobId) {
         if (!resp.ok) return;
         const data = await resp.json();
 
-        if (MapLayers.flood) map.removeLayer(MapLayers.flood);
+        if (MapLayers.flood && map.hasLayer(MapLayers.flood)) {
+            map.removeLayer(MapLayers.flood);
+        }
 
         MapLayers.flood = L.geoJSON(data, {
             style: {
@@ -49,10 +54,11 @@ async function loadFloodLayer(map, jobId) {
                     </div>
                 `);
             }
-        }).addTo(map);
+        });
 
-        if (MapLayers.flood.getLayers().length > 0) {
-            map.fitBounds(MapLayers.flood.getBounds(), { padding: [30, 30] });
+        const floodToggle = document.getElementById('toggle-flood');
+        if (floodToggle && floodToggle.checked) {
+            MapLayers.flood.addTo(map);
         }
     } catch (e) {
         console.warn("Could not load flood layer:", e);
@@ -65,8 +71,8 @@ async function loadDamagedFeaturesLayer(map, jobId) {
         if (!resp.ok) return;
         const data = await resp.json();
 
-        if (MapLayers.roads) map.removeLayer(MapLayers.roads);
-        if (MapLayers.buildings) map.removeLayer(MapLayers.buildings);
+        if (MapLayers.roads && map.hasLayer(MapLayers.roads)) map.removeLayer(MapLayers.roads);
+        if (MapLayers.buildings && map.hasLayer(MapLayers.buildings)) map.removeLayer(MapLayers.buildings);
 
         const roadFeatures = data.features.filter(f => f.properties.osm_type === 'road' || f.properties.osm_type === 'bridge');
         const buildingFeatures = data.features.filter(f => f.properties.osm_type === 'building');
@@ -107,7 +113,12 @@ async function loadDamagedFeaturesLayer(map, jobId) {
                     </div>
                 `);
             }
-        }).addTo(map);
+        });
+
+        const roadsToggle = document.getElementById('toggle-roads');
+        if (roadsToggle && roadsToggle.checked) {
+            MapLayers.roads.addTo(map);
+        }
 
         // Buildings Layer
         MapLayers.buildings = L.geoJSON({ type: "FeatureCollection", features: buildingFeatures }, {
@@ -129,6 +140,11 @@ async function loadDamagedFeaturesLayer(map, jobId) {
                 `);
             }
         });
+
+        const bldgToggle = document.getElementById('toggle-buildings');
+        if (bldgToggle && bldgToggle.checked) {
+            MapLayers.buildings.addTo(map);
+        }
 
         // Cutoff settlements layer
     } catch (e) {
@@ -191,7 +207,12 @@ async function loadCutoffSettlementsLayer(map, jobId) {
                     </div>
                 `);
             }
-        }).addTo(map);
+        });
+
+        const cutoffToggle = document.getElementById('toggle-cutoff');
+        if (cutoffToggle && cutoffToggle.checked) {
+            MapLayers.cutoff.addTo(map);
+        }
 
         // Populate clickable sidebar list
         const listEl = document.getElementById('settlements-list');
@@ -278,7 +299,12 @@ async function loadFloodPathLayer(map, jobId) {
                     </div>
                 `);
             }
-        }).addTo(map);
+        });
+
+        const pathToggle = document.getElementById('toggle-path');
+        if (pathToggle && pathToggle.checked) {
+            MapLayers.path.addTo(map);
+        }
     } catch (e) {
         console.warn("Could not load flood path layer:", e);
     }

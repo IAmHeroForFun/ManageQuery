@@ -3,9 +3,37 @@
  * Implements Schumann (2024) Rescuer Clarity Standards
  */
 document.addEventListener('DOMContentLoaded', () => {
+    const LAYER_MAPPING = [
+        { key: 'cutoff',    checkboxId: 'toggle-cutoff' },
+        { key: 'roads',     checkboxId: 'toggle-roads' },
+        { key: 'flood',     checkboxId: 'toggle-flood' },
+        { key: 'buildings', checkboxId: 'toggle-buildings' },
+        { key: 'path',      checkboxId: 'toggle-path' },
+        { key: 'unet',      checkboxId: 'toggle-unet' },
+        { key: 'emsr927',   checkboxId: 'toggle-emsr927' },
+    ];
+
+    const PRESETS = {
+        evac:   { cutoff: true,  roads: true,  flood: false, buildings: false, path: false, unet: false, emsr927: false },
+        extent: { cutoff: false, roads: false, flood: true,  buildings: true,  path: false, unet: false, emsr927: true  },
+        flow:   { cutoff: true,  roads: false, flood: false, buildings: false, path: true,  unet: false, emsr927: false },
+        all:    { cutoff: true,  roads: true,  flood: true,  buildings: true,  path: true,  unet: true,  emsr927: false }
+    };
+
+    const btnEvac = document.getElementById('btn-view-evac');
+    const btnExtent = document.getElementById('btn-view-extent');
+    const btnFlow = document.getElementById('btn-view-flow');
+    const btnAll = document.getElementById('btn-view-all');
+    const presetButtons = [btnEvac, btnExtent, btnFlow, btnAll].filter(Boolean);
+
     function setLayerVisible(layerKey, checkboxId, isVisible) {
         const checkbox = document.getElementById(checkboxId);
         if (checkbox) checkbox.checked = isVisible;
+
+        if (layerKey === 'emsr927') {
+            setEmsrLayerVisible(isVisible);
+            return;
+        }
 
         const layer = MapLayers[layerKey];
         if (!layer || !window.dashboardMap) return;
@@ -20,90 +48,86 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
     }
+    window.setLayerVisible = setLayerVisible;
 
-    function setupToggle(checkboxId, layerKey) {
-        const checkbox = document.getElementById(checkboxId);
-        if (!checkbox) return;
+    function updateActivePresetIndicator(explicitPresetKey) {
+        let targetPreset = explicitPresetKey;
+        if (!targetPreset) {
+            for (const [pKey, pConfig] of Object.entries(PRESETS)) {
+                let match = true;
+                for (const { key, checkboxId } of LAYER_MAPPING) {
+                    const cb = document.getElementById(checkboxId);
+                    if (cb && pConfig[key] !== undefined) {
+                        if (cb.checked !== pConfig[key]) {
+                            match = false;
+                            break;
+                        }
+                    }
+                }
+                if (match) {
+                    targetPreset = pKey;
+                    break;
+                }
+            }
+        }
 
-        checkbox.addEventListener('change', () => {
-            setLayerVisible(layerKey, checkboxId, checkbox.checked);
-        });
-    }
+        const btnMap = {
+            evac: btnEvac,
+            extent: btnExtent,
+            flow: btnFlow,
+            all: btnAll
+        };
 
-    setupToggle('toggle-cutoff', 'cutoff');
-    setupToggle('toggle-roads', 'roads');
-    setupToggle('toggle-flood', 'flood');
-    setupToggle('toggle-buildings', 'buildings');
-    setupToggle('toggle-path', 'path');
-    setupToggle('toggle-unet', 'unet');
-
-    // 1-Click Operational View Presets Handlers
-    const btnEvac = document.getElementById('btn-view-evac');
-    const btnExtent = document.getElementById('btn-view-extent');
-    const btnFlow = document.getElementById('btn-view-flow');
-    const btnAll = document.getElementById('btn-view-all');
-    const presetButtons = [btnEvac, btnExtent, btnFlow, btnAll].filter(Boolean);
-
-    function setActivePresetBtn(btn) {
         presetButtons.forEach(b => b.classList.remove('active'));
-        if (btn) btn.classList.add('active');
+        if (targetPreset && btnMap[targetPreset]) {
+            btnMap[targetPreset].classList.add('active');
+        }
     }
 
-    // Mode 1: Evacuation & Medical Access (Focuses on cutoff villages & roads)
-    if (btnEvac) {
-        btnEvac.addEventListener('click', () => {
-            setActivePresetBtn(btnEvac);
-            setLayerVisible('cutoff', 'toggle-cutoff', true);
-            setLayerVisible('roads', 'toggle-roads', true);
-            setLayerVisible('flood', 'toggle-flood', false);
-            setLayerVisible('buildings', 'toggle-buildings', false);
-            setLayerVisible('path', 'toggle-path', false);
-            setLayerVisible('unet', 'toggle-unet', false);
-            setEmsrLayerVisible(false);
+    function syncLayersWithControls() {
+        LAYER_MAPPING.forEach(({ key, checkboxId }) => {
+            const checkbox = document.getElementById(checkboxId);
+            if (checkbox) {
+                setLayerVisible(key, checkboxId, checkbox.checked);
+            }
         });
+        updateActivePresetIndicator();
     }
+    window.syncLayersWithControls = syncLayersWithControls;
 
-    // Mode 2: Flood Extent (Focuses on SAR/NDWI inundated polygons & buildings)
-    if (btnExtent) {
-        btnExtent.addEventListener('click', () => {
-            setActivePresetBtn(btnExtent);
-            setLayerVisible('flood', 'toggle-flood', true);
-            setLayerVisible('buildings', 'toggle-buildings', true);
-            setLayerVisible('roads', 'toggle-roads', false);
-            setLayerVisible('cutoff', 'toggle-cutoff', false);
-            setLayerVisible('path', 'toggle-path', false);
-            setLayerVisible('unet', 'toggle-unet', false);
-            setEmsrLayerVisible(true);
-        });
-    }
+    function applyPreset(presetKey) {
+        const config = PRESETS[presetKey];
+        if (!config) return;
 
-    // Mode 3: Flow Path (Focuses on downhill gravity surge corridor & ETAs)
-    if (btnFlow) {
-        btnFlow.addEventListener('click', () => {
-            setActivePresetBtn(btnFlow);
-            setLayerVisible('path', 'toggle-path', true);
-            setLayerVisible('cutoff', 'toggle-cutoff', true);
-            setLayerVisible('roads', 'toggle-roads', false);
-            setLayerVisible('flood', 'toggle-flood', false);
-            setLayerVisible('buildings', 'toggle-buildings', false);
-            setLayerVisible('unet', 'toggle-unet', false);
-            setEmsrLayerVisible(false);
+        LAYER_MAPPING.forEach(({ key, checkboxId }) => {
+            if (config[key] !== undefined) {
+                setLayerVisible(key, checkboxId, config[key]);
+            }
         });
-    }
 
-    // Mode 4: All Layers (Analyst View)
-    if (btnAll) {
-        btnAll.addEventListener('click', () => {
-            setActivePresetBtn(btnAll);
-            setLayerVisible('cutoff', 'toggle-cutoff', true);
-            setLayerVisible('roads', 'toggle-roads', true);
-            setLayerVisible('flood', 'toggle-flood', true);
-            setLayerVisible('buildings', 'toggle-buildings', true);
-            setLayerVisible('path', 'toggle-path', true);
-            setLayerVisible('unet', 'toggle-unet', true);
-            setEmsrLayerVisible(false);
-        });
+        updateActivePresetIndicator(presetKey);
     }
+    window.applyPreset = applyPreset;
+
+    // Attach individual checkbox change listeners
+    LAYER_MAPPING.forEach(({ key, checkboxId }) => {
+        const checkbox = document.getElementById(checkboxId);
+        if (checkbox) {
+            checkbox.addEventListener('change', () => {
+                setLayerVisible(key, checkboxId, checkbox.checked);
+                updateActivePresetIndicator();
+            });
+        }
+    });
+
+    // Preset button event listeners
+    if (btnEvac) btnEvac.addEventListener('click', () => applyPreset('evac'));
+    if (btnExtent) btnExtent.addEventListener('click', () => applyPreset('extent'));
+    if (btnFlow) btnFlow.addEventListener('click', () => applyPreset('flow'));
+    if (btnAll) btnAll.addEventListener('click', () => applyPreset('all'));
+
+    // Initial sync
+    syncLayersWithControls();
 
     // In-Map Legend Accordion Toggle
     const legendHeader = document.getElementById('legend-header-toggle');
@@ -160,13 +184,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 window.dashboardMap.removeLayer(MapLayers.emsr927);
             }
         }
-    }
-
-    const toggleEms = document.getElementById('toggle-emsr927');
-    if (toggleEms) {
-        toggleEms.addEventListener('change', () => {
-            setEmsrLayerVisible(toggleEms.checked);
-        });
     }
 
     // EMSR927 Reference Benchmark Modal Trigger & Map Overlay

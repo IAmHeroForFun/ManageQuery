@@ -120,7 +120,11 @@ class ConnectivityAnalyzer:
             # Check post-flood reachability across intact edges
             for hosp in hospitals:
                 h_node = hosp["node"]
-                if s_node and h_node and dist_to_road <= 3.5 and nx.has_path(G_post, s_node, h_node):
+                if (
+                    s_node and h_node and dist_to_road <= 3.5 and
+                    G_post.has_node(s_node) and G_post.has_node(h_node) and
+                    nx.has_path(G_post, s_node, h_node)
+                ):
                     path_len = round(nx.shortest_path_length(G_post, s_node, h_node, weight='weight'), 1)
                     if path_len < best_dist:
                         best_dist = path_len
@@ -130,7 +134,11 @@ class ConnectivityAnalyzer:
             # Check pre-flood reachability to determine IF flood was the cause of disconnection
             for hosp in hospitals:
                 h_node = hosp["node"]
-                if s_node and h_node and dist_to_road <= 3.5 and nx.has_path(G_pre, s_node, h_node):
+                if (
+                    s_node and h_node and dist_to_road <= 3.5 and
+                    G_pre.has_node(s_node) and G_pre.has_node(h_node) and
+                    nx.has_path(G_pre, s_node, h_node)
+                ):
                     was_connected_pre = True
                     if not best_hospital:
                         path_len = round(nx.shortest_path_length(G_pre, s_node, h_node, weight='weight'), 1)

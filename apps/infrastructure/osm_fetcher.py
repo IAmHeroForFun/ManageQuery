@@ -148,7 +148,11 @@ out tags geom 250;
 
                             # Handle place/village/suburb nodes
                             if el.get("type") == "node" and "place" in tags and ("lon" in el and "lat" in el):
-                                p_name = tags.get("name") or tags.get("name:en")
+                                p_en = tags.get("name:en") or tags.get("int_name")
+                                p_local = tags.get("name")
+                                p_name = p_en or p_local
+                                if p_en and p_local and p_en.lower() != p_local.lower():
+                                    p_name = f"{p_en} ({p_local})"
                                 if p_name:
                                     place_feats.append({
                                         "type": "Feature",
@@ -165,7 +169,11 @@ out tags geom 250;
                             # Handle hospital/clinic nodes
                             if el.get("type") == "node" and "amenity" in tags and ("lon" in el and "lat" in el):
                                 n_lon, n_lat = el["lon"], el["lat"]
-                                p_name = tags.get("name") or tags.get("name:en") or "Medical Facility"
+                                p_en = tags.get("name:en") or tags.get("int_name")
+                                p_local = tags.get("name")
+                                p_name = p_en or p_local or "Medical Facility"
+                                if p_en and p_local and p_en.lower() != p_local.lower():
+                                    p_name = f"{p_en} ({p_local})"
                                 place_feats.append({
                                     "type": "Feature",
                                     "geometry": {"type": "Point", "coordinates": [round(n_lon, 4), round(n_lat, 4)]},
@@ -778,11 +786,14 @@ out tags geom 250;
         if curr_hosp_count < 4 or curr_comm_count < 6:
             try:
                 viewbox = f"{min_lon},{max_lat},{max_lon},{min_lat}"
-                headers = {"User-Agent": "MfdfsDisasterResponse/1.0 (flood-response)"}
+                headers = {
+                    "User-Agent": "MfdfsDisasterResponse/1.0 (flood-response)",
+                    "Accept-Language": "en-US,en;q=0.9"
+                }
                 
-                # Fetch real hospitals
+                # Fetch real hospitals (enforced English transliteration)
                 resp_h = requests.get(
-                    f"https://nominatim.openstreetmap.org/search?format=json&viewbox={viewbox}&bounded=1&q=hospital&limit=30",
+                    f"https://nominatim.openstreetmap.org/search?format=json&viewbox={viewbox}&bounded=1&q=hospital&limit=30&accept-language=en",
                     headers=headers,
                     timeout=5.0
                 )
@@ -806,7 +817,7 @@ out tags geom 250;
                     if len([s for s in live_settlements if not s.get("is_hospital")]) >= 15:
                         break
                     resp_v = requests.get(
-                        f"https://nominatim.openstreetmap.org/search?format=json&viewbox={viewbox}&bounded=1&q={q_term}&limit=20",
+                        f"https://nominatim.openstreetmap.org/search?format=json&viewbox={viewbox}&bounded=1&q={q_term}&limit=20&accept-language=en",
                         headers=headers,
                         timeout=5.0
                     )

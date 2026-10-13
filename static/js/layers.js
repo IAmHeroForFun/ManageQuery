@@ -222,16 +222,51 @@ async function loadCutoffSettlementsLayer(map, jobId) {
                 };
 
                 const isHosp = p.is_hospital || (p.place === 'hospital');
+                const reason = p.isolation_reason || (p.is_cutoff ? 'corridor_breached' : 'accessible');
+
+                let statusBadge = '';
+                let reasonHtml = '';
+
+                if (isHosp) {
+                    statusBadge = `<strong style="color:#2563eb; font-size:13px;">🏥 [REGIONAL MEDICAL FACILITY]</strong>`;
+                    reasonHtml = `
+                        <div style="margin: 4px 0; padding: 4px; background: #eff6ff; border-left: 3px solid #3b82f6; border-radius: 2px;">
+                            <strong>Facility Type:</strong> Hospital / Emergency Medical Base<br>
+                            <strong>Role:</strong> Destination medical hub for receiving flood victims.
+                        </div>
+                    `;
+                } else if (p.is_cutoff) {
+                    let reasonText = 'Road route to hospital severed downstream by floodwater. Requires airlift.';
+                    if (reason === 'direct_flood') {
+                        reasonText = 'Village access road physically submerged by floodwater.';
+                    } else if (reason === 'remote_mountain') {
+                        reasonText = 'High-elevation mountain terrain without pre-existing drivable road connection.';
+                    }
+                    statusBadge = `<strong style="color:#dc2626; font-size:13px;">🚨 [ISOLATED VILLAGE] AIRLIFT NEEDED</strong>`;
+                    reasonHtml = `
+                        <div style="margin: 4px 0; padding: 5px; background: #fef2f2; border-left: 3px solid #ef4444; border-radius: 2px;">
+                            <strong>Nearest Evacuation Hospital:</strong> ${p.nearest_hospital || 'Emergency Medical Center'}<br>
+                            <strong>Road Distance:</strong> ${p.pre_flood_distance_km || '--'} km<br>
+                            <strong>Access Status:</strong> <span style="color:#dc2626; font-weight:700;">CANNOT REACH HOSPITAL</span><br>
+                            <small style="color:#7f1d1d;"><strong>Reason:</strong> ${reasonText}</small>
+                        </div>
+                    `;
+                } else {
+                    statusBadge = `<strong style="color:#16a34a; font-size:13px;">✅ [ACCESSIBLE VILLAGE] ROAD INTACT</strong>`;
+                    reasonHtml = `
+                        <div style="margin: 4px 0; padding: 5px; background: #f0fdf4; border-left: 3px solid #22c55e; border-radius: 2px;">
+                            <strong>Assigned Hospital:</strong> ${p.nearest_hospital || 'District Hospital'}<br>
+                            <strong>Route Distance:</strong> ${p.pre_flood_distance_km || '--'} km<br>
+                            <strong>Access Status:</strong> <span style="color:#16a34a; font-weight:700;">DRIVABLE GROUND ROUTE INTACT</span>
+                        </div>
+                    `;
+                }
+
                 layer.bindPopup(`
-                    <div style="font-size:12px; min-width: 220px;">
-                        <strong style="color:${isHosp ? '#2563eb' : (p.is_cutoff ? '#ef4444' : '#16a34a')}; font-size:13px;">
-                            ${isHosp ? '[HOSPITAL] REGIONAL MEDICAL FACILITY' : (p.is_cutoff ? '[CRITICAL] ISOLATED COMMUNITY' : '[ACCESSIBLE] GROUND EVACUATION ROUTE INTACT')}
-                        </strong><br>
-                        <strong>${isHosp ? 'Facility Name' : 'Community'}:</strong> ${p.name}<br>
-                        ${!isHosp ? `<strong>Assigned Hospital:</strong> ${p.nearest_hospital || 'Emergency Hospital'}<br>` : ''}
-                        <strong>Highway Distance:</strong> ${p.pre_flood_distance_km || '--'} km<br>
-                        <strong>Accessibility Status:</strong> 
-                        ${isHosp ? '<span style="color:#2563eb;font-weight:700;">REGIONAL MEDICAL BASE</span>' : (p.is_cutoff ? '<span style="color:#ef4444;font-weight:700;">ALL ROADS SEVERED — REQUIRES AIRLIFT</span>' : '<span style="color:#16a34a;font-weight:700;">DRIVABLE ROAD ROUTE INTACT</span>')}
+                    <div style="font-size:12px; min-width: 240px; line-height: 1.4;">
+                        ${statusBadge}<br>
+                        <strong>${isHosp ? 'Hospital Name' : 'Village / Community'}:</strong> ${p.name}<br>
+                        ${reasonHtml}
                     </div>
                 `);
             }

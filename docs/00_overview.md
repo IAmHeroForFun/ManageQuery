@@ -152,6 +152,7 @@ Our architectural design is directly informed by **Guy J-P. Schumann (2024)**, *
 | [`08_data_sources.md`](./08_data_sources.md) | Datasets, licenses, download links, attributions |
 | [`09_setup_guide.md`](./09_setup_guide.md) | Install, configure, and run the project |
 | [`10_hydrology_foundations.md`](./10_hydrology_foundations.md) | Hydrologic theory, DEM D8 steepest-descent, and kinematic wave routing |
+| [`11_project_limitations.md`](./11_project_limitations.md) | Plain-English guide to real-world system boundaries and limitations |
 
 ---
 

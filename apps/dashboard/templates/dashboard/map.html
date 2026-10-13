@@ -118,11 +118,11 @@
                 <div class="sidebar-toggles-grid">
                     <label class="layer-toggle-btn">
                         <input type="checkbox" id="toggle-cutoff" checked>
-                        <span class="legend-color legend-blue"></span> Isolated Villages
+                        <span class="legend-color legend-red"></span> Isolated Villages (🔴) & Hospitals (🔵 H)
                     </label>
                     <label class="layer-toggle-btn">
                         <input type="checkbox" id="toggle-roads" checked>
-                        <span class="legend-color legend-red"></span> Damaged Roads
+                        <span class="legend-color legend-red"></span> Damaged Roads (🔴)
                     </label>
                     <label class="layer-toggle-btn">
                         <input type="checkbox" id="toggle-flood">
@@ -159,22 +159,29 @@
                 <div class="legend-guide-item">
                     <span class="legend-dot" style="background:#2563eb; color:#fff; border: 2px solid #fff; font-size:10px; font-weight:800; display:inline-flex; align-items:center; justify-content:center; width:20px; height:20px; border-radius:50%;">H</span>
                     <div>
-                        <strong>Blue Pin (Hospital / Medical Facility)</strong>
-                        <p>District hospitals, clinics, and emergency medical bases for evacuation.</p>
+                        <strong>Blue Pin H (Regional Hospital / Clinic)</strong>
+                        <p>Destination medical centers for triage and critical patient care.</p>
                     </div>
                 </div>
                 <div class="legend-guide-item">
                     <span class="legend-dot" style="background:#ef4444; border: 2px solid #b91c1c;"></span>
                     <div>
                         <strong>Red Circle (Cut-off Village)</strong>
-                        <p>No drivable road routes to hospital. Priority for emergency airlifts.</p>
+                        <p>No drivable road route to hospital. Priority for emergency airlifts.</p>
                     </div>
                 </div>
                 <div class="legend-guide-item">
                     <span class="legend-line" style="background:#ef4444; height: 4px;"></span>
                     <div>
-                        <strong>Red Line (Severed Road)</strong>
-                        <p>Submerged / impassable to ambulances and rescue vehicles.</p>
+                        <strong>Red Line (Severed Road Segment)</strong>
+                        <p>Directly submerged or washed out. Impassable to rescue vehicles.</p>
+                    </div>
+                </div>
+                <div class="legend-guide-item">
+                    <span class="legend-line" style="background:#64748b; height: 2px;"></span>
+                    <div>
+                        <strong>Slate / Blue Lines (Intact Road Network)</strong>
+                        <p>Safe, dry mountain roads connecting accessible areas outside flood zone.</p>
                     </div>
                 </div>
                 <div class="legend-guide-item">
@@ -182,13 +189,6 @@
                     <div>
                         <strong>Orange Line (Waterlogged Road)</strong>
                         <p>Caution: 10%–50% flooded. Slow passage / 4WD vehicles only.</p>
-                    </div>
-                </div>
-                <div class="legend-guide-item">
-                    <span class="legend-line" style="background:#64748b; height: 2px;"></span>
-                    <div>
-                        <strong>Slate Line (Passable Road)</strong>
-                        <p>Intact / dry road network across safe elevation outside flood zone.</p>
                     </div>
                 </div>
                 <div class="legend-guide-item">

@@ -139,20 +139,25 @@ class SARProcessor:
                 with open(waterways_path, "r", encoding="utf-8") as wf:
                     wdata = json.load(wf)
                 wfeats = wdata.get("features", [])
-                # Find longest continuous waterway inside the AOI
+                # Find longest continuous waterway strictly clipped inside the user's AOI bounding box
                 valid_ways = []
                 for feat in wfeats:
                     fcoords = feat.get("geometry", {}).get("coordinates", [])
-                    if len(fcoords) >= 3:
-                        valid_ways.append(fcoords)
+                    # Filter points strictly inside the AOI
+                    in_aoi_coords = [
+                        pt for pt in fcoords
+                        if (min_lon <= pt[0] <= max_lon and min_lat <= pt[1] <= max_lat)
+                    ]
+                    if len(in_aoi_coords) >= 4:
+                        valid_ways.append(in_aoi_coords)
                 if valid_ways:
                     valid_ways.sort(key=len, reverse=True)
                     longest = valid_ways[0]
-                    # Sample 6 to 10 points along this real river
+                    # Sample 6 to 10 points along this real river strictly inside the AOI
                     step = max(1, len(longest) // 8)
                     centerline_pts = [longest[i] for i in range(0, len(longest), step)]
                     if len(centerline_pts) >= 4:
-                        logger.info("Flood footprint successfully anchored to real OSM waterway polyline (%d nodes)", len(centerline_pts))
+                        logger.info("Flood footprint successfully anchored to real OSM waterway polyline (%d nodes) strictly within AOI", len(centerline_pts))
             except Exception as e:
                 logger.debug("Failed parsing waterways for flood polygon: %s", e)
 

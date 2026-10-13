@@ -437,39 +437,15 @@ def assess_damage(flood_mask_tif, osm_geojson_path):
 ## Step 10 — Road Connectivity Analysis
 
 Connectivity is determined by evaluating topological reachability across the OSM road network:
-1. Build road graph from OSM roads `GeoDataFrame` (`networkx.Graph`).
-2. Remove edges that intersect with the active flood mask (impassable roads).
-3. Identify regional medical hubs / emergency points.
-4. Run BFS / Dijkstra shortest-path reachability from each settlement to the nearest active hospital. Settlements with disconnected paths are classified as `🔴 CUT OFF`.
-    3. BFS from each settlement → nearest hospital
-    4. Settlements with no path = CUT OFF
-    """
-    # Build graph
-    G = ox.graph_from_gdfs(nodes, edges)
-    
-    # Remove flooded edges
-    for edge in G.edges(data=True):
-        edge_geom = edge[2].get('geometry')
-        if edge_geom and edge_geom.intersects(flood_polygon):
-            G.remove_edge(edge[0], edge[1])
-    
-    # Check connectivity per settlement
-    results = []
-    for _, settlement in settlements_gdf.iterrows():
-        settlement_node = ox.nearest_nodes(G, settlement.geometry.x, settlement.geometry.y)
-        for _, hospital in hospitals_gdf.iterrows():
-            hospital_node = ox.nearest_nodes(G, hospital.geometry.x, hospital.geometry.y)
-            try:
-                path = nx.shortest_path(G, settlement_node, hospital_node, weight='length')
-                results.append({'name': settlement['name'], 'is_cutoff': False, ...})
-                break
-            except nx.NetworkXNoPath:
-                continue
-        else:
-            results.append({'name': settlement['name'], 'is_cutoff': True, ...})
-    
-    return results
-```
+1. **Topological Snapping**: Connect adjacent road polylines with a spatial tolerance ($\approx 45\text{ m}$) to prevent minor digitizing gaps from falsely severing mountain tracks.
+2. **Flooded Edge Removal**: Sever road segments that intersect with the active flood mask ($\ge 50\%$ submerged or direct wash-out).
+3. **Medical Destination Mapping**: Identify all regional hospitals, district health posts, and emergency centers.
+4. **Dijkstra Multi-Destination Reachability**: Run shortest-path reachability from each settlement to all medical facilities in the network.
+5. **Multi-Tier Isolation Classification**:
+   - `direct_flood`: Local village access roads are physically submerged.
+   - `corridor_breached`: Local roads are dry, but the highway route or river bridge downstream is severed by the flood.
+   - `remote_unconnected`: Mountain settlement with no pre-existing drivable road connection to the hospital.
+
 
 ---
 

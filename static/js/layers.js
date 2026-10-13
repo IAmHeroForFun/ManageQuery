@@ -221,14 +221,26 @@ async function loadCutoffSettlementsLayer(map, jobId) {
             data.features.forEach(f => {
                 const p = f.properties;
                 const coords = f.geometry.coordinates;
+                const isHosp = p.is_hospital || (p.place === 'hospital');
                 const li = document.createElement('li');
                 li.className = 'settlement-item';
                 li.style.cursor = 'pointer';
-                li.title = 'Click to focus on this village on the map';
+                li.title = `Click to focus on this ${isHosp ? 'medical facility' : 'community'} on the map`;
+                
+                let badgeClass = 'status-tag-connected';
+                let badgeText = 'CONNECTED';
+                if (isHosp) {
+                    badgeClass = 'status-tag-hospital';
+                    badgeText = 'MEDICAL BASE';
+                } else if (p.is_cutoff) {
+                    badgeClass = 'status-tag-cutoff';
+                    badgeText = 'CUT OFF';
+                }
+
                 li.innerHTML = `
                     <span><strong>${p.name}</strong></span>
-                    <span class="status-tag ${p.is_cutoff ? 'status-tag-cutoff' : 'status-tag-connected'}">
-                        ${p.is_cutoff ? 'CUT OFF' : 'CONNECTED'}
+                    <span class="status-tag ${badgeClass}" style="${isHosp ? 'background:#dbeafe; color:#1e40af; border:1px solid #93c5fd;' : ''}">
+                        ${badgeText}
                     </span>
                 `;
 

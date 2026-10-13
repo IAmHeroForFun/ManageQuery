@@ -85,17 +85,27 @@ class DamagedFeatureSerializer(serializers.ModelSerializer):
 
 class CutoffSettlementSerializer(serializers.ModelSerializer):
     geometry = serializers.SerializerMethodField()
+    nearest_hospital_geometry = serializers.SerializerMethodField()
 
     class Meta:
         model = CutoffSettlement
         fields = [
             'id', 'name', 'is_cutoff', 'nearest_hospital',
-            'pre_flood_distance_km', 'population_estimate', 'geometry'
+            'nearest_hospital_geometry', 'pre_flood_distance_km',
+            'population_estimate', 'geometry'
         ]
 
     def get_geometry(self, obj):
         try:
             return json.loads(obj.geometry_geojson)
+        except Exception:
+            return None
+
+    def get_nearest_hospital_geometry(self, obj):
+        try:
+            if obj.nearest_hospital_geojson:
+                return json.loads(obj.nearest_hospital_geojson)
+            return None
         except Exception:
             return None
 

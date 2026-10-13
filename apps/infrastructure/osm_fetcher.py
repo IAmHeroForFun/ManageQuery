@@ -604,12 +604,12 @@ out tags geom 250;
             headers = {"User-Agent": "MfdfsDisasterResponse/1.0"}
             
             # Query for villages, suburbs, towns, and hospitals
-            for q_term in ["village", "suburb", "town", "hospital"]:
+            for q_term in ["village", "suburb", "town", "hospital", "clinic"]:
                 try:
                     resp = requests.get(
-                        f"https://nominatim.openstreetmap.org/search?format=json&viewbox={viewbox}&bounded=1&q={q_term}&limit=12",
+                        f"https://nominatim.openstreetmap.org/search?format=json&viewbox={viewbox}&bounded=1&q={q_term}&limit=25",
                         headers=headers,
-                        timeout=3.5
+                        timeout=4.0
                     )
                     if resp.status_code == 200:
                         for item in resp.json():
@@ -623,7 +623,7 @@ out tags geom 250;
                                         "lat": round(v_lat, 4),
                                         "lon": round(v_lon, 4),
                                         "type": item.get("type", q_term),
-                                        "is_hospital": (q_term == "hospital" or "hospital" in v_name.lower() or "medical" in v_name.lower())
+                                        "is_hospital": (q_term in ("hospital", "clinic") or "hospital" in v_name.lower() or "medical" in v_name.lower() or "clinic" in v_name.lower())
                                     })
                 except Exception:
                     pass
@@ -632,13 +632,13 @@ out tags geom 250;
 
         features = []
         if len(live_settlements) >= 3:
-            hosp_list = [s for s in live_settlements if s.get("is_hospital") and s["name"].lower() != "hospital"]
+            hosp_list = [s for s in live_settlements if s.get("is_hospital") and s["name"].lower() not in ("hospital", "clinic")]
             comm_list = [s for s in live_settlements if not s.get("is_hospital")]
 
-            # Include up to 4 primary hospitals and up to 6 surrounding communities
-            selected = hosp_list[:4] + comm_list[:6]
+            # Include all discovered hospitals (up to 20) and surrounding communities (up to 20)
+            selected = hosp_list[:20] + comm_list[:20]
             if len(selected) < 4:
-                selected = live_settlements[:10]
+                selected = live_settlements[:30]
 
             for s in selected:
                 is_hosp = s.get("is_hospital", False)

@@ -113,6 +113,8 @@ class CutoffSettlementsView(APIView):
         serializer = CutoffSettlementSerializer(settlements, many=True)
 
         geo_features = []
+        hospital_lookup = {}
+
         for item in serializer.data:
             if item.get('geometry'):
                 geo_features.append({
@@ -121,11 +123,32 @@ class CutoffSettlementsView(APIView):
                     "properties": {
                         "name": item['name'],
                         "is_cutoff": item['is_cutoff'],
+                        "is_hospital": False,
                         "nearest_hospital": item['nearest_hospital'],
                         "pre_flood_distance_km": item['pre_flood_distance_km'],
                         "population_estimate": item['population_estimate']
                     }
                 })
+
+            # Collect unique hospital facilities
+            h_name = item.get('nearest_hospital')
+            h_geom = item.get('nearest_hospital_geometry')
+            if h_name and h_geom and h_name not in hospital_lookup:
+                hospital_lookup[h_name] = h_geom
+
+        # Add all hospital facilities as distinct map features
+        for h_name, h_geom in hospital_lookup.items():
+            geo_features.append({
+                "type": "Feature",
+                "geometry": h_geom,
+                "properties": {
+                    "name": h_name,
+                    "is_cutoff": False,
+                    "is_hospital": True,
+                    "place": "hospital",
+                    "population": 500
+                }
+            })
 
         return Response({
             "type": "FeatureCollection",

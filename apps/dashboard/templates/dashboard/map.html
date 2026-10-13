@@ -157,6 +157,13 @@
             <h4 style="margin: 0 0 0.5rem 0; font-size: 0.95rem;">Color Key & Guide</h4>
             <div class="sidebar-legend-list">
                 <div class="legend-guide-item">
+                    <span class="legend-dot" style="background:#2563eb; color:#fff; border: 2px solid #fff; font-size:10px; font-weight:800; display:inline-flex; align-items:center; justify-content:center; width:20px; height:20px; border-radius:50%;">H</span>
+                    <div>
+                        <strong>Blue Pin (Hospital / Medical Facility)</strong>
+                        <p>District hospitals, clinics, and emergency medical bases for evacuation.</p>
+                    </div>
+                </div>
+                <div class="legend-guide-item">
                     <span class="legend-dot" style="background:#ef4444; border: 2px solid #b91c1c;"></span>
                     <div>
                         <strong>Red Circle (Cut-off Village)</strong>
@@ -248,7 +255,7 @@
 
         <div id="emsr-modal-body" style="font-size: 0.88rem; line-height: 1.5;">
             <div style="text-align: center; padding: 2rem 0; color: var(--text-muted);">
-                ⏳ Fetching Copernicus reference data...
+                Fetching Copernicus reference data...
             </div>
         </div>
 
@@ -266,8 +273,8 @@
     window.JOB_PROGRESS = {{ job.progress }};
     window.JOB_AOI = {{ job.aoi_geojson|safe }};
 </script>
-<script src="/static/js/map.js?v=20261013_layer_sync"></script>
-<script src="/static/js/layers.js?v=20261013_layer_sync"></script>
-<script src="/static/js/polling.js?v=20261013_layer_sync"></script>
-<script src="/static/js/layer_controls.js?v=20261013_layer_sync"></script>
+<script src="/static/js/map.js?v=20261013_hospital_sync"></script>
+<script src="/static/js/layers.js?v=20261013_hospital_sync"></script>
+<script src="/static/js/polling.js?v=20261013_hospital_sync"></script>
+<script src="/static/js/layer_controls.js?v=20261013_hospital_sync"></script>
 {% endblock %}

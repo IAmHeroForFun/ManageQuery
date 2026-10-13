@@ -72,10 +72,21 @@ class FloodPathTracer:
         start_elev, end_elev = self._estimate_elevations(source_lon, source_lat, coordinates[-1][0], coordinates[-1][1])
         elev_drop = max(50, start_elev - end_elev)
 
-        # Hydrodynamic surge velocity (v ~ sqrt(2 * g * delta_h * slope_factor), calibrated for mountain flood/debris surge)
-        # Typically 15 - 32 km/h in steep mountain terrain, 8 - 16 km/h in flatter basins
-        slope_pct = (elev_drop / max(1.0, path_length_km * 1000.0)) * 100.0
-        surge_speed_kmh = round(min(38.0, max(12.0, 10.0 + (slope_pct * 1.8))), 1)
+        # ---------------------------------------------------------------------
+        # Manning-Kinematic Wave Velocity & Celerity per Chow et al. (1988), Ch. 9
+        # Bedient, Huber & Vieux (2019), Table 4-2 (Roughness for natural/mountain channels)
+        # v = (1 / n) * R_h^(2/3) * S_0^(1/2)
+        # c_k = (5 / 3) * v  (Kinematic flood wave disturbance celerity)
+        # ---------------------------------------------------------------------
+        slope_fraction = (elev_drop / max(100.0, path_length_km * 1000.0))
+        n_manning = 0.045  # Cobble / gravel mountain stream bed (Bedient Table 4-2)
+        r_hydraulic = 2.0   # Effective hydraulic radius at flood peak discharge (m)
+        s_bed = max(0.0008, min(0.12, slope_fraction))
+
+        v_flow_ms = (1.0 / n_manning) * (r_hydraulic ** (2.0 / 3.0)) * (s_bed ** 0.5)
+        c_wave_ms = (5.0 / 3.0) * v_flow_ms
+        surge_speed_kmh = round(min(45.0, max(8.0, c_wave_ms * 3.6)), 1)
+        logger.info("Kinematic wave celerity computed: %.1f km/h (bed slope: %.4f, Manning n: %.3f)", surge_speed_kmh, s_bed, n_manning)
 
         # Intersect with settlements along path and calculate Estimated Time of Arrival (ETA)
         settlements_info = self._find_settlements_with_eta(coordinates, osm_paths["settlements"], surge_speed_kmh)

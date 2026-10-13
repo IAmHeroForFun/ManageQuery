@@ -151,6 +151,7 @@ Our architectural design is directly informed by **Guy J-P. Schumann (2024)**, *
 | [`07_ui_wireframes.md`](./07_ui_wireframes.md) | Page layouts, component descriptions, UX flow |
 | [`08_data_sources.md`](./08_data_sources.md) | Datasets, licenses, download links, attributions |
 | [`09_setup_guide.md`](./09_setup_guide.md) | Install, configure, and run the project |
+| [`10_hydrology_foundations.md`](./10_hydrology_foundations.md) | Hydrologic theory, DEM D8 steepest-descent, and kinematic wave routing |
 
 ---
 

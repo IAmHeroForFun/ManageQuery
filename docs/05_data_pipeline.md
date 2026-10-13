@@ -150,13 +150,18 @@ def download_sentinel1(aoi_geojson, pre_date, post_date, orbit_direction, output
 
 ---
 
-## Step 3 — DEM Download
+## Step 3 — DEM Download & Topographic Modeling
 
 **Tool:** `requests` → Copernicus DEM STAC API
 
 **Product:** Copernicus GLO-30 (30m resolution)
 **Tiles:** 1° × 1° GeoTIFF tiles identified by lat/lon
-**Use:** SAR terrain correction (Step 5) + D8 flood path routing (AI component)
+**Scientific Basis:** Bedient, Huber & Vieux (2019), *Hydrology and Floodplain Analysis* (5th Edition), Chapter 10 (Digital Representation of Topography & GIS D8 Routing).
+**Use:** SAR Range-Doppler Terrain Correction (Step 5) + D8 steepest-slope gravity flood path routing (`apps/dem/path_tracer.py`).
+
+Per **Bedient et al. (2019), Section 10.4**, water moves down the steepest topographic gradient across an 8-neighborhood kernel:
+$$S_{i, j} = \frac{z_i - z_j}{L_{i, j}}$$
+The flow path follows $\arg\max_j (S_{i, j})$ down to the base floodplain level. Combined with **Chow, Maidment & Mays (1988), Chapter 9**, downstream village arrival times (ETAs) are computed via kinematic wave celerity along the steepest descent vector.
 
 **Tile naming:** `Copernicus_DSM_COG_10_N{lat}_00_E{lon}_00_DEM.tif`
 

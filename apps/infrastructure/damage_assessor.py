@@ -49,7 +49,7 @@ class DamageAssessor:
         for feature in roads_data.get("features", []):
             coords = feature["geometry"]["coordinates"]
             overlap_pct = self._calculate_linestring_overlap(coords, flood_coords)
-            status = self._classify_status(overlap_pct)
+            status = self._classify_status(overlap_pct, feature_type="road")
 
             length_km = self._calculate_linestring_length_km(coords)
             if status in ("affected", "possibly_affected"):
@@ -71,7 +71,7 @@ class DamageAssessor:
         for feature in buildings_data.get("features", []):
             coords = feature["geometry"]["coordinates"][0]
             overlap_pct = self._calculate_polygon_overlap(coords, flood_coords)
-            status = self._classify_status(overlap_pct)
+            status = self._classify_status(overlap_pct, feature_type="building")
 
             if status == "affected":
                 affected_buildings += 1
@@ -94,7 +94,7 @@ class DamageAssessor:
         for feature in bridges_data.get("features", []):
             coords = feature["geometry"]["coordinates"]
             overlap_pct = self._calculate_linestring_overlap(coords, flood_coords)
-            status = self._classify_status(overlap_pct)
+            status = self._classify_status(overlap_pct, feature_type="bridge")
 
             if status in ("affected", "possibly_affected"):
                 bridges_damaged += 1
@@ -122,12 +122,31 @@ class DamageAssessor:
 
         return summary
 
-    def _classify_status(self, overlap_pct: float) -> str:
-        if overlap_pct >= 50.0:
-            return "affected"
-        if overlap_pct >= 10.0:
-            return "possibly_affected"
-        return "not_affected"
+    def _classify_status(self, overlap_pct: float, feature_type: str = "road") -> str:
+        """
+        Classifies damage status using hydro-structural vulnerability standards
+        (Bedient, Huber & Vieux 2019, Chapter 12; FEMA HAZUS structural guidelines).
+        Bridges are vulnerable to abutment scour and debris damming at lower thresholds.
+        """
+        if feature_type == "bridge":
+            if overlap_pct >= 20.0:
+                return "affected"
+            if overlap_pct >= 5.0:
+                return "possibly_affected"
+            return "not_affected"
+        elif feature_type == "building":
+            if overlap_pct >= 50.0:
+                return "affected"
+            if overlap_pct >= 10.0:
+                return "possibly_affected"
+            return "not_affected"
+        else:
+            # Roads
+            if overlap_pct >= 35.0:
+                return "affected"
+            if overlap_pct >= 10.0:
+                return "possibly_affected"
+            return "not_affected"
 
     def _point_in_polygon(self, x: float, y: float, poly: List[List[float]]) -> bool:
         """

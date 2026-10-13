@@ -3,7 +3,7 @@
 {% block title %}Dashboard — Job {{ job.id }}{% endblock %}
 
 {% block nav_extra %}
-<a href="/dashboard/{{ job.id }}/report/" class="nav-item btn-report-nav">📄 Situation Report</a>
+<a href="/dashboard/{{ job.id }}/report/" class="nav-item btn-report-nav">Situation Report</a>
 {% endblock %}
 
 {% block content %}
@@ -14,10 +14,10 @@
         <strong>TACTICAL SITUATION BRIEF:</strong>
     </div>
     <div class="mission-brief-text" id="mission-brief-text">
-        🛰️ Loading verified satellite analysis telemetry...
+        Loading verified satellite analysis telemetry...
     </div>
     <div class="mission-provenance-tag">
-        <span title="Copernicus Sentinel-1 (SAR) + Sentinel-2 (Optical) + OpenStreetMap">🛰️ All-Weather Satellite Radar Fusion</span>
+        <span title="Copernicus Sentinel-1 (SAR) + Sentinel-2 (Optical) + OpenStreetMap">All-Weather Satellite Radar Fusion</span>
     </div>
 </div>
 
@@ -44,7 +44,7 @@
         <!-- Summary Metrics Grid -->
         <div class="stats-grid">
             <div class="stat-card stat-card-blue">
-                <div class="stat-icon">🚫</div>
+                <div class="stat-icon" style="font-size:0.95rem;font-weight:800;color:#ef4444;letter-spacing:0.04em;">ISO</div>
                 <div class="stat-data">
                     <span id="stat-cutoff" class="stat-number">
                         {% if job.settlements_cutoff %}{{ job.settlements_cutoff }}{% else %}--{% endif %}
@@ -55,7 +55,7 @@
             </div>
 
             <div class="stat-card stat-card-red">
-                <div class="stat-icon">🛣️</div>
+                <div class="stat-icon" style="font-size:0.95rem;font-weight:800;color:#ef4444;letter-spacing:0.04em;">RD</div>
                 <div class="stat-data">
                     <span id="stat-roads" class="stat-number">
                         {% if job.roads_damaged_km %}{{ job.roads_damaged_km|floatformat:1 }}{% else %}--{% endif %}
@@ -66,7 +66,7 @@
             </div>
 
             <div class="stat-card stat-card-yellow">
-                <div class="stat-icon">🌊</div>
+                <div class="stat-icon" style="font-size:0.95rem;font-weight:800;color:#eab308;letter-spacing:0.04em;">FLD</div>
                 <div class="stat-data">
                     <span id="stat-flood-area" class="stat-number">
                         {% if job.flood_area_km2 %}{{ job.flood_area_km2|floatformat:1 }}{% else %}--{% endif %}
@@ -77,7 +77,7 @@
             </div>
 
             <div class="stat-card stat-card-red">
-                <div class="stat-icon">🏚️</div>
+                <div class="stat-icon" style="font-size:0.95rem;font-weight:800;color:#991b1b;letter-spacing:0.04em;">BLD</div>
                 <div class="stat-data">
                     <span id="stat-buildings" class="stat-number">
                         {% if job.buildings_affected %}{{ job.buildings_affected }}{% else %}--{% endif %}
@@ -90,24 +90,24 @@
 
         <!-- Operational View Presets & Layer Controls Card (Moved OUT of map) -->
         <div class="card map-controls-sidebar-card">
-            <h4 style="margin: 0 0 0.5rem 0; font-size: 0.95rem;">🗺️ Map Controls & Presets</h4>
+            <h4 style="margin: 0 0 0.5rem 0; font-size: 0.95rem;">Map Controls & Presets</h4>
             
             <div class="sidebar-presets-group">
                 <span class="control-label-sm">Operational Presets:</span>
                 <div class="sidebar-preset-buttons">
                     <button type="button" class="view-preset-btn active" id="btn-view-evac" title="Focus strictly on cut-off villages and severed roads">
-                        🚑 Evacuation
+                        Evacuation Routing
                     </button>
                     <button type="button" class="view-preset-btn" id="btn-view-extent" title="Focus on radar & optical flood inundation polygon">
-                        🌊 Flood Extent
+                        Flood Extent
                     </button>
                     {% if job.trace_flood_path %}
                     <button type="button" class="view-preset-btn" id="btn-view-flow" title="Focus on gravity flow corridor and downstream village arrival ETAs">
-                        🧭 Flow Path
+                        Flow Corridor
                     </button>
                     {% endif %}
                     <button type="button" class="view-preset-btn" id="btn-view-all" title="View all available satellite, infrastructure and benchmark layers">
-                        🔍 All Layers
+                        All Layers
                     </button>
                 </div>
             </div>
@@ -154,12 +154,12 @@
 
         <!-- Clean In-Sidebar Legend Card (Moved OUT of map) -->
         <div class="card map-legend-sidebar-card">
-            <h4 style="margin: 0 0 0.5rem 0; font-size: 0.95rem;">📖 Color Key & Guide</h4>
+            <h4 style="margin: 0 0 0.5rem 0; font-size: 0.95rem;">Color Key & Guide</h4>
             <div class="sidebar-legend-list">
                 <div class="legend-guide-item">
                     <span class="legend-dot" style="background:#ef4444; border: 2px solid #b91c1c;"></span>
                     <div>
-                        <strong>Red Circle (🚫 Cut-off Village)</strong>
+                        <strong>Red Circle (Cut-off Village)</strong>
                         <p>No drivable road routes to hospital. Priority for emergency airlifts.</p>
                     </div>
                 </div>
@@ -192,10 +192,10 @@
         <!-- Cut-Off Settlements List -->
         <div class="card settlements-card">
             <div class="settlement-header">
-                <h4>🏥 Hospital Connectivity (Who is cut off?)</h4>
+                <h4>Hospital Connectivity & Community Isolation</h4>
             </div>
             <p class="settlement-explanation">
-                Villages marked <strong>🔴 CUT OFF</strong> lost all intact drivable road routes to district medical facilities and need prioritized emergency airlifts. <em>Click any village below to zoom in on the map.</em>
+                Villages marked <strong>[CUT OFF]</strong> lost all intact drivable road routes to district medical facilities and need prioritized emergency airlifts. <em>Click any village below to zoom in on the map.</em>
             </p>
             <ul id="settlements-list" class="settlement-list">
                 <li class="settlement-loading">Loading network connectivity analysis...</li>
@@ -205,7 +205,7 @@
         <!-- Embedded Situation Report & Copilot (Official Track B Requirement) -->
         <div class="card auto-report-card" id="embedded-report-card">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
-                <h4 style="margin: 0; font-size: 0.95rem;">📑 Auto Situation Briefing</h4>
+                <h4 style="margin: 0; font-size: 0.95rem;">Automated Situation Briefing</h4>
                 <div class="mini-lang-tabs">
                     <button type="button" id="tab-lang-en" class="mini-tab-btn active">EN</button>
                     <button type="button" id="tab-lang-ne" class="mini-tab-btn">नेपाली</button>
@@ -216,10 +216,10 @@
             </div>
             <div style="margin-top: 0.5rem; display: flex; gap: 0.4rem;">
                 <a href="/dashboard/{{ job.id }}/report/" class="btn btn-primary btn-sm btn-block" style="text-align: center; text-decoration: none;">
-                    💬 Open Rescuer Copilot Q&A
+                    Open Rescuer Copilot Q&A
                 </a>
                 <button type="button" id="btn-view-emsr927" class="btn btn-secondary btn-sm" title="View official European Union EMSR927 verification benchmark">
-                    🎯 EMSR927
+                    EMSR927 Benchmark
                 </button>
             </div>
         </div>
@@ -227,7 +227,7 @@
         <!-- Action Card -->
         <div class="card action-card">
             <a href="/" class="btn btn-outline btn-block">
-                🔄 Run New Analysis
+                Run New Analysis
             </a>
         </div>
     </aside>
@@ -239,7 +239,7 @@
         <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1rem; border-bottom: 1px solid var(--border-color); padding-bottom: 0.75rem;">
             <div>
                 <h3 style="margin: 0; font-size: 1.15rem; color: var(--text-primary); display: flex; align-items: center; gap: 0.5rem;">
-                    🇪🇺 Copernicus Emergency Management Service
+                    Copernicus Emergency Management Service
                 </h3>
                 <span style="font-size: 0.8rem; color: var(--text-muted);">Activation EMSR927 Ground-Truth Benchmark</span>
             </div>

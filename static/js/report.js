@@ -35,17 +35,17 @@ document.addEventListener('DOMContentLoaded', () => {
             statusBanner.style.backgroundColor = '#fef2f2';
             statusBanner.style.color = '#991b1b';
             statusBanner.style.borderColor = '#fecaca';
-            statusBanner.innerHTML = `⚠️ <strong>Notice:</strong> ${message}`;
+            statusBanner.innerHTML = `<strong>Notice:</strong> ${message}`;
         } else if (type === 'success') {
             statusBanner.style.backgroundColor = '#f0fdf4';
             statusBanner.style.color = '#166534';
             statusBanner.style.borderColor = '#bbf7d0';
-            statusBanner.innerHTML = `✅ <strong>Success:</strong> ${message}`;
+            statusBanner.innerHTML = `<strong>Success:</strong> ${message}`;
         } else {
             statusBanner.style.backgroundColor = '#eff6ff';
             statusBanner.style.color = '#1e40af';
             statusBanner.style.borderColor = '#bfdbfe';
-            statusBanner.innerHTML = `ℹ️ ${message}`;
+            statusBanner.innerHTML = `${message}`;
         }
     }
 
@@ -100,7 +100,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (btnGenerate && window.JOB_ID) {
         btnGenerate.addEventListener('click', async () => {
             btnGenerate.disabled = true;
-            btnGenerate.textContent = "⏳ Generating Grounded Report with Gemini...";
+            btnGenerate.textContent = "Generating Grounded Report with Gemini...";
             if (statusBanner) statusBanner.style.display = 'none';
 
             try {
@@ -125,16 +125,16 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (textEnglish) textEnglish.innerHTML = formatMarkdown(data.report_english || '');
                 if (textNepali) textNepali.innerHTML = formatMarkdown(data.report_nepali || '');
 
-                btnGenerate.textContent = "✅ Report Generated Successfully";
+                btnGenerate.textContent = "Report Generated Successfully";
                 showStatus("Official Disaster Situation Report synthesized successfully grounded in Sentinel satellite radar and optical imagery.", "success");
                 setTimeout(() => {
                     btnGenerate.disabled = false;
-                    btnGenerate.textContent = "⚡ Generate / Refresh AI Briefing (Gemini)";
+                    btnGenerate.textContent = "Generate / Refresh AI Briefing (Gemini)";
                 }, 3000);
             } catch (e) {
                 showStatus(e.message, "error");
                 btnGenerate.disabled = false;
-                btnGenerate.textContent = "⚡ Generate / Refresh AI Briefing (Gemini)";
+                btnGenerate.textContent = "Generate / Refresh AI Briefing (Gemini)";
             }
         });
     }
@@ -164,7 +164,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             copilotInput.value = '';
             btnAsk.disabled = true;
-            btnAsk.textContent = "⏳ Thinking...";
+            btnAsk.textContent = "Analyzing query...";
 
             // Append loading bot bubble
             const botMsg = document.createElement('div');
@@ -187,10 +187,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 const data = await resp.json();
                 botMsg.textContent = data.answer || "No response received.";
             } catch (err) {
-                botMsg.textContent = "⚠️ Could not connect to Mission Copilot. Please try again.";
+                botMsg.textContent = "Could not connect to Mission Copilot. Please try again.";
             } finally {
                 btnAsk.disabled = false;
-                btnAsk.textContent = "💬 Ask Copilot";
+                btnAsk.textContent = "Ask Copilot";
                 copilotLog.scrollTop = copilotLog.scrollHeight;
             }
         });

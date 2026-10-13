@@ -78,14 +78,14 @@ document.addEventListener('DOMContentLoaded', () => {
                     const roadsKm = (data.roads_damaged_km || 0).toFixed(1);
                     const floodArea = (data.flood_area_km2 || 0).toFixed(1);
                     if (cutoffCount > 0) {
-                        missionBriefEl.innerHTML = `⚠️ <strong style="color:#ef4444;">HIGH PRIORITY:</strong> <strong>${cutoffCount} settlements</strong> completely isolated from emergency medical care. <strong>${roadsKm} km</strong> of road infrastructure severed by <strong>${floodArea} km²</strong> inundation corridor.`;
+                        missionBriefEl.innerHTML = `<strong style="color:#ef4444;">[CRITICAL] HIGH PRIORITY:</strong> <strong>${cutoffCount} settlements</strong> completely isolated from emergency medical care. <strong>${roadsKm} km</strong> of road infrastructure severed by <strong>${floodArea} km²</strong> inundation corridor.`;
                     } else {
-                        missionBriefEl.innerHTML = `✅ <strong style="color:#10b981;">ALL SETTLEMENTS CONNECTED:</strong> Minor localized ponding (${floodArea} km²). Emergency vehicle access intact across valley corridors.`;
+                        missionBriefEl.innerHTML = `<strong style="color:#10b981;">[CLEAR] ALL SETTLEMENTS CONNECTED:</strong> Minor localized ponding (${floodArea} km²). Emergency vehicle access intact across valley corridors.`;
                     }
                 } else if (data.status === 'failed') {
-                    missionBriefEl.innerHTML = `❌ <strong style="color:#ef4444;">Pipeline Error:</strong> Satellite processing halted: ${data.error_message || 'Check logs'}`;
+                    missionBriefEl.innerHTML = `<strong style="color:#ef4444;">[ERROR] Pipeline Error:</strong> Satellite processing halted: ${data.error_message || 'Check logs'}`;
                 } else {
-                    missionBriefEl.innerHTML = `⏳ <strong>ANALYZING:</strong> ${data.current_step || 'Processing satellite SAR/optical imagery...'}`;
+                    missionBriefEl.innerHTML = `<strong>ANALYZING:</strong> ${data.current_step || 'Processing satellite SAR/optical imagery...'}`;
                 }
             }
 

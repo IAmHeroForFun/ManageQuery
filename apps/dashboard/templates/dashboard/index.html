@@ -11,22 +11,21 @@
             <div class="map-toolbar">
                 <div class="map-toolbar-top">
                     <div class="map-title-chip">
-                        <span class="icon">📍</span>
                         <span class="title">Select Area of Interest (AOI)</span>
                         <span class="footprint-pill">18 × 18 km</span>
                     </div>
                     <div class="map-search-wrapper" style="flex: 1; max-width: 320px; min-width: 180px;">
-                        <input type="text" id="aoi-place-search" placeholder="🔍 Search place (e.g. Mumbai, Pokhara)..." style="width: 100%; padding: 0.35rem 0.65rem; border-radius: 20px; border: 1px solid var(--border-input); font-size: 0.8rem; outline: none; background: #f8fafc;" />
+                        <input type="text" id="aoi-place-search" placeholder="Search location (e.g. Mumbai, Pokhara)..." style="width: 100%; padding: 0.35rem 0.65rem; border-radius: 20px; border: 1px solid var(--border-input); font-size: 0.8rem; outline: none; background: #f8fafc;" />
                     </div>
                     <div class="map-toolbar-buttons">
                         <button type="button" id="btn-recenter-aoi" class="btn btn-secondary btn-sm" title="Center box at current view">
-                            🎯 Center
+                            Center View
                         </button>
                         <button type="button" id="btn-reset-aoi" class="btn btn-outline btn-sm" title="Reset box to calibrated position">
-                            🔄 Reset
+                            Reset AOI
                         </button>
                         <button type="submit" form="form-analysis" id="btn-submit" class="btn btn-primary btn-run-direct">
-                            🚀 Run Analysis
+                            Run Analysis
                         </button>
                     </div>
                 </div>
@@ -36,19 +35,19 @@
                     <span class="presets-label">Presets:</span>
                     <div class="preset-chips-scroll">
                         <button type="button" class="preset-chip active" data-preset="trishuli" title="Trishuli Basin, Nepal — 26 Aug 2026">
-                            🏔️ Trishuli (2026) <span class="preset-run-badge">⚡ Auto</span>
+                            Trishuli Basin (2026) <span class="preset-run-badge">Auto</span>
                         </button>
                         <button type="button" class="preset-chip" data-preset="melamchi" title="Melamchi Basin, Nepal — 15 Jun 2021">
-                            🌊 Melamchi (2021) <span class="preset-run-badge">⚡ Auto</span>
+                            Melamchi Basin (2021) <span class="preset-run-badge">Auto</span>
                         </button>
                         <button type="button" class="preset-chip" data-preset="gujarat" title="Gujarat Coast, India — 28 Aug 2024">
-                            🌊 Gujarat (2024) <span class="preset-run-badge">⚡ Auto</span>
+                            Gujarat Coast (2024) <span class="preset-run-badge">Auto</span>
                         </button>
                         <button type="button" class="preset-chip" data-preset="mumbai" title="Mumbai Suburban Corridor, India — 26 Aug 2026">
-                            🇮🇳 Mumbai (2026) <span class="preset-run-badge">⚡ Auto</span>
+                            Mumbai Region (2026) <span class="preset-run-badge">Auto</span>
                         </button>
                         <button type="button" class="preset-chip" data-preset="rhine" title="Rhine Valley, Europe — 14 Jul 2021">
-                            🏞️ Rhine (2021) <span class="preset-run-badge">⚡ Auto</span>
+                            Rhine Valley (2021) <span class="preset-run-badge">Auto</span>
                         </button>
                     </div>
                 </div>
@@ -59,7 +58,7 @@
         </div>
         
         <div class="map-helper-tip">
-            💡 <strong>Quick Positioning:</strong> <strong>Click/tap anywhere on the map</strong> to instantly jump the box there, or drag anywhere inside the blue area. Use <strong>🔍 Search</strong> or presets to jump directly to any city or river basin.
+            <strong>Quick Positioning:</strong> <strong>Click/tap anywhere on the map</strong> to instantly jump the box there, or drag anywhere inside the blue area. Use the search bar or presets to jump directly to any city or river basin.
         </div>
     </div>
 
@@ -77,7 +76,7 @@
                 <!-- Collapsible Advanced Coordinates -->
                 <details class="advanced-coords-details" id="details-coords">
                     <summary class="advanced-coords-summary">
-                        <span>⚙️ Fine-Tune Coordinates (Optional)</span>
+                        <span>Fine-Tune Coordinates (Optional)</span>
                     </summary>
                     <div class="form-group manual-coord-group">
                         <div class="bbox-grid">

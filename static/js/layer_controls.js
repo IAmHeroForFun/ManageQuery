@@ -164,7 +164,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         onEachFeature: (feature, layer) => {
                             layer.bindPopup(`
                                 <div style="font-size:12px;">
-                                    <strong style="color:#1d4ed8;">🇪🇺 Copernicus EMS Reference (EMSR927)</strong><br>
+                                    <strong style="color:#1d4ed8;">Copernicus EMS Reference (EMSR927)</strong><br>
                                     <strong>Validation Source:</strong> Rapid Mapping Activation<br>
                                     <strong>Ground Truth Agreement:</strong> 81% IoU<br>
                                     <em>Attribution: European Union, Copernicus EMS data</em>
@@ -208,7 +208,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (btnEmsr && window.JOB_ID) {
         btnEmsr.addEventListener('click', async () => {
             btnEmsr.disabled = true;
-            btnEmsr.textContent = "⏳ Loading...";
+            btnEmsr.textContent = "Loading...";
             
             // Automatically turn ON the blue reference layer on map
             setEmsrLayerVisible(true);
@@ -217,7 +217,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 modalEmsr.style.display = 'flex';
                 modalBody.innerHTML = `
                     <div style="text-align: center; padding: 2rem 0; color: var(--text-muted);">
-                        ⏳ Fetching Copernicus reference data...
+                        Fetching Copernicus reference data...
                     </div>
                 `;
             }
@@ -239,7 +239,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (modalBody) {
                     modalBody.innerHTML = `
                         <div style="background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 6px; padding: 0.75rem 1rem; margin-bottom: 1rem; color: #166534; font-size: 0.84rem;">
-                            <strong>✅ Benchmark Active:</strong> Copernicus Activation <strong>${data.activation_id}</strong> (${data.event_title}). The blue dashed reference polygon has also been overlaid on your map.
+                            <strong>[ACTIVE] Benchmark Active:</strong> Copernicus Activation <strong>${data.activation_id}</strong> (${data.event_title}). The blue dashed reference polygon has also been overlaid on your map.
                         </div>
 
                         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; margin-bottom: 1rem;">
@@ -294,11 +294,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             } catch (err) {
                 if (modalBody) {
-                    modalBody.innerHTML = `<div style="color: #dc2626; padding: 1rem; text-align: center;">⚠️ Failed to load EMSR927 reference benchmark. Please try again.</div>`;
+                    modalBody.innerHTML = `<div style="color: #dc2626; padding: 1rem; text-align: center;">[ERROR] Failed to load EMSR927 reference benchmark. Please try again.</div>`;
                 }
             } finally {
                 btnEmsr.disabled = false;
-                btnEmsr.textContent = "🎯 EMSR927";
+                btnEmsr.textContent = "EMSR927 Benchmark";
             }
         });
     }

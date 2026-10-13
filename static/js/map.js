@@ -36,9 +36,9 @@ function initLeafletMap(containerId, centerCoords = [28.25, 85.35], zoomLevel = 
     });
 
     const baseMaps = {
-        "🛰️ Satellite Imagery": esriSatellite,
-        "🗺️ Street Map (ESRI)": esriStreet,
-        "🏔️ Topographic Map": openTopo,
+        "Satellite (ESRI World Imagery)": esriSatellite,
+        "Street Map (ESRI World)": esriStreet,
+        "Topographic (OpenTopoMap)": openTopo,
         "CartoDB Streets": cartoVoyager
     };
 

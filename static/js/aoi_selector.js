@@ -89,7 +89,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (statusEl) {
             const widthKm = (Math.abs(maxLon - minLon) * 105).toFixed(1);
             const heightKm = (Math.abs(maxLat - minLat) * 111).toFixed(1);
-            statusEl.innerHTML = `<strong>AOI Footprint:</strong> ~${widthKm} × ${heightKm} km &nbsp;|&nbsp; <span style="background:rgba(16,185,129,0.15);color:#059669;font-weight:600;padding:2px 8px;border-radius:4px;font-size:0.78rem;">🔒 Fixed High-Accuracy Box</span>`;
+            statusEl.innerHTML = `<strong>AOI Footprint:</strong> ~${widthKm} × ${heightKm} km &nbsp;|&nbsp; <span style="background:rgba(16,185,129,0.15);color:#059669;font-weight:600;padding:2px 8px;border-radius:4px;font-size:0.78rem;">Fixed High-Accuracy Footprint</span>`;
         }
     }
 
@@ -104,7 +104,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // 1. Center Move Handle (Move-Only: preserves exact fixed footprint)
         const centerIcon = L.divIcon({
             className: 'aoi-center-handle',
-            html: '<div class="handle-center-dot" title="Drag to MOVE the fixed box anywhere">✥ MOVE</div>',
+            html: '<div class="handle-center-dot" title="Drag to MOVE the fixed box anywhere">MOVE</div>',
             iconSize: [68, 28],
             iconAnchor: [34, 14]
         });
@@ -328,7 +328,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const sourceIcon = L.divIcon({
             className: 'upstream-source-marker',
-            html: '<div class="source-pin"><span class="source-pin-icon">💧</span><span class="source-pin-label">Origin</span></div>',
+            html: '<div class="source-pin"><span class="source-pin-icon" style="font-size:10px;font-weight:800;color:#0284c7;">PT</span><span class="source-pin-label">Origin</span></div>',
             iconSize: [38, 38],
             iconAnchor: [19, 36]
         });
@@ -346,7 +346,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const estM = Math.round(2200 + Math.max(0, (pLat - 27.8) / 0.8) * 2600);
                 elevEst = ` • ~${estM}m elev`;
             }
-            return `💧 Upstream Flood Origin [${pLng.toFixed(4)}, ${pLat.toFixed(4)}]${elevEst}<br><small style="color:#cbd5e1;">(Drag to reposition flood source)</small>`;
+            return `Upstream Flood Origin [${pLng.toFixed(4)}, ${pLat.toFixed(4)}]${elevEst}<br><small style="color:#cbd5e1;">(Drag to reposition flood source)</small>`;
         };
 
         sourceMarker.bindTooltip(updateTooltip(lon, lat), {
@@ -469,7 +469,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 // 2. Fall back to OpenStreetMap Nominatim geocoding
                 try {
-                    searchInput.placeholder = "🔍 Searching...";
+                    searchInput.placeholder = "Searching...";
                     const res = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(q)}&limit=1`);
                     const data = await res.json();
                     if (data && data.length > 0) {
@@ -484,7 +484,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     console.error("Geocoding failed:", err);
                     alert("Place search temporarily unavailable. You can click anywhere on the map to jump the box there.");
                 } finally {
-                    searchInput.placeholder = "🔍 Search place (e.g. Mumbai, Pokhara)...";
+                    searchInput.placeholder = "Search location (e.g. Mumbai, Pokhara)...";
                 }
             }
         });
@@ -602,7 +602,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (btnSubmit) {
             btnSubmit.disabled = true;
-            btnSubmit.textContent = "⏳ Initializing Satellite Pipeline...";
+            btnSubmit.textContent = "Initializing Satellite Pipeline...";
         }
 
         const dateInput = document.getElementById('flood-date');
@@ -645,7 +645,7 @@ document.addEventListener('DOMContentLoaded', () => {
             alert("Failed to submit analysis: " + error.message);
             if (btnSubmit) {
                 btnSubmit.disabled = false;
-                btnSubmit.textContent = "🚀 Run Satellite Flood Analysis";
+                btnSubmit.textContent = "Run Satellite Flood Analysis";
             }
         }
     }

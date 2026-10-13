@@ -47,7 +47,7 @@ async function loadFloodLayer(map, jobId) {
                 const p = feature.properties || {};
                 layer.bindPopup(`
                     <div style="font-size:12px;">
-                        <strong style="color:#ca8a04;">🌊 Inundated & Saturated Debris Corridor</strong><br>
+                        <strong style="color:#ca8a04;">[INUNDATION] Saturated Debris Corridor</strong><br>
                         <strong>Sensor:</strong> ${p.source || 'Fused (SAR+Optical)'}<br>
                         <strong>Confidence:</strong> ${(p.confidence ? (p.confidence * 100).toFixed(0) : '88')}%<br>
                         <strong>Calculated Area:</strong> ${p.area_km2 || '--'} km²
@@ -100,7 +100,7 @@ async function loadDamagedFeaturesLayer(map, jobId) {
                 layer.bindPopup(`
                     <div style="font-size:12px; min-width: 210px;">
                         <strong style="color:${isSevered ? '#dc2626' : '#d97706'}; font-size:13px;">
-                            ${isBridge ? '🌉 ' + (isSevered ? 'SEVERED BRIDGE' : 'BRIDGE AT RISK') : (isSevered ? '🚫 SEVERED ROAD' : '⚠️ CAUTION: WATERLOGGED ROAD')}
+                            ${isBridge ? '[BRIDGE] ' + (isSevered ? 'SEVERED RIVER CROSSING' : 'BRIDGE AT RISK') : (isSevered ? '[SEVERED] IMPASSABLE ROAD' : '[CAUTION] WATERLOGGED ROAD')}
                         </strong><br>
                         <strong>Name:</strong> ${p.osm_name || (isBridge ? 'River Crossing Bridge' : 'Corridor Road')}<br>
                         <strong>Infrastructure:</strong> ${p.osm_type.toUpperCase()}<br>
@@ -132,7 +132,7 @@ async function loadDamagedFeaturesLayer(map, jobId) {
                 const p = feature.properties;
                 layer.bindPopup(`
                     <div style="font-size:12px;">
-                        <strong style="color:#991b1b; font-size:13px;">🏚️ Flood-Impacted Structure</strong><br>
+                        <strong style="color:#991b1b; font-size:13px;">[IMPACTED] Structural Flood Damage</strong><br>
                         <strong>Building ID/Name:</strong> ${p.osm_name || p.osm_id}<br>
                         <strong>Status:</strong> <span style="font-weight:700; color:#dc2626;">SUBMERGED / STRUCTURAL THREAT</span><br>
                         <strong>Footprint Inundation:</strong> ${p.overlap_pct}%
@@ -170,7 +170,7 @@ async function loadCutoffSettlementsLayer(map, jobId) {
                     return L.marker(latlng, {
                         icon: L.divIcon({
                             className: 'custom-hosp-marker',
-                            html: `<div style="background:#2563eb; color:#fff; border-radius:50%; width:24px; height:24px; display:flex; align-items:center; justify-content:center; font-size:13px; border:2px solid #fff; box-shadow:0 2px 6px rgba(0,0,0,0.3);">🏥</div>`,
+                            html: `<div style="background:#2563eb; color:#fff; border-radius:50%; width:24px; height:24px; display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:800; border:2px solid #fff; box-shadow:0 2px 6px rgba(0,0,0,0.3);">H</div>`,
                             iconSize: [24, 24],
                             iconAnchor: [12, 12]
                         })
@@ -197,7 +197,7 @@ async function loadCutoffSettlementsLayer(map, jobId) {
                 layer.bindPopup(`
                     <div style="font-size:12px; min-width: 220px;">
                         <strong style="color:${isHosp ? '#2563eb' : (p.is_cutoff ? '#ef4444' : '#16a34a')}; font-size:13px;">
-                            ${isHosp ? '🏥 REGIONAL MEDICAL FACILITY' : (p.is_cutoff ? '🚨 PRIORITY 1: ISOLATED COMMUNITY' : '✅ GROUND EVACUATION ACCESSIBLE')}
+                            ${isHosp ? '[HOSPITAL] REGIONAL MEDICAL FACILITY' : (p.is_cutoff ? '[CRITICAL] ISOLATED COMMUNITY' : '[ACCESSIBLE] GROUND EVACUATION ROUTE INTACT')}
                         </strong><br>
                         <strong>${isHosp ? 'Facility Name' : 'Community'}:</strong> ${p.name}<br>
                         ${!isHosp ? `<strong>Assigned Hospital:</strong> ${p.nearest_hospital || 'Emergency Hospital'}<br>` : ''}
@@ -226,9 +226,9 @@ async function loadCutoffSettlementsLayer(map, jobId) {
                 li.style.cursor = 'pointer';
                 li.title = 'Click to focus on this village on the map';
                 li.innerHTML = `
-                    <span><strong>📍 ${p.name}</strong></span>
+                    <span><strong>${p.name}</strong></span>
                     <span class="status-tag ${p.is_cutoff ? 'status-tag-cutoff' : 'status-tag-connected'}">
-                        ${p.is_cutoff ? '🔴 CUT OFF' : '🟢 CONNECTED'}
+                        ${p.is_cutoff ? 'CUT OFF' : 'CONNECTED'}
                     </span>
                 `;
 
@@ -271,11 +271,11 @@ async function loadFloodPathLayer(map, jobId) {
                 if (p.settlement_etas && p.settlement_etas.length > 0) {
                     etaHtml = `
                         <div style="margin-top:6px; border-top:1px solid #e2e8f0; padding-top:4px;">
-                            <strong>⏱️ Downstream Surge Arrival (ETA):</strong>
+                            <strong>Downstream Surge Arrival (ETA):</strong>
                             <div style="max-height:110px; overflow-y:auto; margin-top:3px;">
                                 ${p.settlement_etas.map(s => `
                                     <div style="display:flex; justify-content:space-between; font-size:11px; margin-bottom:2px;">
-                                        <span>📍 <strong>${s.name}</strong> (${s.distance_from_origin_km} km)</span>
+                                        <span><strong>${s.name}</strong> (${s.distance_from_origin_km} km)</span>
                                         <span style="color:#d97706; font-weight:700;">+${s.eta_formatted}</span>
                                     </div>
                                 `).join('')}
@@ -288,12 +288,12 @@ async function loadFloodPathLayer(map, jobId) {
 
                 layer.bindPopup(`
                     <div style="font-size:12px; min-width: 220px;">
-                        <strong style="color:#9333ea; font-size:13px;">🟣 Downhill Flow Corridor (OSM/D8)</strong><br>
+                        <strong style="color:#9333ea; font-size:13px;">[FLOW CORRIDOR] Downhill Gravity Drainage (OSM/D8)</strong><br>
                         <div style="display:grid; grid-template-columns: 1fr 1fr; gap:4px; margin: 5px 0; background:#faf5ff; padding:5px; border-radius:4px; font-size:11px;">
                             <div><strong>Path Length:</strong><br>${p.path_length_km} km</div>
-                            <div><strong>Elevation Drop:</strong><br>📉 -${p.elevation_drop_m || '--'} m</div>
-                            <div><strong>Headwater Elev:</strong><br>🏔️ ${p.start_elevation_m || '--'} m</div>
-                            <div><strong>Surge Velocity:</strong><br>⚡ ~${p.avg_speed_kmh || '--'} km/h</div>
+                            <div><strong>Elevation Drop:</strong><br>-${p.elevation_drop_m || '--'} m</div>
+                            <div><strong>Headwater Elev:</strong><br>${p.start_elevation_m || '--'} m</div>
+                            <div><strong>Surge Velocity:</strong><br>~${p.avg_speed_kmh || '--'} km/h</div>
                         </div>
                         ${etaHtml}
                     </div>

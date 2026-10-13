@@ -1,0 +1,101 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          72.83171,
+          18.9601
+        ]
+      },
+      "properties": {
+        "name": "E Ward General Hospital",
+        "place": "hospital",
+        "is_hospital": true,
+        "population": 3500
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          72.83878,
+          18.96092
+        ]
+      },
+      "properties": {
+        "name": "E Ward Sector 1",
+        "place": "village",
+        "is_hospital": false,
+        "population": 1050
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          72.82609,
+          18.98233
+        ]
+      },
+      "properties": {
+        "name": "E Ward Sector 2",
+        "place": "village",
+        "is_hospital": false,
+        "population": 900
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          72.83554,
+          18.97601
+        ]
+      },
+      "properties": {
+        "name": "E Ward West",
+        "place": "village",
+        "is_hospital": false,
+        "population": 750
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          72.83532,
+          18.98135
+        ]
+      },
+      "properties": {
+        "name": "E Ward East",
+        "place": "village",
+        "is_hospital": false,
+        "population": 600
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          72.84105,
+          18.98093
+        ]
+      },
+      "properties": {
+        "name": "E Ward River Crossing",
+        "place": "village",
+        "is_hospital": false,
+        "population": 450
+      }
+    }
+  ]
+}

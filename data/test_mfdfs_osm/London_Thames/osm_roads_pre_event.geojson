@@ -1,0 +1,87 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -0.1138,
+            51.5054
+          ],
+          [
+            -0.1044,
+            51.5108
+          ],
+          [
+            -0.0977,
+            51.5177
+          ],
+          [
+            -0.088,
+            51.5275
+          ]
+        ]
+      },
+      "properties": {
+        "osm_id": "way/arterial_5030",
+        "name": "Corridor Primary Highway",
+        "highway": "primary",
+        "surface": "asphalt"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -0.1044,
+            51.5108
+          ],
+          [
+            -0.1115,
+            51.5136
+          ],
+          [
+            -0.1147,
+            51.5188
+          ]
+        ]
+      },
+      "properties": {
+        "osm_id": "way/feeder_5030",
+        "name": "Valley Secondary Link",
+        "highway": "secondary",
+        "surface": "paved"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -0.0977,
+            51.5177
+          ],
+          [
+            -0.0867,
+            51.5184
+          ],
+          [
+            -0.0868,
+            51.5146
+          ]
+        ]
+      },
+      "properties": {
+        "osm_id": "way/upper_5030",
+        "name": "Mountain Spur Access Road",
+        "highway": "tertiary",
+        "surface": "gravel"
+      }
+    }
+  ]
+}

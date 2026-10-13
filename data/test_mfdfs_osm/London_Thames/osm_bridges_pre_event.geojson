@@ -1,0 +1,71 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -0.1044,
+            51.5108
+          ],
+          [
+            -0.0977,
+            51.5177
+          ]
+        ]
+      },
+      "properties": {
+        "osm_id": "way/bridge_10",
+        "name": "River Crossing Bridge 1",
+        "bridge": "yes",
+        "highway": "primary"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -0.1044,
+            51.5108
+          ],
+          [
+            -0.1115,
+            51.5136
+          ]
+        ]
+      },
+      "properties": {
+        "osm_id": "way/bridge_11",
+        "name": "River Crossing Bridge 2",
+        "bridge": "yes",
+        "highway": "secondary"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -0.0977,
+            51.5177
+          ],
+          [
+            -0.0867,
+            51.5184
+          ]
+        ]
+      },
+      "properties": {
+        "osm_id": "way/bridge_12",
+        "name": "River Crossing Bridge 3",
+        "bridge": "yes",
+        "highway": "tertiary"
+      }
+    }
+  ]
+}

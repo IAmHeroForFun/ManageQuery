@@ -118,8 +118,11 @@ class SARProcessor:
         seed_val = int(abs(min_lon * 1000 + min_lat * 100)) % 10000
         rng = random.Random(seed_val)
 
-        # Detect west-facing coastlines (e.g. Mumbai, Konkan, Gujarat where west is Arabian Sea)
-        is_west_coast = (72.6 <= min_lon <= 73.2 and 18.5 <= min_lat <= 22.5)
+        # Dynamic coastal margin detection: check if western or eastern periphery touches marine water
+        west_probe = [min_lon, min_lat, min_lon + 0.15 * d_lon, max_lat]
+        east_probe = [max_lon - 0.15 * d_lon, min_lat, max_lon, max_lat]
+        is_west_marine = OSMFetcher()._is_ocean_bbox(west_probe)
+        is_east_marine = OSMFetcher()._is_ocean_bbox(east_probe)
 
         num_waypoints = rng.randint(5, 8)
         left_bank = []
@@ -128,9 +131,11 @@ class SARProcessor:
 
         for i in range(num_waypoints):
             t = i / (num_waypoints - 1)
-            # On west coast, shift center toward inland terrestrial corridor (0.45 - 0.70 of d_lon)
-            if is_west_coast:
-                c_x = min_lon + (0.40 + 0.35 * t + rng.uniform(-0.04, 0.04)) * d_lon
+            # Adapt center toward inland landmass away from marine water
+            if is_west_marine:
+                c_x = min_lon + (0.42 + 0.35 * t + rng.uniform(-0.04, 0.04)) * d_lon
+            elif is_east_marine:
+                c_x = min_lon + (0.15 + 0.35 * t + rng.uniform(-0.04, 0.04)) * d_lon
             else:
                 c_x = min_lon + (0.15 + 0.65 * t + rng.uniform(-0.06, 0.06)) * d_lon
 

@@ -83,31 +83,59 @@ async function loadDamagedFeaturesLayer(map, jobId) {
                 const status = feature.properties.status;
                 const isBridge = feature.properties.osm_type === 'bridge';
                 const isAffected = status === 'affected';
+                const isPossible = status === 'possibly_affected';
                 
+                // Red for severed, orange for waterlogged, clean slate for intact passable road
+                let strokeColor = '#64748b'; // Intact passable route
+                let weight = 2.0;
+                let opacity = 0.75;
+
+                if (isAffected) {
+                    strokeColor = '#ef4444';
+                    weight = isBridge ? 5.5 : 3.8;
+                    opacity = 0.95;
+                } else if (isPossible) {
+                    strokeColor = '#f97316';
+                    weight = isBridge ? 4.5 : 3.0;
+                    opacity = 0.90;
+                } else if (isBridge) {
+                    strokeColor = '#3b82f6'; // Intact operational bridge
+                    weight = 4.0;
+                    opacity = 0.90;
+                }
+
                 return {
-                    color: isAffected ? '#ef4444' : '#f97316',
-                    weight: isBridge ? 5.5 : (isAffected ? 3.5 : 2.5),
+                    color: strokeColor,
+                    weight: weight,
                     lineCap: 'round',
                     lineJoin: 'round',
-                    dashArray: null, // Solid clean lines to avoid crossing dashes
-                    opacity: isBridge ? 1.0 : 0.92
+                    dashArray: null,
+                    opacity: opacity
                 };
             },
             onEachFeature: (feature, layer) => {
                 const p = feature.properties;
                 const isSevered = p.status === 'affected';
+                const isPossible = p.status === 'possibly_affected';
                 const isBridge = p.osm_type === 'bridge';
+
+                let statusBadge = `<strong style="color:#059669; font-size:13px;">[PASSABLE] OPERATIONAL ${isBridge ? 'BRIDGE' : 'ROUTE'}</strong>`;
+                let vehiclePass = `<span style="font-weight:700; color:#059669;">CLEAR / PASSABLE TO ALL VEHICLES</span>`;
+
+                if (isSevered) {
+                    statusBadge = `<strong style="color:#dc2626; font-size:13px;">${isBridge ? '[BRIDGE] SEVERED RIVER CROSSING' : '[SEVERED] IMPASSABLE ROAD'}</strong>`;
+                    vehiclePass = `<span style="font-weight:700; color:#dc2626;">IMPASSABLE TO AMBULANCES</span>`;
+                } else if (isPossible) {
+                    statusBadge = `<strong style="color:#d97706; font-size:13px;">${isBridge ? '[BRIDGE] CROSSING AT RISK' : '[CAUTION] WATERLOGGED ROAD'}</strong>`;
+                    vehiclePass = `<span style="font-weight:700; color:#d97706;">CAUTION / 4WD ONLY</span>`;
+                }
+
                 layer.bindPopup(`
                     <div style="font-size:12px; min-width: 210px;">
-                        <strong style="color:${isSevered ? '#dc2626' : '#d97706'}; font-size:13px;">
-                            ${isBridge ? '[BRIDGE] ' + (isSevered ? 'SEVERED RIVER CROSSING' : 'BRIDGE AT RISK') : (isSevered ? '[SEVERED] IMPASSABLE ROAD' : '[CAUTION] WATERLOGGED ROAD')}
-                        </strong><br>
+                        ${statusBadge}<br>
                         <strong>Name:</strong> ${p.osm_name || (isBridge ? 'River Crossing Bridge' : 'Corridor Road')}<br>
                         <strong>Infrastructure:</strong> ${p.osm_type.toUpperCase()}<br>
-                        <strong>Vehicle Passability:</strong> 
-                        <span style="font-weight:700; color:${isSevered ? '#dc2626' : '#d97706'};">
-                            ${isSevered ? 'IMPASSABLE TO AMBULANCES' : 'SLOW / 4WD ONLY'}
-                        </span><br>
+                        <strong>Vehicle Passability:</strong> ${vehiclePass}<br>
                         <strong>Submerged Overlap:</strong> ${p.overlap_pct}%<br>
                         <small style="color:#64748b;">Source: OpenStreetMap intersected with satellite radar footprint.</small>
                     </div>

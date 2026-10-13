@@ -1,0 +1,621 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            85.20657,
+            27.89916
+          ],
+          [
+            85.20639,
+            27.89922
+          ]
+        ]
+      },
+      "properties": {
+        "osm_id": "way/bridge_10",
+        "name": "River Crossing Bridge 1",
+        "bridge": "yes",
+        "highway": "tertiary"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            85.23564,
+            27.89651
+          ],
+          [
+            85.2353,
+            27.8965
+          ]
+        ]
+      },
+      "properties": {
+        "osm_id": "way/bridge_11",
+        "name": "River Crossing Bridge 2",
+        "bridge": "yes",
+        "highway": "residential"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            85.23262,
+            27.89846
+          ],
+          [
+            85.23213,
+            27.89817
+          ]
+        ]
+      },
+      "properties": {
+        "osm_id": "way/bridge_12",
+        "name": "River Crossing Bridge 3",
+        "bridge": "yes",
+        "highway": "residential"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            85.23196,
+            27.8951
+          ],
+          [
+            85.23205,
+            27.89534
+          ]
+        ]
+      },
+      "properties": {
+        "osm_id": "way/bridge_13",
+        "name": "River Crossing Bridge 4",
+        "bridge": "yes",
+        "highway": "unclassified"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            85.23321,
+            27.89789
+          ],
+          [
+            85.23311,
+            27.89812
+          ]
+        ]
+      },
+      "properties": {
+        "osm_id": "way/bridge_14",
+        "name": "River Crossing Bridge 5",
+        "bridge": "yes",
+        "highway": "residential"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            85.23804,
+            27.89911
+          ],
+          [
+            85.2379,
+            27.90074
+          ]
+        ]
+      },
+      "properties": {
+        "osm_id": "way/bridge_15",
+        "name": "River Crossing Bridge 6",
+        "bridge": "yes",
+        "highway": "residential"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            85.2514,
+            27.84576
+          ],
+          [
+            85.25154,
+            27.8458
+          ]
+        ]
+      },
+      "properties": {
+        "osm_id": "way/bridge_16",
+        "name": "River Crossing Bridge 7",
+        "bridge": "yes",
+        "highway": "unclassified"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            85.2233,
+            27.85636
+          ],
+          [
+            85.22329,
+            27.85651
+          ]
+        ]
+      },
+      "properties": {
+        "osm_id": "way/bridge_17",
+        "name": "River Crossing Bridge 8",
+        "bridge": "yes",
+        "highway": "unclassified"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            85.20555,
+            27.87358
+          ],
+          [
+            85.2055,
+            27.87361
+          ]
+        ]
+      },
+      "properties": {
+        "osm_id": "way/bridge_18",
+        "name": "River Crossing Bridge 9",
+        "bridge": "yes",
+        "highway": "unclassified"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            85.23443,
+            27.86529
+          ],
+          [
+            85.23447,
+            27.86536
+          ]
+        ]
+      },
+      "properties": {
+        "osm_id": "way/bridge_19",
+        "name": "River Crossing Bridge 10",
+        "bridge": "yes",
+        "highway": "unclassified"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            85.21181,
+            27.85947
+          ],
+          [
+            85.21182,
+            27.85938
+          ]
+        ]
+      },
+      "properties": {
+        "osm_id": "way/bridge_20",
+        "name": "River Crossing Bridge 11",
+        "bridge": "yes",
+        "highway": "unclassified"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            85.20333,
+            27.87699
+          ],
+          [
+            85.20327,
+            27.87704
+          ]
+        ]
+      },
+      "properties": {
+        "osm_id": "way/bridge_21",
+        "name": "River Crossing Bridge 12",
+        "bridge": "yes",
+        "highway": "unclassified"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            85.2482,
+            27.85663
+          ],
+          [
+            85.24824,
+            27.85663
+          ]
+        ]
+      },
+      "properties": {
+        "osm_id": "way/bridge_22",
+        "name": "River Crossing Bridge 13",
+        "bridge": "yes",
+        "highway": "unclassified"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            85.25075,
+            27.86051
+          ],
+          [
+            85.25071,
+            27.86049
+          ]
+        ]
+      },
+      "properties": {
+        "osm_id": "way/bridge_23",
+        "name": "River Crossing Bridge 14",
+        "bridge": "yes",
+        "highway": "unclassified"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            85.24657,
+            27.87481
+          ],
+          [
+            85.24674,
+            27.87492
+          ]
+        ]
+      },
+      "properties": {
+        "osm_id": "way/bridge_24",
+        "name": "River Crossing Bridge 15",
+        "bridge": "yes",
+        "highway": "unclassified"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            85.24742,
+            27.87702
+          ],
+          [
+            85.24741,
+            27.87732
+          ]
+        ]
+      },
+      "properties": {
+        "osm_id": "way/bridge_25",
+        "name": "River Crossing Bridge 16",
+        "bridge": "yes",
+        "highway": "unclassified"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            85.24654,
+            27.87201
+          ],
+          [
+            85.24637,
+            27.87213
+          ]
+        ]
+      },
+      "properties": {
+        "osm_id": "way/bridge_26",
+        "name": "River Crossing Bridge 17",
+        "bridge": "yes",
+        "highway": "unclassified"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            85.23455,
+            27.86294
+          ],
+          [
+            85.23459,
+            27.863
+          ]
+        ]
+      },
+      "properties": {
+        "osm_id": "way/bridge_27",
+        "name": "River Crossing Bridge 18",
+        "bridge": "yes",
+        "highway": "residential"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            85.24113,
+            27.86129
+          ],
+          [
+            85.2411,
+            27.86138
+          ]
+        ]
+      },
+      "properties": {
+        "osm_id": "way/bridge_28",
+        "name": "River Crossing Bridge 19",
+        "bridge": "yes",
+        "highway": "unclassified"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            85.23284,
+            27.8574
+          ],
+          [
+            85.23283,
+            27.85743
+          ]
+        ]
+      },
+      "properties": {
+        "osm_id": "way/bridge_29",
+        "name": "River Crossing Bridge 20",
+        "bridge": "yes",
+        "highway": "unclassified"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            85.2419,
+            27.85786
+          ],
+          [
+            85.24199,
+            27.85792
+          ]
+        ]
+      },
+      "properties": {
+        "osm_id": "way/bridge_30",
+        "name": "River Crossing Bridge 21",
+        "bridge": "yes",
+        "highway": "unclassified"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            85.23885,
+            27.85543
+          ],
+          [
+            85.23879,
+            27.85545
+          ]
+        ]
+      },
+      "properties": {
+        "osm_id": "way/bridge_31",
+        "name": "River Crossing Bridge 22",
+        "bridge": "yes",
+        "highway": "unclassified"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            85.25096,
+            27.87056
+          ],
+          [
+            85.25101,
+            27.8705
+          ]
+        ]
+      },
+      "properties": {
+        "osm_id": "way/bridge_32",
+        "name": "River Crossing Bridge 23",
+        "bridge": "yes",
+        "highway": "unclassified"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            85.2342,
+            27.90029
+          ],
+          [
+            85.23416,
+            27.90042
+          ]
+        ]
+      },
+      "properties": {
+        "osm_id": "way/bridge_33",
+        "name": "River Crossing Bridge 24",
+        "bridge": "yes",
+        "highway": "residential"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            85.18597,
+            27.90581
+          ],
+          [
+            85.18588,
+            27.90565
+          ]
+        ]
+      },
+      "properties": {
+        "osm_id": "way/bridge_34",
+        "name": "River Crossing Bridge 25",
+        "bridge": "yes",
+        "highway": "secondary"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            85.24842,
+            27.85283
+          ],
+          [
+            85.24846,
+            27.85285
+          ]
+        ]
+      },
+      "properties": {
+        "osm_id": "way/bridge_35",
+        "name": "River Crossing Bridge 26",
+        "bridge": "yes",
+        "highway": "unclassified"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            85.22197,
+            27.86133
+          ],
+          [
+            85.22204,
+            27.86129
+          ]
+        ]
+      },
+      "properties": {
+        "osm_id": "way/bridge_36",
+        "name": "River Crossing Bridge 27",
+        "bridge": "yes",
+        "highway": "unclassified"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            85.20845,
+            27.87741
+          ],
+          [
+            85.20832,
+            27.87745
+          ]
+        ]
+      },
+      "properties": {
+        "osm_id": "way/bridge_37",
+        "name": "River Crossing Bridge 28",
+        "bridge": "yes",
+        "highway": "unclassified"
+      }
+    }
+  ]
+}

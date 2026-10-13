@@ -1,0 +1,101 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.1138,
+          51.5054
+        ]
+      },
+      "properties": {
+        "name": "City of London General Hospital",
+        "place": "hospital",
+        "is_hospital": true,
+        "population": 3500
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.1115,
+          51.5136
+        ]
+      },
+      "properties": {
+        "name": "City of London Sector 1",
+        "place": "village",
+        "is_hospital": false,
+        "population": 1050
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.1147,
+          51.5188
+        ]
+      },
+      "properties": {
+        "name": "City of London Sector 2",
+        "place": "village",
+        "is_hospital": false,
+        "population": 900
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.1044,
+          51.5108
+        ]
+      },
+      "properties": {
+        "name": "City of London West",
+        "place": "village",
+        "is_hospital": false,
+        "population": 750
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.1044,
+          51.5108
+        ]
+      },
+      "properties": {
+        "name": "City of London East",
+        "place": "village",
+        "is_hospital": false,
+        "population": 600
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.0977,
+          51.5177
+        ]
+      },
+      "properties": {
+        "name": "City of London River Crossing",
+        "place": "village",
+        "is_hospital": false,
+        "population": 450
+      }
+    }
+  ]
+}

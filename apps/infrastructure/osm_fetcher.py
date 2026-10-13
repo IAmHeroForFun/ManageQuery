@@ -46,15 +46,18 @@ class OSMFetcher:
         # 1. Fetch live infrastructure from Overpass API (supports arbitrary box sizes without node limits)
         roads_data, buildings_data, waterways_data, places_data = self._fetch_overpass_infrastructure(bbox)
 
-        # 2. Resilient fallback to OSM 0.6 sub-tiling if Overpass produced no results
-        if not roads_data.get("features"):
-            roads_06, bldgs_06, waterways_06 = self._fetch_live_osm_data(bbox)
-            if roads_06.get("features"):
+        # 2. Resilient fallback to OSM 0.6 micro-tiling if Overpass produced no results
+        if not roads_data.get("features") or not places_data.get("features"):
+            roads_06, bldgs_06, waterways_06, places_06 = self._fetch_live_osm_data(bbox)
+            if roads_06.get("features") and not roads_data.get("features"):
                 roads_data = roads_06
             if bldgs_06.get("features") and not buildings_data.get("features"):
                 buildings_data = bldgs_06
             if waterways_06.get("features") and not waterways_data.get("features"):
                 waterways_data = waterways_06
+            if places_06.get("features"):
+                existing_places = places_data.get("features", [])
+                places_data = {"type": "FeatureCollection", "features": existing_places + places_06.get("features", [])}
 
         # 3. Offline / synthetic fallback only if internet queries produced no data
         if not roads_data.get("features"):
@@ -91,30 +94,33 @@ class OSMFetcher:
             "waterways": waterways_path
         }
 
-    def _fetch_overpass_infrastructure(self, bbox: List[float]) -> tuple[Dict[str, Any], Dict[str, Any], Dict[str, Any]]:
+    def _fetch_overpass_infrastructure(self, bbox: List[float]) -> tuple[Dict[str, Any], Dict[str, Any], Dict[str, Any], Dict[str, Any]]:
         """
         Queries official OpenStreetMap Overpass API for real road networks,
-        waterways, and buildings across the full bounding box without the 50,000 node limit of OSM 0.6.
+        waterways, and buildings using GET queries.
         """
         if self._is_ocean_bbox(bbox):
-            return {"type": "FeatureCollection", "features": []}, {"type": "FeatureCollection", "features": []}, {"type": "FeatureCollection", "features": []}
+            return (
+                {"type": "FeatureCollection", "features": []},
+                {"type": "FeatureCollection", "features": []},
+                {"type": "FeatureCollection", "features": []},
+                {"type": "FeatureCollection", "features": []}
+            )
 
         min_lon, min_lat, max_lon, max_lat = bbox
 
         endpoints = [
             "https://overpass-api.de/api/interpreter",
-            "https://overpass.kumi.systems/api/interpreter",
-            "https://maps.mail.ru/osm/tools/overpass/api/interpreter"
+            "https://overpass.kumi.systems/api/interpreter"
         ]
 
-        query = f"""
-[out:json][timeout:15];
+        query = f"""[out:json][timeout:10][bbox:{min_lat:.4f},{min_lon:.4f},{max_lat:.4f},{max_lon:.4f}];
 (
-  way["highway"~"motorway|trunk|primary|secondary|tertiary|residential|unclassified"]({min_lat:.5f},{min_lon:.5f},{max_lat:.5f},{max_lon:.5f});
-  way["waterway"~"river|stream|canal"]({min_lat:.5f},{min_lon:.5f},{max_lat:.5f},{max_lon:.5f});
-  way["building"~"hospital|apartments|residential|commercial|school|yes"]({min_lat:.5f},{min_lon:.5f},{max_lat:.5f},{max_lon:.5f});
-  node["amenity"~"hospital|clinic"]({min_lat:.5f},{min_lon:.5f},{max_lat:.5f},{max_lon:.5f});
-  node["place"~"city|town|suburb|neighbourhood|village|hamlet"]({min_lat:.5f},{min_lon:.5f},{max_lat:.5f},{max_lon:.5f});
+  way["highway"~"motorway|trunk|primary|secondary|tertiary|residential|unclassified|track"];
+  way["waterway"~"river|stream|canal"];
+  way["building"~"hospital|apartments|residential|commercial|school|yes"];
+  node["amenity"~"hospital|clinic"];
+  node["place"~"city|town|suburb|neighbourhood|village"];
 );
 out tags geom 250;
 """
@@ -130,7 +136,7 @@ out tags geom 250;
 
         for ep in endpoints:
             try:
-                resp = requests.post(ep, data={"data": query}, headers=headers, timeout=9.0)
+                resp = requests.get(ep, params={"data": query}, headers=headers, timeout=8.0)
                 if resp.status_code == 200 and resp.content:
                     data = resp.json()
                     elements = data.get("elements", [])
@@ -159,6 +165,17 @@ out tags geom 250;
                             # Handle hospital/clinic nodes
                             if el.get("type") == "node" and "amenity" in tags and ("lon" in el and "lat" in el):
                                 n_lon, n_lat = el["lon"], el["lat"]
+                                p_name = tags.get("name") or tags.get("name:en") or "Medical Facility"
+                                place_feats.append({
+                                    "type": "Feature",
+                                    "geometry": {"type": "Point", "coordinates": [round(n_lon, 4), round(n_lat, 4)]},
+                                    "properties": {
+                                        "name": p_name,
+                                        "place": "hospital",
+                                        "is_hospital": True,
+                                        "population": 300
+                                    }
+                                })
                                 sz = 0.0012
                                 bldg_feats.append({
                                     "type": "Feature",
@@ -168,7 +185,7 @@ out tags geom 250;
                                     },
                                     "properties": {
                                         "osm_id": f"node/{way_id}",
-                                        "name": tags.get("name", "Medical Facility"),
+                                        "name": p_name,
                                         "building": "hospital"
                                     }
                                 })
@@ -204,15 +221,28 @@ out tags geom 250;
                             elif "building" in tags and len(coords) >= 3:
                                 if coords[0] != coords[-1]:
                                     coords.append(coords[0])
+                                b_name = tags.get("name", "Structure")
+                                is_hosp_bldg = tags.get("building") == "hospital" or "hospital" in b_name.lower() or "clinic" in b_name.lower()
                                 bldg_feats.append({
                                     "type": "Feature",
                                     "geometry": {"type": "Polygon", "coordinates": [coords]},
                                     "properties": {
                                         "osm_id": f"way/{way_id}",
-                                        "name": tags.get("name", "Structure"),
+                                        "name": b_name,
                                         "building": tags.get("building", "yes")
                                     }
                                 })
+                                if is_hosp_bldg and b_name != "Structure":
+                                    place_feats.append({
+                                        "type": "Feature",
+                                        "geometry": {"type": "Point", "coordinates": coords[0]},
+                                        "properties": {
+                                            "name": b_name,
+                                            "place": "hospital",
+                                            "is_hospital": True,
+                                            "population": 400
+                                        }
+                                    })
 
                         if road_feats or waterway_feats or bldg_feats or place_feats:
                             logger.info(
@@ -223,7 +253,7 @@ out tags geom 250;
                                 {"type": "FeatureCollection", "features": road_feats[:160]},
                                 {"type": "FeatureCollection", "features": bldg_feats[:180]},
                                 {"type": "FeatureCollection", "features": waterway_feats[:100]},
-                                {"type": "FeatureCollection", "features": place_feats[:30]}
+                                {"type": "FeatureCollection", "features": place_feats[:40]}
                             )
             except Exception as e:
                 logger.debug("Overpass endpoint %s query failed: %s", ep, e)
@@ -236,56 +266,97 @@ out tags geom 250;
             {"type": "FeatureCollection", "features": []}
         )
 
-    def _fetch_live_osm_data(self, bbox: List[float]) -> tuple[Dict[str, Any], Dict[str, Any], Dict[str, Any]]:
+    def _fetch_live_osm_data(self, bbox: List[float]) -> tuple[Dict[str, Any], Dict[str, Any], Dict[str, Any], Dict[str, Any]]:
         """
         Attempts to fetch live OSM data directly from the OpenStreetMap 0.6 API
-        for the given bounding box. Limits bounds to max ~0.15 deg span to comply with API limits.
+        for the given bounding box using micro-tiling (max 0.02 deg span per tile)
+        to strictly abide by the 50,000 node limit even in dense cities like Mumbai or London.
+        Also parses node elements for real place settlements and hospitals.
         """
         if self._is_ocean_bbox(bbox):
-            return {"type": "FeatureCollection", "features": []}, {"type": "FeatureCollection", "features": []}, {"type": "FeatureCollection", "features": []}
+            return (
+                {"type": "FeatureCollection", "features": []},
+                {"type": "FeatureCollection", "features": []},
+                {"type": "FeatureCollection", "features": []},
+                {"type": "FeatureCollection", "features": []}
+            )
 
         min_lon, min_lat, max_lon, max_lat = bbox
+        mid_lon = (min_lon + max_lon) / 2
+        mid_lat = (min_lat + max_lat) / 2
         d_lon = max_lon - min_lon
         d_lat = max_lat - min_lat
 
-        # Define sub-tiles if box is larger than 0.15 deg so the ENTIRE box is queried
+        # Define micro-tiles across the AOI (center, corners)
         sub_tiles = []
-        if d_lon > 0.18 or d_lat > 0.18:
-            n_cols = max(1, min(3, int(d_lon / 0.14) + 1))
-            n_rows = max(1, min(3, int(d_lat / 0.14) + 1))
-            step_x = d_lon / n_cols
-            step_y = d_lat / n_rows
-            for c in range(n_cols):
-                for r in range(n_rows):
-                    sub_tiles.append([
-                        min_lon + c * step_x,
-                        min_lat + r * step_y,
-                        min_lon + (c + 1) * step_x,
-                        min_lat + (r + 1) * step_y
-                    ])
-        else:
-            sub_tiles.append([min_lon, min_lat, max_lon, max_lat])
+        tile_span = 0.015  # ~1.5 km per tile to ensure instant sub-second responses
+        sample_pts = [
+            (mid_lon, mid_lat),
+            (min_lon + 0.3 * d_lon, min_lat + 0.3 * d_lat),
+            (min_lon + 0.7 * d_lon, min_lat + 0.7 * d_lat)
+        ]
+        for sx, sy in sample_pts:
+            sub_tiles.append([
+                max(min_lon, sx - tile_span / 2),
+                max(min_lat, sy - tile_span / 2),
+                min(max_lon, sx + tile_span / 2),
+                min(max_lat, sy + tile_span / 2)
+            ])
 
         road_feats = []
         bldg_feats = []
         waterway_feats = []
+        place_feats = []
         seen_ways = set()
+        seen_nodes = set()
 
         for tile in sub_tiles:
             t_min_lon, t_min_lat, t_max_lon, t_max_lat = tile
-            c_lon = (t_min_lon + t_max_lon) / 2
-            c_lat = (t_min_lat + t_max_lat) / 2
-            span_lon = min(t_max_lon - t_min_lon, 0.14)
-            span_lat = min(t_max_lat - t_min_lat, 0.14)
-            query_bbox = f"{c_lon - span_lon/2:.4f},{c_lat - span_lat/2:.4f},{c_lon + span_lon/2:.4f},{c_lat + span_lat/2:.4f}"
+            query_bbox = f"{t_min_lon:.4f},{t_min_lat:.4f},{t_max_lon:.4f},{t_max_lat:.4f}"
 
             try:
                 url = f"https://api.openstreetmap.org/api/0.6/map?bbox={query_bbox}"
                 headers = {"User-Agent": "MfdfsDisasterResponse/1.0"}
-                resp = requests.get(url, headers=headers, timeout=4.0)
+                resp = requests.get(url, headers=headers, timeout=5.0)
                 if resp.status_code == 200 and resp.content:
                     root = ET.fromstring(resp.content)
                     nodes = {n.attrib['id']: (float(n.attrib['lon']), float(n.attrib['lat'])) for n in root.findall('node')}
+
+                    # Extract node-based places and medical facilities
+                    for n in root.findall('node'):
+                        nid = n.attrib['id']
+                        if nid in seen_nodes:
+                            continue
+                        seen_nodes.add(nid)
+                        n_lon = float(n.attrib['lon'])
+                        n_lat = float(n.attrib['lat'])
+                        n_tags = {t.attrib['k']: t.attrib['v'] for t in n.findall('tag')}
+
+                        if 'place' in n_tags:
+                            p_name = n_tags.get('name') or n_tags.get('name:en')
+                            if p_name:
+                                place_feats.append({
+                                    "type": "Feature",
+                                    "geometry": {"type": "Point", "coordinates": [round(n_lon, 4), round(n_lat, 4)]},
+                                    "properties": {
+                                        "name": p_name,
+                                        "place": n_tags['place'],
+                                        "is_hospital": False,
+                                        "population": 1500
+                                    }
+                                })
+                        elif 'amenity' in n_tags and n_tags['amenity'] in ('hospital', 'clinic'):
+                            h_name = n_tags.get('name') or n_tags.get('name:en') or "Medical Center"
+                            place_feats.append({
+                                    "type": "Feature",
+                                    "geometry": {"type": "Point", "coordinates": [round(n_lon, 4), round(n_lat, 4)]},
+                                    "properties": {
+                                        "name": h_name,
+                                        "place": "hospital",
+                                        "is_hospital": True,
+                                        "population": 350
+                                    }
+                            })
 
                     for way in root.findall('way'):
                         way_id = way.attrib['id']
@@ -307,7 +378,7 @@ out tags geom 250;
                             })
                         elif 'highway' in tags and len(nds) >= 2:
                             hw_type = tags['highway']
-                            if hw_type in ('motorway', 'trunk', 'primary', 'secondary', 'tertiary', 'residential', 'unclassified', 'road'):
+                            if hw_type in ('motorway', 'trunk', 'primary', 'secondary', 'tertiary', 'residential', 'unclassified', 'track', 'road'):
                                 road_feats.append({
                                     "type": "Feature",
                                     "geometry": {"type": "LineString", "coordinates": [[round(x, 5), round(y, 5)] for x, y in nds]},
@@ -319,23 +390,46 @@ out tags geom 250;
                                     }
                                 })
                         elif 'building' in tags and len(nds) >= 3:
+                            b_name = tags.get('name', 'Structure')
+                            is_hosp = tags.get('building') == 'hospital' or 'hospital' in b_name.lower() or 'clinic' in b_name.lower()
                             bldg_feats.append({
                                 "type": "Feature",
                                 "geometry": {"type": "Polygon", "coordinates": [[[round(x, 5), round(y, 5)] for x, y in nds]],},
                                 "properties": {
                                     "osm_id": f"way/{way_id}",
-                                    "name": tags.get('name', 'Structure'),
+                                    "name": b_name,
                                     "building": tags['building']
                                 }
                             })
+                            if is_hosp and b_name != 'Structure':
+                                place_feats.append({
+                                    "type": "Feature",
+                                    "geometry": {"type": "Point", "coordinates": [round(nds[0][0], 4), round(nds[0][1], 4)]},
+                                    "properties": {
+                                        "name": b_name,
+                                        "place": "hospital",
+                                        "is_hospital": True,
+                                        "population": 400
+                                    }
+                                })
             except Exception as e:
-                logger.debug("Live OSM 0.6 sub-tile fetch fell back: %s", e)
+                logger.debug("Live OSM 0.6 micro-tile fetch fell back: %s", e)
 
-        if road_feats or waterway_feats:
-            logger.info("Successfully fetched %d live roads, %d buildings, %d waterways across %d sub-tiles", len(road_feats), len(bldg_feats), len(waterway_feats), len(sub_tiles))
-            return {"type": "FeatureCollection", "features": road_feats[:150]}, {"type": "FeatureCollection", "features": bldg_feats[:180]}, {"type": "FeatureCollection", "features": waterway_feats[:100]}
+        if road_feats or place_feats:
+            logger.info("Successfully fetched %d live roads, %d buildings, %d waterways, %d places across %d micro-tiles", len(road_feats), len(bldg_feats), len(waterway_feats), len(place_feats), len(sub_tiles))
+            return (
+                {"type": "FeatureCollection", "features": road_feats[:160]},
+                {"type": "FeatureCollection", "features": bldg_feats[:180]},
+                {"type": "FeatureCollection", "features": waterway_feats[:100]},
+                {"type": "FeatureCollection", "features": place_feats[:40]}
+            )
 
-        return {"type": "FeatureCollection", "features": []}, {"type": "FeatureCollection", "features": []}, {"type": "FeatureCollection", "features": []}
+        return (
+            {"type": "FeatureCollection", "features": []},
+            {"type": "FeatureCollection", "features": []},
+            {"type": "FeatureCollection", "features": []},
+            {"type": "FeatureCollection", "features": []}
+        )
 
     def _fetch_or_generate_roads(self, bbox: List[float]) -> Dict[str, Any]:
         """Queries ohsome API v2 if API key is provided, else falls back to generation."""
@@ -638,13 +732,14 @@ out tags geom 250;
                 p_name = props.get("name")
                 coords = feat.get("geometry", {}).get("coordinates", [])
                 if p_name and len(coords) >= 2 and min_lon <= coords[0] <= max_lon and min_lat <= coords[1] <= max_lat:
+                    is_hosp = props.get("is_hospital", False) or "hospital" in p_name.lower() or "clinic" in p_name.lower() or "health" in p_name.lower() or props.get("place") == "hospital"
                     if not any(s["name"].lower() == p_name.lower() for s in live_settlements):
                         live_settlements.append({
                             "name": p_name,
                             "lat": round(coords[1], 4),
                             "lon": round(coords[0], 4),
-                            "type": props.get("place", "village"),
-                            "is_hospital": False
+                            "type": "hospital" if is_hosp else props.get("place", "village"),
+                            "is_hospital": is_hosp
                         })
 
         if buildings and buildings.get("features"):
@@ -675,34 +770,62 @@ out tags geom 250;
                             })
 
         # -------------------------------------------------------------
-        # 2. Resilient Single-Call Nominatim Query (if < 4 settlements)
+        # 2. Resilient Real-World Nominatim Geospatial Search (if < 4 hospitals or < 6 communities)
         # -------------------------------------------------------------
-        if len(live_settlements) < 4:
+        curr_hosp_count = len([s for s in live_settlements if s.get("is_hospital")])
+        curr_comm_count = len([s for s in live_settlements if not s.get("is_hospital")])
+
+        if curr_hosp_count < 4 or curr_comm_count < 6:
             try:
                 viewbox = f"{min_lon},{max_lat},{max_lon},{min_lat}"
                 headers = {"User-Agent": "MfdfsDisasterResponse/1.0 (flood-response)"}
-                resp = requests.get(
-                    f"https://nominatim.openstreetmap.org/search?format=json&viewbox={viewbox}&bounded=1&q=hospital,town,village&limit=30",
+                
+                # Fetch real hospitals
+                resp_h = requests.get(
+                    f"https://nominatim.openstreetmap.org/search?format=json&viewbox={viewbox}&bounded=1&q=hospital&limit=30",
                     headers=headers,
                     timeout=5.0
                 )
-                if resp.status_code == 200:
-                    for item in resp.json():
-                        v_name = item.get("name") or item.get("display_name", "").split(",")[0]
+                if resp_h.status_code == 200:
+                    for item in resp_h.json():
+                        v_name = item.get("name") or item.get("display_name", "").split(",")[0].strip()
                         v_lat = float(item.get("lat", 0.0))
                         v_lon = float(item.get("lon", 0.0))
                         if v_name and min_lon <= v_lon <= max_lon and min_lat <= v_lat <= max_lat:
                             if not any(s["name"].lower() == v_name.lower() for s in live_settlements):
-                                is_hosp = ("hospital" in v_name.lower() or "medical" in v_name.lower() or "clinic" in v_name.lower() or item.get("type") == "hospital")
                                 live_settlements.append({
                                     "name": v_name,
                                     "lat": round(v_lat, 4),
                                     "lon": round(v_lon, 4),
-                                    "type": item.get("type", "village"),
-                                    "is_hospital": is_hosp
+                                    "type": "hospital",
+                                    "is_hospital": True
                                 })
+
+                # Fetch real towns, villages, or suburbs
+                for q_term in ["village", "suburb", "town"]:
+                    if len([s for s in live_settlements if not s.get("is_hospital")]) >= 15:
+                        break
+                    resp_v = requests.get(
+                        f"https://nominatim.openstreetmap.org/search?format=json&viewbox={viewbox}&bounded=1&q={q_term}&limit=20",
+                        headers=headers,
+                        timeout=5.0
+                    )
+                    if resp_v.status_code == 200:
+                        for item in resp_v.json():
+                            v_name = item.get("name") or item.get("display_name", "").split(",")[0].strip()
+                            v_lat = float(item.get("lat", 0.0))
+                            v_lon = float(item.get("lon", 0.0))
+                            if v_name and min_lon <= v_lon <= max_lon and min_lat <= v_lat <= max_lat:
+                                if not any(s["name"].lower() == v_name.lower() for s in live_settlements):
+                                    live_settlements.append({
+                                        "name": v_name,
+                                        "lat": round(v_lat, 4),
+                                        "lon": round(v_lon, 4),
+                                        "type": item.get("type", q_term),
+                                        "is_hospital": False
+                                    })
             except Exception as e:
-                logger.debug("Nominatim supplementary query skipped: %s", e)
+                logger.debug("Nominatim supplementary search skipped: %s", e)
 
         features = []
         if len(live_settlements) >= 3:

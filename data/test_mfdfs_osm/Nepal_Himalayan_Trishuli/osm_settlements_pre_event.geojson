@@ -1,0 +1,101 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          85.20998,
+          27.85597
+        ]
+      },
+      "properties": {
+        "name": "Trishuli District Hospital",
+        "place": "hospital",
+        "is_hospital": true,
+        "population": 3500
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          85.2038,
+          27.8754
+        ]
+      },
+      "properties": {
+        "name": "Bidur / Trishuli Center",
+        "place": "village",
+        "is_hospital": false,
+        "population": 1050
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          85.22185,
+          27.86228
+        ]
+      },
+      "properties": {
+        "name": "Betrawati",
+        "place": "village",
+        "is_hospital": false,
+        "population": 900
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          85.23278,
+          27.85915
+        ]
+      },
+      "properties": {
+        "name": "Dhunche",
+        "place": "village",
+        "is_hospital": false,
+        "population": 750
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          85.23908,
+          27.85882
+        ]
+      },
+      "properties": {
+        "name": "Syabrubesi",
+        "place": "village",
+        "is_hospital": false,
+        "population": 600
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          85.23568,
+          27.8683
+        ]
+      },
+      "properties": {
+        "name": "Kalikasthan",
+        "place": "village",
+        "is_hospital": false,
+        "population": 450
+      }
+    }
+  ]
+}

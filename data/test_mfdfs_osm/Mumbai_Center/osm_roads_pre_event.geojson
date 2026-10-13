@@ -1,0 +1,6477 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            72.8463,
+            18.98951
+          ],
+          [
+            72.84632,
+            18.98956
+          ],
+          [
+            72.84636,
+            18.98964
+          ],
+          [
+            72.84654,
+            18.99018
+          ],
+          [
+            72.84667,
+            18.99042
+          ],
+          [
+            72.84691,
+            18.99066
+          ],
+          [
+            72.84738,
+            18.99098
+          ],
+          [
+            72.84759,
+            18.9915
+          ],
+          [
+            72.84778,
+            18.99188
+          ],
+          [
+            72.84793,
+            18.99216
+          ],
+          [
+            72.848,
+            18.9923
+          ],
+          [
+            72.84818,
+            18.99264
+          ],
+          [
+            72.84838,
+            18.99315
+          ],
+          [
+            72.84848,
+            18.99344
+          ],
+          [
+            72.84866,
+            18.99391
+          ],
+          [
+            72.84871,
+            18.99406
+          ],
+          [
+            72.84881,
+            18.99482
+          ],
+          [
+            72.84882,
+            18.99524
+          ],
+          [
+            72.84882,
+            18.99534
+          ],
+          [
+            72.84888,
+            18.99582
+          ],
+          [
+            72.84894,
+            18.99598
+          ],
+          [
+            72.84926,
+            18.99652
+          ],
+          [
+            72.84934,
+            18.99668
+          ],
+          [
+            72.84937,
+            18.99673
+          ],
+          [
+            72.84974,
+            18.99744
+          ],
+          [
+            72.84986,
+            18.99768
+          ],
+          [
+            72.85003,
+            18.99802
+          ],
+          [
+            72.85012,
+            18.99814
+          ],
+          [
+            72.85031,
+            18.99848
+          ]
+        ]
+      },
+      "properties": {
+        "osm_id": "way/22848102",
+        "name": "Tokersee Jivraj Road",
+        "highway": "tertiary",
+        "surface": "paved"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            72.82254,
+            18.98892
+          ],
+          [
+            72.82269,
+            18.98909
+          ],
+          [
+            72.82273,
+            18.98917
+          ],
+          [
+            72.82277,
+            18.98924
+          ],
+          [
+            72.82285,
+            18.98939
+          ],
+          [
+            72.82324,
+            18.99014
+          ],
+          [
+            72.82364,
+            18.99091
+          ],
+          [
+            72.82436,
+            18.99227
+          ],
+          [
+            72.82455,
+            18.99266
+          ],
+          [
+            72.82463,
+            18.99281
+          ],
+          [
+            72.82489,
+            18.99333
+          ],
+          [
+            72.82503,
+            18.9936
+          ]
+        ]
+      },
+      "properties": {
+        "osm_id": "way/22850484",
+        "name": "Senapati Bapat Marg",
+        "highway": "primary",
+        "surface": "asphalt"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            72.84435,
+            18.9647
+          ],
+          [
+            72.84487,
+            18.96475
+          ],
+          [
+            72.84534,
+            18.96477
+          ]
+        ]
+      },
+      "properties": {
+        "osm_id": "way/22850522",
+        "name": "Residential Highway",
+        "highway": "residential",
+        "surface": "paved"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            72.84444,
+            18.96357
+          ],
+          [
+            72.84479,
+            18.96371
+          ],
+          [
+            72.84499,
+            18.96384
+          ],
+          [
+            72.84511,
+            18.96408
+          ]
+        ]
+      },
+      "properties": {
+        "osm_id": "way/22850524",
+        "name": "Hosp Lane",
+        "highway": "residential",
+        "surface": "paved"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            72.8443,
+            18.96427
+          ],
+          [
+            72.84522,
+            18.9644
+          ]
+        ]
+      },
+      "properties": {
+        "osm_id": "way/22850525",
+        "name": "Church Street",
+        "highway": "residential",
+        "surface": "paved"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            72.84436,
+            18.96386
+          ],
+          [
+            72.84511,
+            18.96408
+          ]
+        ]
+      },
+      "properties": {
+        "osm_id": "way/22850526",
+        "name": "D Lane",
+        "highway": "residential",
+        "surface": "paved"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            72.84432,
+            18.96448
+          ],
+          [
+            72.8449,
+            18.96456
+          ],
+          [
+            72.8453,
+            18.96458
+          ]
+        ]
+      },
+      "properties": {
+        "osm_id": "way/22850527",
+        "name": "Nava Street",
+        "highway": "residential",
+        "surface": "paved"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            72.84511,
+            18.96408
+          ],
+          [
+            72.84522,
+            18.9644
+          ]
+        ]
+      },
+      "properties": {
+        "osm_id": "way/22850528",
+        "name": "Residential Highway",
+        "highway": "residential",
+        "surface": "paved"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            72.84589,
+            18.96563
+          ],
+          [
+            72.84713,
+            18.96573
+          ]
+        ]
+      },
+      "properties": {
+        "osm_id": "way/22850534",
+        "name": "Nawab Tank Bridge Road",
+        "highway": "residential",
+        "surface": "paved"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            72.84522,
+            18.9644
+          ],
+          [
+            72.8453,
+            18.96458
+          ]
+        ]
+      },
+      "properties": {
+        "osm_id": "way/22850536",
+        "name": "Residential Highway",
+        "highway": "residential",
+        "surface": "paved"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            72.84534,
+            18.96477
+          ],
+          [
+            72.84532,
+            18.96521
+          ],
+          [
+            72.8453,
+            18.96554
+          ]
+        ]
+      },
+      "properties": {
+        "osm_id": "way/22850541",
+        "name": "Residential Highway",
+        "highway": "residential",
+        "surface": "paved"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            72.84718,
+            18.96609
+          ],
+          [
+            72.84681,
+            18.966
+          ],
+          [
+            72.84652,
+            18.96596
+          ],
+          [
+            72.84621,
+            18.96596
+          ],
+          [
+            72.84591,
+            18.96594
+          ]
+        ]
+      },
+      "properties": {
+        "osm_id": "way/22850542",
+        "name": "Nawab Tank Road",
+        "highway": "residential",
+        "surface": "paved"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            72.8455,
+            18.96362
+          ],
+          [
+            72.84582,
+            18.96086
+          ],
+          [
+            72.84589,
+            18.96053
+          ]
+        ]
+      },
+      "properties": {
+        "osm_id": "way/22850550",
+        "name": "Tertiary Highway",
+        "highway": "tertiary",
+        "surface": "paved"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            72.84547,
+            18.96977
+          ],
+          [
+            72.8456,
+            18.96975
+          ],
+          [
+            72.84589,
+            18.96973
+          ]
+        ]
+      },
+      "properties": {
+        "osm_id": "way/22850551",
+        "name": "Tertiary Highway",
+        "highway": "tertiary",
+        "surface": "paved"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            72.84522,
+            18.96859
+          ],
+          [
+            72.84465,
+            18.96875
+          ],
+          [
+            72.84423,
+            18.96892
+          ]
+        ]
+      },
+      "properties": {
+        "osm_id": "way/22850552",
+        "name": "Gun Powder Road",
+        "highway": "residential",
+        "surface": "paved"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            72.84617,
+            18.96973
+          ],
+          [
+            72.84654,
+            18.96969
+          ]
+        ]
+      },
+      "properties": {
+        "osm_id": "way/22850556",
+        "name": "Tertiary Highway",
+        "highway": "tertiary",
+        "surface": "paved"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            72.84709,
+            18.96715
+          ],
+          [
+            72.84692,
+            18.96719
+          ],
+          [
+            72.84646,
+            18.96728
+          ],
+          [
+            72.84604,
+            18.96735
+          ]
+        ]
+      },
+      "properties": {
+        "osm_id": "way/22850557",
+        "name": "MD Naik Marg",
+        "highway": "tertiary",
+        "surface": "paved"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            72.84589,
+            18.96053
+          ],
+          [
+            72.84595,
+            18.96083
+          ],
+          [
+            72.8463,
+            18.96246
+          ],
+          [
+            72.84631,
+            18.96249
+          ],
+          [
+            72.84633,
+            18.96258
+          ],
+          [
+            72.84646,
+            18.96322
+          ],
+          [
+            72.84672,
+            18.96424
+          ],
+          [
+            72.84678,
+            18.96448
+          ],
+          [
+            72.84701,
+            18.96531
+          ],
+          [
+            72.84704,
+            18.96539
+          ],
+          [
+            72.84713,
+            18.96573
+          ]
+        ]
+      },
+      "properties": {
+        "osm_id": "way/22850562",
+        "name": "Muzawar Pakhadi Road",
+        "highway": "tertiary",
+        "surface": "paved"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            72.84589,
+            18.96563
+          ],
+          [
+            72.84552,
+            18.96559
+          ]
+        ]
+      },
+      "properties": {
+        "osm_id": "way/22850566",
+        "name": "Nawab Tank Bridge",
+        "highway": "residential",
+        "surface": "paved"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            72.84709,
+            18.96715
+          ],
+          [
+            72.84723,
+            18.9671
+          ],
+          [
+            72.84726,
+            18.96703
+          ],
+          [
+            72.84726,
+            18.96697
+          ],
+          [
+            72.84718,
+            18.96609
+          ],
+          [
+            72.84717,
+            18.96585
+          ],
+          [
+            72.84713,
+            18.96573
+          ]
+        ]
+      },
+      "properties": {
+        "osm_id": "way/22850567",
+        "name": "Muzawar Pakhadi Road",
+        "highway": "tertiary",
+        "surface": "paved"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            72.8453,
+            18.96458
+          ],
+          [
+            72.84534,
+            18.96477
+          ]
+        ]
+      },
+      "properties": {
+        "osm_id": "way/22850575",
+        "name": "Residential Highway",
+        "highway": "residential",
+        "surface": "paved"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            72.84604,
+            18.96735
+          ],
+          [
+            72.84596,
+            18.96676
+          ],
+          [
+            72.84591,
+            18.96594
+          ],
+          [
+            72.84584,
+            18.96561
+          ],
+          [
+            72.8458,
+            18.96539
+          ],
+          [
+            72.84567,
+            18.96488
+          ]
+        ]
+      },
+      "properties": {
+        "osm_id": "way/22850577",
+        "name": "Dockyard Road",
+        "highway": "tertiary",
+        "surface": "paved"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            72.84412,
+            18.97644
+          ],
+          [
+            72.8441,
+            18.97653
+          ],
+          [
+            72.84405,
+            18.97673
+          ],
+          [
+            72.84401,
+            18.97687
+          ],
+          [
+            72.84391,
+            18.97732
+          ],
+          [
+            72.84382,
+            18.97776
+          ],
+          [
+            72.8437,
+            18.97826
+          ],
+          [
+            72.8436,
+            18.97873
+          ],
+          [
+            72.84359,
+            18.97876
+          ],
+          [
+            72.84349,
+            18.97925
+          ],
+          [
+            72.84336,
+            18.97984
+          ],
+          [
+            72.84334,
+            18.98001
+          ],
+          [
+            72.84328,
+            18.98038
+          ],
+          [
+            72.84315,
+            18.98088
+          ],
+          [
+            72.843,
+            18.98154
+          ],
+          [
+            72.84284,
+            18.98227
+          ],
+          [
+            72.84256,
+            18.98325
+          ],
+          [
+            72.84233,
+            18.9842
+          ],
+          [
+            72.84214,
+            18.985
+          ],
+          [
+            72.84212,
+            18.98512
+          ],
+          [
+            72.8421,
+            18.98518
+          ],
+          [
+            72.84211,
+            18.98532
+          ]
+        ]
+      },
+      "properties": {
+        "osm_id": "way/22850579",
+        "name": "Barrister Nath Pai Marg",
+        "highway": "primary",
+        "surface": "paved"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            72.83065,
+            18.9613
+          ],
+          [
+            72.83081,
+            18.9613
+          ],
+          [
+            72.83109,
+            18.96132
+          ],
+          [
+            72.83188,
+            18.96136
+          ]
+        ]
+      },
+      "properties": {
+        "osm_id": "way/22850585",
+        "name": "Yaqoob Street",
+        "highway": "residential",
+        "surface": "paved"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            72.83183,
+            18.96837
+          ],
+          [
+            72.8321,
+            18.96838
+          ],
+          [
+            72.8326,
+            18.9684
+          ],
+          [
+            72.83266,
+            18.96841
+          ]
+        ]
+      },
+      "properties": {
+        "osm_id": "way/22850586",
+        "name": "Residential Highway",
+        "highway": "residential",
+        "surface": "paved"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            72.83463,
+            18.96117
+          ],
+          [
+            72.83533,
+            18.96123
+          ],
+          [
+            72.83581,
+            18.96125
+          ],
+          [
+            72.83612,
+            18.96123
+          ],
+          [
+            72.83615,
+            18.96121
+          ],
+          [
+            72.83623,
+            18.96107
+          ],
+          [
+            72.83645,
+            18.96105
+          ],
+          [
+            72.83649,
+            18.96103
+          ],
+          [
+            72.83652,
+            18.96094
+          ],
+          [
+            72.83655,
+            18.9609
+          ],
+          [
+            72.8366,
+            18.96088
+          ],
+          [
+            72.83678,
+            18.9608
+          ],
+          [
+            72.83685,
+            18.96074
+          ]
+        ]
+      },
+      "properties": {
+        "osm_id": "way/22850602",
+        "name": "1st Balu Changu Patil Marg",
+        "highway": "residential",
+        "surface": "paved"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            72.83401,
+            18.95967
+          ],
+          [
+            72.83387,
+            18.96026
+          ],
+          [
+            72.83385,
+            18.96044
+          ],
+          [
+            72.83382,
+            18.96056
+          ],
+          [
+            72.83361,
+            18.9613
+          ],
+          [
+            72.83356,
+            18.96144
+          ],
+          [
+            72.83355,
+            18.96209
+          ]
+        ]
+      },
+      "properties": {
+        "osm_id": "way/22850604",
+        "name": "Babula Tank Cross Lane",
+        "highway": "residential",
+        "surface": "paved"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            72.83726,
+            18.96096
+          ],
+          [
+            72.83732,
+            18.96117
+          ],
+          [
+            72.83741,
+            18.96146
+          ]
+        ]
+      },
+      "properties": {
+        "osm_id": "way/22850613",
+        "name": "Residential Highway",
+        "highway": "residential",
+        "surface": "paved"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            72.83191,
+            18.95864
+          ],
+          [
+            72.83268,
+            18.95902
+          ],
+          [
+            72.83281,
+            18.95909
+          ],
+          [
+            72.83297,
+            18.95919
+          ],
+          [
+            72.83326,
+            18.95934
+          ],
+          [
+            72.8335,
+            18.95944
+          ],
+          [
+            72.83372,
+            18.9595
+          ],
+          [
+            72.83395,
+            18.95962
+          ],
+          [
+            72.83401,
+            18.95967
+          ],
+          [
+            72.83422,
+            18.95988
+          ],
+          [
+            72.83436,
+            18.95996
+          ],
+          [
+            72.83493,
+            18.96025
+          ]
+        ]
+      },
+      "properties": {
+        "osm_id": "way/22850615",
+        "name": "Imamwada Road",
+        "highway": "residential",
+        "surface": "paved"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            72.844,
+            18.96355
+          ],
+          [
+            72.84228,
+            18.96394
+          ],
+          [
+            72.8409,
+            18.96416
+          ],
+          [
+            72.84017,
+            18.9643
+          ],
+          [
+            72.83965,
+            18.96441
+          ],
+          [
+            72.83936,
+            18.96447
+          ],
+          [
+            72.83923,
+            18.96454
+          ],
+          [
+            72.8392,
+            18.96458
+          ],
+          [
+            72.83915,
+            18.96463
+          ],
+          [
+            72.83896,
+            18.96483
+          ],
+          [
+            72.83888,
+            18.96491
+          ],
+          [
+            72.83883,
+            18.96497
+          ]
+        ]
+      },
+      "properties": {
+        "osm_id": "way/22850620",
+        "name": "J Rathod Marg",
+        "highway": "tertiary",
+        "surface": "paved"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            72.84436,
+            18.96386
+          ],
+          [
+            72.8443,
+            18.96427
+          ]
+        ]
+      },
+      "properties": {
+        "osm_id": "way/22850623",
+        "name": "Residential Highway",
+        "highway": "residential",
+        "surface": "paved"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            72.84065,
+            18.9657
+          ],
+          [
+            72.84017,
+            18.9643
+          ]
+        ]
+      },
+      "properties": {
+        "osm_id": "way/22850624",
+        "name": "D Koyande Road",
+        "highway": "residential",
+        "surface": "paved"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            72.83695,
+            18.96147
+          ],
+          [
+            72.83651,
+            18.96156
+          ],
+          [
+            72.83604,
+            18.96166
+          ],
+          [
+            72.83595,
+            18.96166
+          ],
+          [
+            72.83586,
+            18.96162
+          ],
+          [
+            72.83564,
+            18.96164
+          ],
+          [
+            72.83537,
+            18.96168
+          ],
+          [
+            72.83518,
+            18.96171
+          ],
+          [
+            72.8351,
+            18.96174
+          ],
+          [
+            72.83502,
+            18.96177
+          ],
+          [
+            72.83495,
+            18.96184
+          ],
+          [
+            72.83467,
+            18.96223
+          ]
+        ]
+      },
+      "properties": {
+        "osm_id": "way/22850630",
+        "name": "A N Surve Marg (Umerkhadi Road)",
+        "highway": "residential",
+        "surface": "paved"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            72.83566,
+            18.96054
+          ],
+          [
+            72.83574,
+            18.96086
+          ],
+          [
+            72.83581,
+            18.96125
+          ],
+          [
+            72.83586,
+            18.96162
+          ]
+        ]
+      },
+      "properties": {
+        "osm_id": "way/22850642",
+        "name": "2nd Balu Changu Patil Path",
+        "highway": "residential",
+        "surface": "paved"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            72.83877,
+            18.96115
+          ],
+          [
+            72.83806,
+            18.96132
+          ],
+          [
+            72.83741,
+            18.96146
+          ],
+          [
+            72.837,
+            18.96158
+          ]
+        ]
+      },
+      "properties": {
+        "osm_id": "way/22850649",
+        "name": "Nowroji Hill Road No 7",
+        "highway": "residential",
+        "surface": "paved"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            72.83698,
+            18.95988
+          ],
+          [
+            72.83714,
+            18.96041
+          ]
+        ]
+      },
+      "properties": {
+        "osm_id": "way/22850652",
+        "name": "Nowroji Hill Road No 21",
+        "highway": "residential",
+        "surface": "paved"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            72.83963,
+            18.96679
+          ],
+          [
+            72.83889,
+            18.96729
+          ],
+          [
+            72.8386,
+            18.96755
+          ],
+          [
+            72.83843,
+            18.96771
+          ],
+          [
+            72.83831,
+            18.96784
+          ],
+          [
+            72.83794,
+            18.96828
+          ],
+          [
+            72.83752,
+            18.96877
+          ]
+        ]
+      },
+      "properties": {
+        "osm_id": "way/22850656",
+        "name": "Saint Mary Road",
+        "highway": "residential",
+        "surface": "paved"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            72.84444,
+            18.96357
+          ],
+          [
+            72.84436,
+            18.96386
+          ]
+        ]
+      },
+      "properties": {
+        "osm_id": "way/22850657",
+        "name": "Residential Highway",
+        "highway": "residential",
+        "surface": "paved"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            72.83436,
+            18.95996
+          ],
+          [
+            72.83432,
+            18.96043
+          ],
+          [
+            72.83432,
+            18.96049
+          ],
+          [
+            72.83432,
+            18.96054
+          ],
+          [
+            72.83434,
+            18.96058
+          ],
+          [
+            72.83438,
+            18.96062
+          ],
+          [
+            72.83439,
+            18.96066
+          ],
+          [
+            72.8344,
+            18.96071
+          ],
+          [
+            72.83438,
+            18.96083
+          ]
+        ]
+      },
+      "properties": {
+        "osm_id": "way/22850660",
+        "name": "Mirza Ali Road",
+        "highway": "residential",
+        "surface": "paved"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            72.84069,
+            18.96583
+          ],
+          [
+            72.84069,
+            18.9659
+          ],
+          [
+            72.84072,
+            18.966
+          ],
+          [
+            72.84075,
+            18.96613
+          ],
+          [
+            72.8408,
+            18.96628
+          ],
+          [
+            72.84084,
+            18.96644
+          ],
+          [
+            72.84091,
+            18.96661
+          ],
+          [
+            72.84099,
+            18.96675
+          ],
+          [
+            72.84106,
+            18.96688
+          ],
+          [
+            72.84115,
+            18.96706
+          ],
+          [
+            72.84124,
+            18.9672
+          ],
+          [
+            72.84135,
+            18.9674
+          ],
+          [
+            72.84143,
+            18.96754
+          ],
+          [
+            72.84153,
+            18.96773
+          ],
+          [
+            72.84155,
+            18.96778
+          ],
+          [
+            72.84159,
+            18.96787
+          ],
+          [
+            72.84165,
+            18.96792
+          ],
+          [
+            72.84193,
+            18.96829
+          ]
+        ]
+      },
+      "properties": {
+        "osm_id": "way/22850665",
+        "name": "Belvedere Road",
+        "highway": "residential",
+        "surface": "paved"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            72.84159,
+            18.96787
+          ],
+          [
+            72.8415,
+            18.96788
+          ],
+          [
+            72.84102,
+            18.96802
+          ],
+          [
+            72.84087,
+            18.96806
+          ],
+          [
+            72.84076,
+            18.96809
+          ],
+          [
+            72.84046,
+            18.96818
+          ],
+          [
+            72.84037,
+            18.96821
+          ],
+          [
+            72.84033,
+            18.96823
+          ]
+        ]
+      },
+      "properties": {
+        "osm_id": "way/22850676",
+        "name": "Ismail Waghu Marg",
+        "highway": "residential",
+        "surface": "paved"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            72.83866,
+            18.95884
+          ],
+          [
+            72.83869,
+            18.95886
+          ],
+          [
+            72.83895,
+            18.9596
+          ],
+          [
+            72.83909,
+            18.96022
+          ],
+          [
+            72.8391,
+            18.96036
+          ],
+          [
+            72.83914,
+            18.96076
+          ],
+          [
+            72.83914,
+            18.96092
+          ],
+          [
+            72.83878,
+            18.96092
+          ]
+        ]
+      },
+      "properties": {
+        "osm_id": "way/22850677",
+        "name": "Nowroji Hill Road No 11",
+        "highway": "residential",
+        "surface": "paved"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            72.8425,
+            18.9698
+          ],
+          [
+            72.84221,
+            18.96989
+          ],
+          [
+            72.84177,
+            18.97003
+          ],
+          [
+            72.84169,
+            18.97008
+          ]
+        ]
+      },
+      "properties": {
+        "osm_id": "way/22850679",
+        "name": "Gun Powder Road",
+        "highway": "residential",
+        "surface": "paved"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            72.83537,
+            18.96056
+          ],
+          [
+            72.83533,
+            18.96123
+          ]
+        ]
+      },
+      "properties": {
+        "osm_id": "way/22850681",
+        "name": "Jail Road North Cross Lane",
+        "highway": "residential",
+        "surface": "paved"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            72.83696,
+            18.96251
+          ],
+          [
+            72.83698,
+            18.96257
+          ],
+          [
+            72.83698,
+            18.96258
+          ],
+          [
+            72.83705,
+            18.96283
+          ]
+        ]
+      },
+      "properties": {
+        "osm_id": "way/22850694",
+        "name": "Residential Highway",
+        "highway": "residential",
+        "surface": "paved"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            72.83883,
+            18.96171
+          ],
+          [
+            72.83755,
+            18.96203
+          ],
+          [
+            72.83722,
+            18.96213
+          ]
+        ]
+      },
+      "properties": {
+        "osm_id": "way/22850697",
+        "name": "Nowroji Hill Road No 9",
+        "highway": "residential",
+        "surface": "paved"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            72.844,
+            18.96355
+          ],
+          [
+            72.84412,
+            18.96355
+          ],
+          [
+            72.84431,
+            18.96356
+          ],
+          [
+            72.84444,
+            18.96357
+          ]
+        ]
+      },
+      "properties": {
+        "osm_id": "way/22850700",
+        "name": "Residential Highway",
+        "highway": "residential",
+        "surface": "paved"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            72.84193,
+            18.96829
+          ],
+          [
+            72.8422,
+            18.96898
+          ],
+          [
+            72.84228,
+            18.96919
+          ],
+          [
+            72.84235,
+            18.96938
+          ],
+          [
+            72.8424,
+            18.96951
+          ],
+          [
+            72.84242,
+            18.96958
+          ],
+          [
+            72.8425,
+            18.9698
+          ]
+        ]
+      },
+      "properties": {
+        "osm_id": "way/22850702",
+        "name": "2nd GP Lane",
+        "highway": "residential",
+        "surface": "paved"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            72.84381,
+            18.96822
+          ],
+          [
+            72.84423,
+            18.96892
+          ],
+          [
+            72.84432,
+            18.96948
+          ]
+        ]
+      },
+      "properties": {
+        "osm_id": "way/22850704",
+        "name": "Gun Powder Road",
+        "highway": "residential",
+        "surface": "paved"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            72.8428,
+            18.96844
+          ],
+          [
+            72.84289,
+            18.96795
+          ],
+          [
+            72.84289,
+            18.96788
+          ],
+          [
+            72.84292,
+            18.96783
+          ],
+          [
+            72.84295,
+            18.96778
+          ],
+          [
+            72.84353,
+            18.96748
+          ],
+          [
+            72.84361,
+            18.96747
+          ],
+          [
+            72.8437,
+            18.96749
+          ],
+          [
+            72.84375,
+            18.96754
+          ],
+          [
+            72.84392,
+            18.96773
+          ],
+          [
+            72.84415,
+            18.96799
+          ]
+        ]
+      },
+      "properties": {
+        "osm_id": "way/22850709",
+        "name": "Residential Highway",
+        "highway": "residential",
+        "surface": "paved"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            72.83674,
+            18.96042
+          ],
+          [
+            72.83684,
+            18.96044
+          ],
+          [
+            72.83705,
+            18.96043
+          ],
+          [
+            72.83714,
+            18.96041
+          ],
+          [
+            72.83792,
+            18.96021
+          ],
+          [
+            72.83801,
+            18.96018
+          ],
+          [
+            72.8387,
+            18.96001
+          ]
+        ]
+      },
+      "properties": {
+        "osm_id": "way/22850718",
+        "name": "Nowroji Hill Road No 4",
+        "highway": "residential",
+        "surface": "paved"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            72.83483,
+            18.95968
+          ],
+          [
+            72.83493,
+            18.96025
+          ],
+          [
+            72.83498,
+            18.96057
+          ]
+        ]
+      },
+      "properties": {
+        "osm_id": "way/22850723",
+        "name": "Asha Sadan Marg",
+        "highway": "tertiary",
+        "surface": "paved"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            72.83439,
+            18.96214
+          ],
+          [
+            72.83463,
+            18.96117
+          ],
+          [
+            72.83472,
+            18.96073
+          ],
+          [
+            72.83474,
+            18.96068
+          ],
+          [
+            72.83481,
+            18.96063
+          ],
+          [
+            72.83487,
+            18.9606
+          ],
+          [
+            72.83498,
+            18.96057
+          ]
+        ]
+      },
+      "properties": {
+        "osm_id": "way/22850731",
+        "name": "Laxman Narayan Jadhav Road",
+        "highway": "tertiary",
+        "surface": "paved"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            72.84414,
+            18.96548
+          ],
+          [
+            72.84426,
+            18.96547
+          ],
+          [
+            72.84439,
+            18.96547
+          ],
+          [
+            72.84456,
+            18.96547
+          ],
+          [
+            72.8453,
+            18.96554
+          ],
+          [
+            72.84552,
+            18.96559
+          ]
+        ]
+      },
+      "properties": {
+        "osm_id": "way/22850734",
+        "name": "Nawab Tank Bridge Road",
+        "highway": "residential",
+        "surface": "paved"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            72.84332,
+            18.96845
+          ],
+          [
+            72.84326,
+            18.96865
+          ],
+          [
+            72.84321,
+            18.96876
+          ],
+          [
+            72.84316,
+            18.96883
+          ],
+          [
+            72.84301,
+            18.96891
+          ],
+          [
+            72.84288,
+            18.96899
+          ],
+          [
+            72.84228,
+            18.96919
+          ]
+        ]
+      },
+      "properties": {
+        "osm_id": "way/22850739",
+        "name": "G Bawdi Road",
+        "highway": "residential",
+        "surface": "paved"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            72.83879,
+            18.96057
+          ],
+          [
+            72.83834,
+            18.96067
+          ],
+          [
+            72.83791,
+            18.96079
+          ],
+          [
+            72.83726,
+            18.96096
+          ],
+          [
+            72.83683,
+            18.96106
+          ]
+        ]
+      },
+      "properties": {
+        "osm_id": "way/22850743",
+        "name": "Nowroji Hill Road No 5",
+        "highway": "residential",
+        "surface": "paved"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            72.83884,
+            18.96182
+          ],
+          [
+            72.83915,
+            18.9618
+          ],
+          [
+            72.83916,
+            18.96101
+          ],
+          [
+            72.83878,
+            18.96101
+          ]
+        ]
+      },
+      "properties": {
+        "osm_id": "way/22850744",
+        "name": "Nowroji Hill Road No 11",
+        "highway": "residential",
+        "surface": "paved"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            72.83867,
+            18.96314
+          ],
+          [
+            72.83859,
+            18.96308
+          ],
+          [
+            72.83849,
+            18.96301
+          ],
+          [
+            72.83841,
+            18.963
+          ],
+          [
+            72.8383,
+            18.96299
+          ],
+          [
+            72.83776,
+            18.96329
+          ]
+        ]
+      },
+      "properties": {
+        "osm_id": "way/22850750",
+        "name": "Manji Rathod Road",
+        "highway": "residential",
+        "surface": "paved"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            72.84087,
+            18.97004
+          ],
+          [
+            72.84102,
+            18.97004
+          ],
+          [
+            72.8413,
+            18.97003
+          ],
+          [
+            72.84145,
+            18.97005
+          ],
+          [
+            72.84169,
+            18.97008
+          ],
+          [
+            72.84197,
+            18.97038
+          ],
+          [
+            72.84202,
+            18.97045
+          ],
+          [
+            72.84212,
+            18.97057
+          ],
+          [
+            72.84213,
+            18.97064
+          ],
+          [
+            72.84242,
+            18.97126
+          ],
+          [
+            72.84251,
+            18.97138
+          ],
+          [
+            72.84254,
+            18.97141
+          ],
+          [
+            72.84269,
+            18.97148
+          ],
+          [
+            72.8429,
+            18.97158
+          ],
+          [
+            72.84318,
+            18.97172
+          ]
+        ]
+      },
+      "properties": {
+        "osm_id": "way/22850752",
+        "name": "Ramsheth Naik Road",
+        "highway": "tertiary",
+        "surface": "paved"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            72.84368,
+            18.96004
+          ],
+          [
+            72.84316,
+            18.95788
+          ]
+        ]
+      },
+      "properties": {
+        "osm_id": "way/22850753",
+        "name": "Tertiary Highway",
+        "highway": "tertiary",
+        "surface": "paved"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            72.83741,
+            18.96146
+          ],
+          [
+            72.83755,
+            18.96203
+          ]
+        ]
+      },
+      "properties": {
+        "osm_id": "way/22850756",
+        "name": "Residential Highway",
+        "highway": "residential",
+        "surface": "paved"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            72.8409,
+            18.96416
+          ],
+          [
+            72.84093,
+            18.9646
+          ],
+          [
+            72.84096,
+            18.96498
+          ],
+          [
+            72.84096,
+            18.96515
+          ],
+          [
+            72.84096,
+            18.96528
+          ]
+        ]
+      },
+      "properties": {
+        "osm_id": "way/22850764",
+        "name": "D Koyande Road",
+        "highway": "residential",
+        "surface": "paved"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            72.84435,
+            18.9647
+          ],
+          [
+            72.84442,
+            18.96496
+          ],
+          [
+            72.84456,
+            18.96547
+          ]
+        ]
+      },
+      "properties": {
+        "osm_id": "way/22850776",
+        "name": "Residential Highway",
+        "highway": "residential",
+        "surface": "paved"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            72.84432,
+            18.96448
+          ],
+          [
+            72.84435,
+            18.9647
+          ]
+        ]
+      },
+      "properties": {
+        "osm_id": "way/22850784",
+        "name": "Residential Highway",
+        "highway": "residential",
+        "surface": "paved"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            72.84096,
+            18.96528
+          ],
+          [
+            72.8408,
+            18.96541
+          ],
+          [
+            72.84065,
+            18.9657
+          ]
+        ]
+      },
+      "properties": {
+        "osm_id": "way/22850789",
+        "name": "D Koyande Road",
+        "highway": "residential",
+        "surface": "paved"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            72.8443,
+            18.96427
+          ],
+          [
+            72.84432,
+            18.96448
+          ]
+        ]
+      },
+      "properties": {
+        "osm_id": "way/22850795",
+        "name": "Residential Highway",
+        "highway": "residential",
+        "surface": "paved"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            72.83821,
+            18.96431
+          ],
+          [
+            72.83866,
+            18.96482
+          ]
+        ]
+      },
+      "properties": {
+        "osm_id": "way/22850811",
+        "name": "Hancock Bridge",
+        "highway": "tertiary",
+        "surface": "paved"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            72.83638,
+            18.9587
+          ],
+          [
+            72.8364,
+            18.95885
+          ],
+          [
+            72.83658,
+            18.95945
+          ],
+          [
+            72.83667,
+            18.95994
+          ],
+          [
+            72.83674,
+            18.96042
+          ],
+          [
+            72.83674,
+            18.96047
+          ],
+          [
+            72.83678,
+            18.9608
+          ],
+          [
+            72.83683,
+            18.96106
+          ],
+          [
+            72.83695,
+            18.96147
+          ],
+          [
+            72.837,
+            18.96158
+          ],
+          [
+            72.83722,
+            18.96213
+          ],
+          [
+            72.8373,
+            18.96232
+          ]
+        ]
+      },
+      "properties": {
+        "osm_id": "way/22850814",
+        "name": "Samanthbhai Nanji Marg (Jail Road East)",
+        "highway": "tertiary",
+        "surface": "paved"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            72.83884,
+            18.96187
+          ],
+          [
+            72.83884,
+            18.96182
+          ],
+          [
+            72.83883,
+            18.96171
+          ],
+          [
+            72.83877,
+            18.96115
+          ],
+          [
+            72.83878,
+            18.96101
+          ],
+          [
+            72.83878,
+            18.96095
+          ],
+          [
+            72.83878,
+            18.96092
+          ],
+          [
+            72.83879,
+            18.96057
+          ],
+          [
+            72.83879,
+            18.96038
+          ],
+          [
+            72.8387,
+            18.96001
+          ],
+          [
+            72.8386,
+            18.95967
+          ],
+          [
+            72.83854,
+            18.95949
+          ],
+          [
+            72.83837,
+            18.95891
+          ],
+          [
+            72.83828,
+            18.95861
+          ],
+          [
+            72.83822,
+            18.95843
+          ],
+          [
+            72.8382,
+            18.95835
+          ]
+        ]
+      },
+      "properties": {
+        "osm_id": "way/22850819",
+        "name": "Dr Meisheri Road",
+        "highway": "tertiary",
+        "surface": "asphalt"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            72.83914,
+            18.96589
+          ],
+          [
+            72.83916,
+            18.96594
+          ],
+          [
+            72.83919,
+            18.966
+          ],
+          [
+            72.83929,
+            18.96619
+          ],
+          [
+            72.83963,
+            18.96679
+          ],
+          [
+            72.83988,
+            18.96726
+          ],
+          [
+            72.83999,
+            18.96761
+          ],
+          [
+            72.84033,
+            18.96823
+          ],
+          [
+            72.84041,
+            18.96837
+          ],
+          [
+            72.84045,
+            18.96845
+          ]
+        ]
+      },
+      "properties": {
+        "osm_id": "way/22850833",
+        "name": "Shivdas Champsi Marg (Mazagoan Road)",
+        "highway": "tertiary",
+        "surface": "paved"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            72.84484,
+            18.9676
+          ],
+          [
+            72.84427,
+            18.9679
+          ],
+          [
+            72.84415,
+            18.96799
+          ],
+          [
+            72.84381,
+            18.96822
+          ],
+          [
+            72.8436,
+            18.96833
+          ],
+          [
+            72.84337,
+            18.96845
+          ],
+          [
+            72.84332,
+            18.96845
+          ],
+          [
+            72.84305,
+            18.96849
+          ],
+          [
+            72.8428,
+            18.96844
+          ],
+          [
+            72.84214,
+            18.96828
+          ],
+          [
+            72.84193,
+            18.96829
+          ],
+          [
+            72.8418,
+            18.96832
+          ]
+        ]
+      },
+      "properties": {
+        "osm_id": "way/22850851",
+        "name": "Dockyard Road",
+        "highway": "secondary",
+        "surface": "paved"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            72.83434,
+            18.94446
+          ],
+          [
+            72.83436,
+            18.94456
+          ],
+          [
+            72.83439,
+            18.94465
+          ],
+          [
+            72.83447,
+            18.94483
+          ],
+          [
+            72.83463,
+            18.94515
+          ],
+          [
+            72.83506,
+            18.94636
+          ],
+          [
+            72.83516,
+            18.94669
+          ],
+          [
+            72.83523,
+            18.94701
+          ],
+          [
+            72.83526,
+            18.94721
+          ],
+          [
+            72.83534,
+            18.94775
+          ],
+          [
+            72.83535,
+            18.94794
+          ],
+          [
+            72.83531,
+            18.94817
+          ],
+          [
+            72.83522,
+            18.94843
+          ],
+          [
+            72.83505,
+            18.94875
+          ],
+          [
+            72.83481,
+            18.94932
+          ],
+          [
+            72.83473,
+            18.94951
+          ],
+          [
+            72.83467,
+            18.94972
+          ],
+          [
+            72.8346,
+            18.95006
+          ],
+          [
+            72.83454,
+            18.95046
+          ],
+          [
+            72.83454,
+            18.95079
+          ],
+          [
+            72.83448,
+            18.9511
+          ],
+          [
+            72.83407,
+            18.95266
+          ],
+          [
+            72.834,
+            18.95287
+          ],
+          [
+            72.83389,
+            18.9531
+          ],
+          [
+            72.83376,
+            18.9533
+          ],
+          [
+            72.8336,
+            18.9535
+          ],
+          [
+            72.83336,
+            18.95373
+          ],
+          [
+            72.83324,
+            18.95383
+          ],
+          [
+            72.83311,
+            18.95398
+          ],
+          [
+            72.83302,
+            18.95412
+          ],
+          [
+            72.83296,
+            18.95433
+          ],
+          [
+            72.83291,
+            18.9546
+          ],
+          [
+            72.83288,
+            18.95484
+          ],
+          [
+            72.83282,
+            18.95527
+          ],
+          [
+            72.83277,
+            18.9555
+          ],
+          [
+            72.83271,
+            18.95587
+          ],
+          [
+            72.83267,
+            18.95621
+          ],
+          [
+            72.83261,
+            18.95659
+          ],
+          [
+            72.83257,
+            18.95675
+          ],
+          [
+            72.8325,
+            18.95688
+          ],
+          [
+            72.83236,
+            18.957
+          ],
+          [
+            72.83212,
+            18.95722
+          ],
+          [
+            72.83205,
+            18.95743
+          ],
+          [
+            72.83201,
+            18.9576
+          ],
+          [
+            72.83198,
+            18.95803
+          ],
+          [
+            72.8319,
+            18.95833
+          ],
+          [
+            72.83177,
+            18.95865
+          ],
+          [
+            72.83173,
+            18.95884
+          ],
+          [
+            72.8317,
+            18.95922
+          ],
+          [
+            72.83171,
+            18.9601
+          ],
+          [
+            72.83173,
+            18.96031
+          ],
+          [
+            72.83181,
+            18.96063
+          ],
+          [
+            72.83188,
+            18.9609
+          ],
+          [
+            72.8319,
+            18.9611
+          ],
+          [
+            72.83191,
+            18.96143
+          ],
+          [
+            72.83192,
+            18.96187
+          ],
+          [
+            72.83197,
+            18.9624
+          ],
+          [
+            72.83198,
+            18.96273
+          ],
+          [
+            72.83202,
+            18.96355
+          ],
+          [
+            72.83202,
+            18.96362
+          ]
+        ]
+      },
+      "properties": {
+        "osm_id": "way/22851295",
+        "name": "J. J. Flyover",
+        "highway": "primary",
+        "surface": "asphalt"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            72.84414,
+            18.96548
+          ],
+          [
+            72.84403,
+            18.96529
+          ],
+          [
+            72.84389,
+            18.96499
+          ],
+          [
+            72.84383,
+            18.96469
+          ],
+          [
+            72.84382,
+            18.96436
+          ],
+          [
+            72.8439,
+            18.96405
+          ],
+          [
+            72.84412,
+            18.96355
+          ],
+          [
+            72.84413,
+            18.96334
+          ],
+          [
+            72.84414,
+            18.96328
+          ],
+          [
+            72.84409,
+            18.96309
+          ],
+          [
+            72.844,
+            18.96271
+          ],
+          [
+            72.84362,
+            18.96113
+          ],
+          [
+            72.84355,
+            18.96085
+          ],
+          [
+            72.84337,
+            18.9601
+          ]
+        ]
+      },
+      "properties": {
+        "osm_id": "way/22851312",
+        "name": "P D' Mello Road",
+        "highway": "primary",
+        "surface": "paved"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            72.84661,
+            18.97801
+          ],
+          [
+            72.84713,
+            18.97839
+          ],
+          [
+            72.84753,
+            18.97856
+          ]
+        ]
+      },
+      "properties": {
+        "osm_id": "way/22851333",
+        "name": "4th Lane",
+        "highway": "tertiary",
+        "surface": "paved"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            72.84661,
+            18.97801
+          ],
+          [
+            72.8465,
+            18.97805
+          ],
+          [
+            72.84597,
+            18.97827
+          ],
+          [
+            72.84593,
+            18.97829
+          ],
+          [
+            72.8459,
+            18.9783
+          ],
+          [
+            72.84555,
+            18.97851
+          ]
+        ]
+      },
+      "properties": {
+        "osm_id": "way/22851342",
+        "name": "Tertiary Highway",
+        "highway": "tertiary",
+        "surface": "paved"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            72.8464,
+            18.97217
+          ],
+          [
+            72.84712,
+            18.97183
+          ],
+          [
+            72.84745,
+            18.97176
+          ],
+          [
+            72.84799,
+            18.97166
+          ],
+          [
+            72.8488,
+            18.97157
+          ]
+        ]
+      },
+      "properties": {
+        "osm_id": "way/22851381",
+        "name": "S A M Dattar Road",
+        "highway": "unclassified",
+        "surface": "paved"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            72.84654,
+            18.96969
+          ],
+          [
+            72.84659,
+            18.97052
+          ],
+          [
+            72.84659,
+            18.97062
+          ],
+          [
+            72.84655,
+            18.97089
+          ],
+          [
+            72.84647,
+            18.97133
+          ],
+          [
+            72.84644,
+            18.97141
+          ],
+          [
+            72.8464,
+            18.97217
+          ],
+          [
+            72.84641,
+            18.97236
+          ],
+          [
+            72.84637,
+            18.97293
+          ],
+          [
+            72.84635,
+            18.97351
+          ],
+          [
+            72.84637,
+            18.97414
+          ],
+          [
+            72.84631,
+            18.97473
+          ],
+          [
+            72.8463,
+            18.9749
+          ],
+          [
+            72.84628,
+            18.97544
+          ],
+          [
+            72.84628,
+            18.97572
+          ],
+          [
+            72.84631,
+            18.97609
+          ]
+        ]
+      },
+      "properties": {
+        "osm_id": "way/22851440",
+        "name": "Magazine Street",
+        "highway": "tertiary",
+        "surface": "paved"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            72.8453,
+            18.97685
+          ],
+          [
+            72.8452,
+            18.9763
+          ],
+          [
+            72.84513,
+            18.97592
+          ],
+          [
+            72.84514,
+            18.97532
+          ],
+          [
+            72.84521,
+            18.97492
+          ],
+          [
+            72.84528,
+            18.97454
+          ],
+          [
+            72.84539,
+            18.97414
+          ],
+          [
+            72.84569,
+            18.9729
+          ],
+          [
+            72.84598,
+            18.97169
+          ],
+          [
+            72.84603,
+            18.97138
+          ]
+        ]
+      },
+      "properties": {
+        "osm_id": "way/22851442",
+        "name": "4th Lane",
+        "highway": "tertiary",
+        "surface": "paved"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            72.84828,
+            18.97242
+          ],
+          [
+            72.84805,
+            18.97244
+          ],
+          [
+            72.84748,
+            18.97247
+          ],
+          [
+            72.84686,
+            18.97244
+          ],
+          [
+            72.84641,
+            18.97236
+          ]
+        ]
+      },
+      "properties": {
+        "osm_id": "way/22851446",
+        "name": "1st Lane",
+        "highway": "tertiary",
+        "surface": "paved"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            72.84753,
+            18.97856
+          ],
+          [
+            72.84795,
+            18.97888
+          ],
+          [
+            72.84854,
+            18.97924
+          ],
+          [
+            72.84857,
+            18.97925
+          ],
+          [
+            72.84886,
+            18.9794
+          ],
+          [
+            72.84923,
+            18.97959
+          ],
+          [
+            72.85019,
+            18.98012
+          ]
+        ]
+      },
+      "properties": {
+        "osm_id": "way/22851498",
+        "name": "Hay Bandar Road",
+        "highway": "tertiary",
+        "surface": "paved"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            72.84631,
+            18.97609
+          ],
+          [
+            72.84645,
+            18.97646
+          ],
+          [
+            72.84652,
+            18.97667
+          ],
+          [
+            72.84665,
+            18.97698
+          ],
+          [
+            72.84681,
+            18.97729
+          ],
+          [
+            72.84689,
+            18.97744
+          ],
+          [
+            72.84753,
+            18.97856
+          ]
+        ]
+      },
+      "properties": {
+        "osm_id": "way/22851510",
+        "name": "Signal Hill Avenue",
+        "highway": "tertiary",
+        "surface": "paved"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            72.84565,
+            18.97619
+          ],
+          [
+            72.84631,
+            18.97609
+          ]
+        ]
+      },
+      "properties": {
+        "osm_id": "way/22851513",
+        "name": "Sant Savata Marg",
+        "highway": "tertiary",
+        "surface": "paved"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            72.84444,
+            18.97608
+          ],
+          [
+            72.84376,
+            18.97596
+          ],
+          [
+            72.84344,
+            18.97591
+          ],
+          [
+            72.84313,
+            18.97591
+          ],
+          [
+            72.84283,
+            18.97595
+          ],
+          [
+            72.84242,
+            18.97603
+          ]
+        ]
+      },
+      "properties": {
+        "osm_id": "way/22851515",
+        "name": "Sant Savata Marg",
+        "highway": "tertiary",
+        "surface": "paved"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            72.85122,
+            18.99076
+          ],
+          [
+            72.84964,
+            18.98739
+          ],
+          [
+            72.84888,
+            18.98576
+          ],
+          [
+            72.84851,
+            18.98496
+          ],
+          [
+            72.84816,
+            18.98422
+          ],
+          [
+            72.84773,
+            18.98332
+          ],
+          [
+            72.84694,
+            18.98164
+          ],
+          [
+            72.8468,
+            18.98136
+          ],
+          [
+            72.84653,
+            18.98077
+          ],
+          [
+            72.84606,
+            18.97976
+          ],
+          [
+            72.84561,
+            18.97878
+          ],
+          [
+            72.84555,
+            18.97851
+          ]
+        ]
+      },
+      "properties": {
+        "osm_id": "way/22851562",
+        "name": "Tertiary Highway",
+        "highway": "tertiary",
+        "surface": "paved"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            72.84698,
+            18.98969
+          ],
+          [
+            72.84654,
+            18.99018
+          ]
+        ]
+      },
+      "properties": {
+        "osm_id": "way/22851581",
+        "name": "Zakaria Bunder Cross Road 1",
+        "highway": "residential",
+        "surface": "paved"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            72.84085,
+            18.98281
+          ],
+          [
+            72.83961,
+            18.98282
+          ],
+          [
+            72.8395,
+            18.98282
+          ],
+          [
+            72.83926,
+            18.98285
+          ],
+          [
+            72.83904,
+            18.98288
+          ],
+          [
+            72.8388,
+            18.98288
+          ],
+          [
+            72.83835,
+            18.98289
+          ],
+          [
+            72.8383,
+            18.98289
+          ],
+          [
+            72.838,
+            18.9829
+          ]
+        ]
+      },
+      "properties": {
+        "osm_id": "way/22851682",
+        "name": "H A Palay Marg",
+        "highway": "residential",
+        "surface": "paved"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            72.83767,
+            18.9808
+          ],
+          [
+            72.83771,
+            18.98145
+          ],
+          [
+            72.83771,
+            18.98167
+          ],
+          [
+            72.83771,
+            18.98176
+          ],
+          [
+            72.83772,
+            18.98193
+          ],
+          [
+            72.83772,
+            18.982
+          ],
+          [
+            72.83765,
+            18.98279
+          ],
+          [
+            72.83767,
+            18.98285
+          ],
+          [
+            72.83771,
+            18.98289
+          ],
+          [
+            72.838,
+            18.9829
+          ],
+          [
+            72.83849,
+            18.9842
+          ]
+        ]
+      },
+      "properties": {
+        "osm_id": "way/22851683",
+        "name": "Residential Highway",
+        "highway": "residential",
+        "surface": "paved"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            72.84136,
+            18.98537
+          ],
+          [
+            72.83964,
+            18.98551
+          ],
+          [
+            72.83783,
+            18.98567
+          ]
+        ]
+      },
+      "properties": {
+        "osm_id": "way/22851703",
+        "name": "Tanaji Malusare Road (Albert Road)",
+        "highway": "tertiary",
+        "surface": "paved"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            72.83647,
+            18.98448
+          ],
+          [
+            72.8372,
+            18.98425
+          ],
+          [
+            72.83744,
+            18.98422
+          ],
+          [
+            72.8377,
+            18.9842
+          ],
+          [
+            72.83792,
+            18.9842
+          ],
+          [
+            72.83849,
+            18.9842
+          ],
+          [
+            72.83876,
+            18.9842
+          ],
+          [
+            72.83918,
+            18.98423
+          ],
+          [
+            72.83949,
+            18.98426
+          ],
+          [
+            72.83954,
+            18.98426
+          ],
+          [
+            72.83968,
+            18.98427
+          ],
+          [
+            72.84002,
+            18.98428
+          ],
+          [
+            72.84087,
+            18.98434
+          ],
+          [
+            72.84097,
+            18.98434
+          ]
+        ]
+      },
+      "properties": {
+        "osm_id": "way/22851710",
+        "name": "A G Pawar Marg",
+        "highway": "tertiary",
+        "surface": "paved"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            72.84091,
+            18.98322
+          ],
+          [
+            72.84211,
+            18.98322
+          ],
+          [
+            72.84256,
+            18.98325
+          ]
+        ]
+      },
+      "properties": {
+        "osm_id": "way/22851725",
+        "name": "S N Reddy Road",
+        "highway": "tertiary",
+        "surface": "paved"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            72.83591,
+            18.98885
+          ],
+          [
+            72.83642,
+            18.98859
+          ],
+          [
+            72.83648,
+            18.98858
+          ],
+          [
+            72.83656,
+            18.98857
+          ],
+          [
+            72.83675,
+            18.98857
+          ],
+          [
+            72.83684,
+            18.98859
+          ],
+          [
+            72.83692,
+            18.98862
+          ],
+          [
+            72.83714,
+            18.98868
+          ],
+          [
+            72.83717,
+            18.98871
+          ],
+          [
+            72.83738,
+            18.98889
+          ],
+          [
+            72.8374,
+            18.98892
+          ],
+          [
+            72.83766,
+            18.98919
+          ],
+          [
+            72.83784,
+            18.98934
+          ],
+          [
+            72.83814,
+            18.98963
+          ],
+          [
+            72.83828,
+            18.98983
+          ],
+          [
+            72.83835,
+            18.99
+          ],
+          [
+            72.83829,
+            18.99053
+          ],
+          [
+            72.83827,
+            18.99092
+          ],
+          [
+            72.83827,
+            18.99099
+          ],
+          [
+            72.83826,
+            18.99105
+          ]
+        ]
+      },
+      "properties": {
+        "osm_id": "way/22851741",
+        "name": "Dinshaw Petit Road",
+        "highway": "residential",
+        "surface": "paved"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            72.8339,
+            18.98536
+          ],
+          [
+            72.83384,
+            18.98539
+          ],
+          [
+            72.83381,
+            18.98545
+          ],
+          [
+            72.83379,
+            18.98553
+          ],
+          [
+            72.83384,
+            18.98611
+          ],
+          [
+            72.83385,
+            18.98648
+          ],
+          [
+            72.83387,
+            18.98707
+          ]
+        ]
+      },
+      "properties": {
+        "osm_id": "way/22851757",
+        "name": "Residential Highway",
+        "highway": "residential",
+        "surface": "asphalt"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            72.84114,
+            18.98952
+          ],
+          [
+            72.84043,
+            18.98966
+          ],
+          [
+            72.8404,
+            18.98966
+          ],
+          [
+            72.83991,
+            18.98974
+          ],
+          [
+            72.8389,
+            18.98991
+          ],
+          [
+            72.83835,
+            18.99
+          ]
+        ]
+      },
+      "properties": {
+        "osm_id": "way/22851760",
+        "name": "Ganesh Nagar Lane",
+        "highway": "residential",
+        "surface": "paved"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            72.84167,
+            18.98697
+          ],
+          [
+            72.8416,
+            18.98696
+          ],
+          [
+            72.84158,
+            18.98694
+          ],
+          [
+            72.84155,
+            18.98692
+          ],
+          [
+            72.84155,
+            18.98689
+          ],
+          [
+            72.84151,
+            18.98621
+          ],
+          [
+            72.84136,
+            18.98537
+          ]
+        ]
+      },
+      "properties": {
+        "osm_id": "way/22851781",
+        "name": "Ghodapdeo Road",
+        "highway": "tertiary",
+        "surface": "paved"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            72.83539,
+            18.98398
+          ],
+          [
+            72.83553,
+            18.98397
+          ],
+          [
+            72.83559,
+            18.98398
+          ],
+          [
+            72.83566,
+            18.98402
+          ],
+          [
+            72.83647,
+            18.98448
+          ],
+          [
+            72.83701,
+            18.98488
+          ],
+          [
+            72.83746,
+            18.98537
+          ],
+          [
+            72.83762,
+            18.9855
+          ],
+          [
+            72.83783,
+            18.98567
+          ]
+        ]
+      },
+      "properties": {
+        "osm_id": "way/22851782",
+        "name": "T B Kadam Marg (Chinchpokli Road)",
+        "highway": "tertiary",
+        "surface": "paved"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            72.84097,
+            18.98434
+          ],
+          [
+            72.84098,
+            18.98442
+          ],
+          [
+            72.841,
+            18.9845
+          ],
+          [
+            72.84102,
+            18.98457
+          ],
+          [
+            72.84136,
+            18.98537
+          ]
+        ]
+      },
+      "properties": {
+        "osm_id": "way/22851787",
+        "name": "Ghodapdeo Road",
+        "highway": "tertiary",
+        "surface": "paved"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            72.84147,
+            18.98807
+          ],
+          [
+            72.84181,
+            18.98806
+          ],
+          [
+            72.84237,
+            18.988
+          ],
+          [
+            72.84253,
+            18.98798
+          ],
+          [
+            72.84345,
+            18.98794
+          ],
+          [
+            72.84374,
+            18.98793
+          ],
+          [
+            72.84407,
+            18.98791
+          ],
+          [
+            72.84422,
+            18.98794
+          ],
+          [
+            72.84429,
+            18.98797
+          ],
+          [
+            72.84438,
+            18.98802
+          ],
+          [
+            72.84444,
+            18.98807
+          ],
+          [
+            72.84493,
+            18.98845
+          ],
+          [
+            72.84499,
+            18.98848
+          ],
+          [
+            72.84507,
+            18.98849
+          ],
+          [
+            72.84515,
+            18.98848
+          ],
+          [
+            72.84528,
+            18.98843
+          ]
+        ]
+      },
+      "properties": {
+        "osm_id": "way/22851808",
+        "name": "Shrikanth Hadkar Marg",
+        "highway": "secondary",
+        "surface": "paved"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            72.83026,
+            18.97659
+          ],
+          [
+            72.83061,
+            18.97673
+          ],
+          [
+            72.8311,
+            18.9768
+          ],
+          [
+            72.83167,
+            18.97679
+          ],
+          [
+            72.83211,
+            18.97684
+          ],
+          [
+            72.83221,
+            18.97685
+          ]
+        ]
+      },
+      "properties": {
+        "osm_id": "way/22851851",
+        "name": "Station Road",
+        "highway": "residential",
+        "surface": "paved"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            72.83473,
+            18.98166
+          ],
+          [
+            72.83506,
+            18.98148
+          ],
+          [
+            72.83532,
+            18.98135
+          ],
+          [
+            72.83595,
+            18.98097
+          ],
+          [
+            72.83618,
+            18.98087
+          ]
+        ]
+      },
+      "properties": {
+        "osm_id": "way/22851854",
+        "name": "Dadoji Konddev Marg",
+        "highway": "tertiary",
+        "surface": "paved"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            72.8342,
+            18.97378
+          ],
+          [
+            72.835,
+            18.9742
+          ]
+        ]
+      },
+      "properties": {
+        "osm_id": "way/22851865",
+        "name": "Residential Highway",
+        "highway": "residential",
+        "surface": "paved"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            72.84323,
+            18.97769
+          ],
+          [
+            72.84305,
+            18.97811
+          ],
+          [
+            72.84285,
+            18.97838
+          ],
+          [
+            72.84272,
+            18.97838
+          ],
+          [
+            72.84266,
+            18.97857
+          ]
+        ]
+      },
+      "properties": {
+        "osm_id": "way/22851876",
+        "name": "Residential Highway",
+        "highway": "residential",
+        "surface": "paved"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            72.8418,
+            18.98105
+          ],
+          [
+            72.84176,
+            18.98147
+          ],
+          [
+            72.84175,
+            18.98159
+          ],
+          [
+            72.84175,
+            18.98161
+          ],
+          [
+            72.84173,
+            18.98178
+          ],
+          [
+            72.84171,
+            18.98203
+          ],
+          [
+            72.84174,
+            18.98206
+          ],
+          [
+            72.84284,
+            18.98227
+          ],
+          [
+            72.84292,
+            18.98229
+          ]
+        ]
+      },
+      "properties": {
+        "osm_id": "way/22851880",
+        "name": "Residential Highway",
+        "highway": "residential",
+        "surface": "paved"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            72.84128,
+            18.97991
+          ],
+          [
+            72.84199,
+            18.98013
+          ],
+          [
+            72.84328,
+            18.98038
+          ]
+        ]
+      },
+      "properties": {
+        "osm_id": "way/22851881",
+        "name": "Ghodapdeo Cross Road 2",
+        "highway": "residential",
+        "surface": "paved"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            72.83388,
+            18.97917
+          ],
+          [
+            72.83369,
+            18.97921
+          ],
+          [
+            72.83365,
+            18.97919
+          ],
+          [
+            72.8336,
+            18.97918
+          ],
+          [
+            72.83355,
+            18.97911
+          ],
+          [
+            72.83354,
+            18.97904
+          ],
+          [
+            72.83356,
+            18.97893
+          ]
+        ]
+      },
+      "properties": {
+        "osm_id": "way/22851883",
+        "name": "PS Mandlik Bridge",
+        "highway": "tertiary",
+        "surface": "paved"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            72.83513,
+            18.9746
+          ],
+          [
+            72.83511,
+            18.97495
+          ],
+          [
+            72.83507,
+            18.97547
+          ],
+          [
+            72.83506,
+            18.97556
+          ],
+          [
+            72.83505,
+            18.97564
+          ]
+        ]
+      },
+      "properties": {
+        "osm_id": "way/22851889",
+        "name": "Residential Highway",
+        "highway": "residential",
+        "surface": "paved"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            72.83373,
+            18.97408
+          ],
+          [
+            72.83342,
+            18.9742
+          ],
+          [
+            72.83297,
+            18.9744
+          ],
+          [
+            72.83334,
+            18.9756
+          ],
+          [
+            72.83341,
+            18.97567
+          ],
+          [
+            72.83351,
+            18.97575
+          ]
+        ]
+      },
+      "properties": {
+        "osm_id": "way/22851890",
+        "name": "N U B Marg",
+        "highway": "residential",
+        "surface": "paved"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            72.83552,
+            18.97569
+          ],
+          [
+            72.83554,
+            18.97601
+          ],
+          [
+            72.83557,
+            18.97631
+          ],
+          [
+            72.83559,
+            18.97677
+          ],
+          [
+            72.83559,
+            18.97732
+          ]
+        ]
+      },
+      "properties": {
+        "osm_id": "way/22851900",
+        "name": "Residential Highway",
+        "highway": "residential",
+        "surface": "paved"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            72.83898,
+            18.97062
+          ],
+          [
+            72.83923,
+            18.97126
+          ]
+        ]
+      },
+      "properties": {
+        "osm_id": "way/22851914",
+        "name": "DN Singh Road No 1",
+        "highway": "residential",
+        "surface": "paved"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            72.84138,
+            18.97943
+          ],
+          [
+            72.84128,
+            18.97991
+          ]
+        ]
+      },
+      "properties": {
+        "osm_id": "way/22851917",
+        "name": "Residential Highway",
+        "highway": "residential",
+        "surface": "paved"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            72.84,
+            18.97025
+          ],
+          [
+            72.83959,
+            18.97039
+          ],
+          [
+            72.83924,
+            18.97052
+          ],
+          [
+            72.83898,
+            18.97062
+          ],
+          [
+            72.83856,
+            18.97075
+          ]
+        ]
+      },
+      "properties": {
+        "osm_id": "way/22851926",
+        "name": "DN Singh Road No 2",
+        "highway": "residential",
+        "surface": "paved"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            72.83817,
+            18.96988
+          ],
+          [
+            72.83824,
+            18.97002
+          ],
+          [
+            72.83839,
+            18.97034
+          ],
+          [
+            72.83856,
+            18.97075
+          ]
+        ]
+      },
+      "properties": {
+        "osm_id": "way/22851928",
+        "name": "DN Singh Road No 4",
+        "highway": "residential",
+        "surface": "paved"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            72.84148,
+            18.97745
+          ],
+          [
+            72.84228,
+            18.97756
+          ],
+          [
+            72.8427,
+            18.97762
+          ],
+          [
+            72.84323,
+            18.97769
+          ],
+          [
+            72.84382,
+            18.97776
+          ]
+        ]
+      },
+      "properties": {
+        "osm_id": "way/22851933",
+        "name": "K R Mhatre Marg",
+        "highway": "residential",
+        "surface": "paved"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            72.84269,
+            18.97706
+          ],
+          [
+            72.84391,
+            18.97732
+          ]
+        ]
+      },
+      "properties": {
+        "osm_id": "way/22851934",
+        "name": "Residential Highway",
+        "highway": "residential",
+        "surface": "paved"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            72.84118,
+            18.98041
+          ],
+          [
+            72.84105,
+            18.98093
+          ],
+          [
+            72.84104,
+            18.98098
+          ]
+        ]
+      },
+      "properties": {
+        "osm_id": "way/22851937",
+        "name": "Residential Highway",
+        "highway": "residential",
+        "surface": "paved"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            72.83682,
+            18.98045
+          ],
+          [
+            72.83697,
+            18.98044
+          ],
+          [
+            72.83766,
+            18.9804
+          ],
+          [
+            72.83792,
+            18.98039
+          ],
+          [
+            72.83846,
+            18.98037
+          ],
+          [
+            72.83875,
+            18.98036
+          ],
+          [
+            72.83924,
+            18.98034
+          ],
+          [
+            72.83966,
+            18.98032
+          ],
+          [
+            72.84046,
+            18.98028
+          ],
+          [
+            72.84078,
+            18.98026
+          ]
+        ]
+      },
+      "properties": {
+        "osm_id": "way/22851938",
+        "name": "E.S. Patanwala Marg",
+        "highway": "tertiary",
+        "surface": "concrete"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            72.84173,
+            18.98178
+          ],
+          [
+            72.84273,
+            18.98197
+          ]
+        ]
+      },
+      "properties": {
+        "osm_id": "way/22851943",
+        "name": "Residential Highway",
+        "highway": "residential",
+        "surface": "paved"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            72.83767,
+            18.9808
+          ],
+          [
+            72.83787,
+            18.98078
+          ],
+          [
+            72.83805,
+            18.98077
+          ],
+          [
+            72.8384,
+            18.98073
+          ],
+          [
+            72.83844,
+            18.98074
+          ],
+          [
+            72.83846,
+            18.98075
+          ],
+          [
+            72.83846,
+            18.98077
+          ],
+          [
+            72.83852,
+            18.98136
+          ],
+          [
+            72.83977,
+            18.98124
+          ],
+          [
+            72.83997,
+            18.98123
+          ],
+          [
+            72.84105,
+            18.98119
+          ]
+        ]
+      },
+      "properties": {
+        "osm_id": "way/22851947",
+        "name": "Keshavrao Borkar Marg",
+        "highway": "residential",
+        "surface": "asphalt"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            72.84105,
+            18.98093
+          ],
+          [
+            72.8418,
+            18.98105
+          ]
+        ]
+      },
+      "properties": {
+        "osm_id": "way/22851948",
+        "name": "Cross Road 1",
+        "highway": "residential",
+        "surface": "paved"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            72.83767,
+            18.9808
+          ],
+          [
+            72.83666,
+            18.98082
+          ],
+          [
+            72.83635,
+            18.98092
+          ],
+          [
+            72.83632,
+            18.98092
+          ],
+          [
+            72.83629,
+            18.98091
+          ],
+          [
+            72.83618,
+            18.98087
+          ]
+        ]
+      },
+      "properties": {
+        "osm_id": "way/22851949",
+        "name": "K Borkar Road",
+        "highway": "residential",
+        "surface": "paved"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            72.84049,
+            18.97055
+          ],
+          [
+            72.84011,
+            18.97074
+          ],
+          [
+            72.83923,
+            18.97126
+          ],
+          [
+            72.83916,
+            18.97128
+          ],
+          [
+            72.83848,
+            18.97155
+          ],
+          [
+            72.83839,
+            18.97158
+          ],
+          [
+            72.83813,
+            18.97168
+          ],
+          [
+            72.83806,
+            18.97171
+          ],
+          [
+            72.8379,
+            18.97185
+          ],
+          [
+            72.8378,
+            18.97195
+          ],
+          [
+            72.83761,
+            18.97209
+          ],
+          [
+            72.83759,
+            18.97213
+          ],
+          [
+            72.83759,
+            18.97221
+          ],
+          [
+            72.83756,
+            18.97221
+          ],
+          [
+            72.83745,
+            18.97221
+          ],
+          [
+            72.83711,
+            18.97226
+          ],
+          [
+            72.83701,
+            18.97229
+          ],
+          [
+            72.83671,
+            18.97234
+          ],
+          [
+            72.83595,
+            18.97247
+          ],
+          [
+            72.8358,
+            18.97252
+          ],
+          [
+            72.83557,
+            18.97263
+          ],
+          [
+            72.8351,
+            18.97292
+          ],
+          [
+            72.83504,
+            18.97297
+          ],
+          [
+            72.83448,
+            18.97354
+          ],
+          [
+            72.8342,
+            18.97378
+          ],
+          [
+            72.83416,
+            18.97381
+          ],
+          [
+            72.83397,
+            18.97395
+          ],
+          [
+            72.83389,
+            18.97402
+          ]
+        ]
+      },
+      "properties": {
+        "osm_id": "way/22851955",
+        "name": "Seth Moti Shah Road (Love Lane)",
+        "highway": "residential",
+        "surface": "paved"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            72.84037,
+            18.97283
+          ],
+          [
+            72.84053,
+            18.97284
+          ],
+          [
+            72.84232,
+            18.97299
+          ],
+          [
+            72.84236,
+            18.97299
+          ],
+          [
+            72.8424,
+            18.97297
+          ],
+          [
+            72.84241,
+            18.97294
+          ],
+          [
+            72.84242,
+            18.97289
+          ]
+        ]
+      },
+      "properties": {
+        "osm_id": "way/22851956",
+        "name": "Residential Highway",
+        "highway": "residential",
+        "surface": "paved"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            72.83228,
+            18.97133
+          ],
+          [
+            72.83212,
+            18.97136
+          ],
+          [
+            72.83202,
+            18.97141
+          ],
+          [
+            72.83189,
+            18.97149
+          ],
+          [
+            72.83149,
+            18.97174
+          ],
+          [
+            72.83112,
+            18.9719
+          ],
+          [
+            72.83057,
+            18.97215
+          ],
+          [
+            72.83029,
+            18.9722
+          ],
+          [
+            72.83009,
+            18.97224
+          ],
+          [
+            72.82999,
+            18.97226
+          ],
+          [
+            72.82949,
+            18.97233
+          ],
+          [
+            72.82912,
+            18.97242
+          ],
+          [
+            72.82884,
+            18.97248
+          ],
+          [
+            72.82834,
+            18.97258
+          ],
+          [
+            72.82802,
+            18.97266
+          ],
+          [
+            72.82786,
+            18.9727
+          ],
+          [
+            72.82778,
+            18.97272
+          ]
+        ]
+      },
+      "properties": {
+        "osm_id": "way/22851958",
+        "name": "Sheik Hafizuddin Marg",
+        "highway": "residential",
+        "surface": "paved"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            72.84318,
+            18.97172
+          ],
+          [
+            72.84281,
+            18.97184
+          ],
+          [
+            72.84241,
+            18.97203
+          ],
+          [
+            72.84175,
+            18.97234
+          ],
+          [
+            72.8417,
+            18.97236
+          ],
+          [
+            72.84106,
+            18.97251
+          ],
+          [
+            72.84039,
+            18.97255
+          ]
+        ]
+      },
+      "properties": {
+        "osm_id": "way/22851960",
+        "name": "Champsi Bhimji Marg",
+        "highway": "residential",
+        "surface": "paved"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            72.84021,
+            18.97348
+          ],
+          [
+            72.84033,
+            18.97349
+          ],
+          [
+            72.84048,
+            18.9735
+          ],
+          [
+            72.84113,
+            18.97354
+          ],
+          [
+            72.84163,
+            18.97357
+          ],
+          [
+            72.84221,
+            18.97359
+          ],
+          [
+            72.84225,
+            18.97361
+          ],
+          [
+            72.84229,
+            18.97364
+          ],
+          [
+            72.84234,
+            18.97365
+          ],
+          [
+            72.84287,
+            18.97365
+          ]
+        ]
+      },
+      "properties": {
+        "osm_id": "way/22851961",
+        "name": "Residential Highway",
+        "highway": "residential",
+        "surface": "paved"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            72.84128,
+            18.97991
+          ],
+          [
+            72.84118,
+            18.98041
+          ]
+        ]
+      },
+      "properties": {
+        "osm_id": "way/22851987",
+        "name": "Residential Highway",
+        "highway": "residential",
+        "surface": "paved"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            72.84212,
+            18.97958
+          ],
+          [
+            72.84199,
+            18.98013
+          ],
+          [
+            72.8419,
+            18.98065
+          ],
+          [
+            72.8418,
+            18.98105
+          ]
+        ]
+      },
+      "properties": {
+        "osm_id": "way/22851997",
+        "name": "Residential Highway",
+        "highway": "residential",
+        "surface": "paved"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            72.83618,
+            18.98087
+          ],
+          [
+            72.83643,
+            18.98065
+          ],
+          [
+            72.83645,
+            18.98063
+          ]
+        ]
+      },
+      "properties": {
+        "osm_id": "way/22851998",
+        "name": "Dadoji Konddev Marg",
+        "highway": "tertiary",
+        "surface": "paved"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            72.84094,
+            18.97933
+          ],
+          [
+            72.84138,
+            18.97943
+          ],
+          [
+            72.84193,
+            18.97954
+          ],
+          [
+            72.84212,
+            18.97958
+          ],
+          [
+            72.84336,
+            18.97984
+          ]
+        ]
+      },
+      "properties": {
+        "osm_id": "way/22852000",
+        "name": "Ghodapdeo Cross Road",
+        "highway": "residential",
+        "surface": "asphalt"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            72.84224,
+            18.97843
+          ],
+          [
+            72.84193,
+            18.97954
+          ]
+        ]
+      },
+      "properties": {
+        "osm_id": "way/22852001",
+        "name": "Residential Highway",
+        "highway": "residential",
+        "surface": "paved"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            72.84051,
+            18.97623
+          ],
+          [
+            72.84051,
+            18.9763
+          ],
+          [
+            72.84054,
+            18.97636
+          ],
+          [
+            72.84055,
+            18.97639
+          ],
+          [
+            72.84062,
+            18.97652
+          ],
+          [
+            72.84075,
+            18.97665
+          ],
+          [
+            72.84081,
+            18.9767
+          ],
+          [
+            72.84086,
+            18.97674
+          ],
+          [
+            72.84127,
+            18.97693
+          ],
+          [
+            72.84131,
+            18.97698
+          ],
+          [
+            72.84134,
+            18.97703
+          ],
+          [
+            72.84148,
+            18.97745
+          ],
+          [
+            72.84144,
+            18.9779
+          ],
+          [
+            72.8414,
+            18.97797
+          ],
+          [
+            72.84129,
+            18.97817
+          ],
+          [
+            72.84122,
+            18.97831
+          ],
+          [
+            72.84115,
+            18.97849
+          ],
+          [
+            72.84107,
+            18.97869
+          ],
+          [
+            72.84094,
+            18.97933
+          ],
+          [
+            72.84079,
+            18.9802
+          ],
+          [
+            72.84078,
+            18.98026
+          ]
+        ]
+      },
+      "properties": {
+        "osm_id": "way/22852010",
+        "name": "Rambhau Bhogle Marg",
+        "highway": "tertiary",
+        "surface": "paved"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            72.84104,
+            18.98098
+          ],
+          [
+            72.84105,
+            18.98119
+          ],
+          [
+            72.84105,
+            18.9814
+          ],
+          [
+            72.84105,
+            18.98152
+          ],
+          [
+            72.84103,
+            18.98161
+          ],
+          [
+            72.84097,
+            18.98192
+          ],
+          [
+            72.84092,
+            18.98212
+          ],
+          [
+            72.84091,
+            18.98219
+          ],
+          [
+            72.84085,
+            18.98281
+          ],
+          [
+            72.84085,
+            18.98287
+          ],
+          [
+            72.84091,
+            18.98322
+          ],
+          [
+            72.84094,
+            18.9835
+          ],
+          [
+            72.84098,
+            18.98376
+          ],
+          [
+            72.84096,
+            18.98409
+          ],
+          [
+            72.84097,
+            18.98434
+          ]
+        ]
+      },
+      "properties": {
+        "osm_id": "way/22852017",
+        "name": "Rambhau Bhogle Marg",
+        "highway": "tertiary",
+        "surface": "paved"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            72.84069,
+            18.97048
+          ],
+          [
+            72.84068,
+            18.9705
+          ],
+          [
+            72.84066,
+            18.97059
+          ],
+          [
+            72.84064,
+            18.97067
+          ],
+          [
+            72.84059,
+            18.97093
+          ],
+          [
+            72.84055,
+            18.97118
+          ],
+          [
+            72.84054,
+            18.97128
+          ],
+          [
+            72.84046,
+            18.97197
+          ],
+          [
+            72.84042,
+            18.97229
+          ],
+          [
+            72.84039,
+            18.97255
+          ],
+          [
+            72.84037,
+            18.97283
+          ]
+        ]
+      },
+      "properties": {
+        "osm_id": "way/22852027",
+        "name": "Dr Mascarenhas Road (Mount Road)",
+        "highway": "tertiary",
+        "surface": "paved"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            72.83375,
+            18.97547
+          ],
+          [
+            72.83419,
+            18.97554
+          ],
+          [
+            72.83455,
+            18.97558
+          ],
+          [
+            72.83505,
+            18.97564
+          ],
+          [
+            72.83548,
+            18.97568
+          ],
+          [
+            72.83552,
+            18.97569
+          ],
+          [
+            72.83616,
+            18.97575
+          ],
+          [
+            72.83623,
+            18.97575
+          ],
+          [
+            72.83627,
+            18.97575
+          ],
+          [
+            72.83694,
+            18.97582
+          ],
+          [
+            72.83733,
+            18.97587
+          ],
+          [
+            72.83757,
+            18.97594
+          ],
+          [
+            72.83774,
+            18.976
+          ],
+          [
+            72.83799,
+            18.97618
+          ],
+          [
+            72.83822,
+            18.97628
+          ],
+          [
+            72.83846,
+            18.97631
+          ],
+          [
+            72.83907,
+            18.97628
+          ],
+          [
+            72.83916,
+            18.97627
+          ],
+          [
+            72.83983,
+            18.97622
+          ],
+          [
+            72.84032,
+            18.9762
+          ],
+          [
+            72.84051,
+            18.97623
+          ]
+        ]
+      },
+      "properties": {
+        "osm_id": "way/22852038",
+        "name": "Sant Savata Marg",
+        "highway": "tertiary",
+        "surface": "paved"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            72.83205,
+            18.9743
+          ],
+          [
+            72.83206,
+            18.97466
+          ],
+          [
+            72.83206,
+            18.97474
+          ]
+        ]
+      },
+      "properties": {
+        "osm_id": "way/22852045",
+        "name": "N M Joshi Marg",
+        "highway": "secondary",
+        "surface": "paved"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            72.82862,
+            18.96703
+          ],
+          [
+            72.82864,
+            18.96711
+          ],
+          [
+            72.82864,
+            18.96716
+          ],
+          [
+            72.8286,
+            18.96739
+          ],
+          [
+            72.82856,
+            18.9676
+          ],
+          [
+            72.82846,
+            18.96816
+          ],
+          [
+            72.82836,
+            18.96868
+          ],
+          [
+            72.82834,
+            18.96877
+          ],
+          [
+            72.82828,
+            18.9691
+          ],
+          [
+            72.82815,
+            18.96974
+          ],
+          [
+            72.82814,
+            18.96989
+          ],
+          [
+            72.82811,
+            18.97005
+          ],
+          [
+            72.82806,
+            18.97051
+          ],
+          [
+            72.82805,
+            18.97059
+          ],
+          [
+            72.82802,
+            18.97082
+          ],
+          [
+            72.82793,
+            18.97155
+          ],
+          [
+            72.8279,
+            18.97167
+          ],
+          [
+            72.82788,
+            18.97182
+          ],
+          [
+            72.82787,
+            18.97207
+          ],
+          [
+            72.82778,
+            18.97272
+          ]
+        ]
+      },
+      "properties": {
+        "osm_id": "way/22852086",
+        "name": "Maulana Azad Road North",
+        "highway": "tertiary",
+        "surface": "asphalt"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            72.82978,
+            18.97023
+          ],
+          [
+            72.82968,
+            18.96997
+          ],
+          [
+            72.82963,
+            18.96993
+          ],
+          [
+            72.82955,
+            18.96992
+          ],
+          [
+            72.82939,
+            18.96998
+          ],
+          [
+            72.82935,
+            18.97002
+          ],
+          [
+            72.82933,
+            18.97009
+          ],
+          [
+            72.82946,
+            18.97042
+          ]
+        ]
+      },
+      "properties": {
+        "osm_id": "way/22852091",
+        "name": "Residential Highway",
+        "highway": "residential",
+        "surface": "paved"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            72.82958,
+            18.98411
+          ],
+          [
+            72.82951,
+            18.98417
+          ],
+          [
+            72.82921,
+            18.98442
+          ],
+          [
+            72.82844,
+            18.98508
+          ],
+          [
+            72.82821,
+            18.98528
+          ],
+          [
+            72.82812,
+            18.98537
+          ],
+          [
+            72.82791,
+            18.98555
+          ],
+          [
+            72.82776,
+            18.98573
+          ],
+          [
+            72.82767,
+            18.98585
+          ],
+          [
+            72.82752,
+            18.98606
+          ],
+          [
+            72.82737,
+            18.98643
+          ],
+          [
+            72.82735,
+            18.98649
+          ],
+          [
+            72.82733,
+            18.98655
+          ],
+          [
+            72.8273,
+            18.98668
+          ],
+          [
+            72.82725,
+            18.9869
+          ],
+          [
+            72.82721,
+            18.98707
+          ],
+          [
+            72.82717,
+            18.98726
+          ],
+          [
+            72.82713,
+            18.98744
+          ],
+          [
+            72.82712,
+            18.98764
+          ],
+          [
+            72.82716,
+            18.98782
+          ],
+          [
+            72.82722,
+            18.98795
+          ],
+          [
+            72.82741,
+            18.98839
+          ],
+          [
+            72.82743,
+            18.98845
+          ],
+          [
+            72.82805,
+            18.98986
+          ],
+          [
+            72.82807,
+            18.98991
+          ],
+          [
+            72.8281,
+            18.98995
+          ],
+          [
+            72.82831,
+            18.99014
+          ],
+          [
+            72.82854,
+            18.99039
+          ],
+          [
+            72.82881,
+            18.99079
+          ],
+          [
+            72.82896,
+            18.99127
+          ]
+        ]
+      },
+      "properties": {
+        "osm_id": "way/22852103",
+        "name": "Junior Boricha Marg",
+        "highway": "residential",
+        "surface": "paved"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            72.82769,
+            18.98204
+          ],
+          [
+            72.82761,
+            18.9821
+          ],
+          [
+            72.82636,
+            18.98223
+          ],
+          [
+            72.82616,
+            18.98221
+          ]
+        ]
+      },
+      "properties": {
+        "osm_id": "way/22852107",
+        "name": "BK Singh Marg",
+        "highway": "residential",
+        "surface": "paved"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            72.82541,
+            18.97052
+          ],
+          [
+            72.82472,
+            18.97073
+          ],
+          [
+            72.82374,
+            18.97103
+          ],
+          [
+            72.82364,
+            18.97106
+          ],
+          [
+            72.82324,
+            18.97119
+          ],
+          [
+            72.8229,
+            18.97129
+          ],
+          [
+            72.82212,
+            18.97154
+          ],
+          [
+            72.82177,
+            18.97162
+          ]
+        ]
+      },
+      "properties": {
+        "osm_id": "way/22852127",
+        "name": "Maratha Mandir Marg",
+        "highway": "residential",
+        "surface": "paved"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            72.82756,
+            18.97061
+          ],
+          [
+            72.82777,
+            18.9713
+          ],
+          [
+            72.8279,
+            18.97167
+          ]
+        ]
+      },
+      "properties": {
+        "osm_id": "way/22852129",
+        "name": "Residential Highway",
+        "highway": "residential",
+        "surface": "paved"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            72.82374,
+            18.97103
+          ],
+          [
+            72.82384,
+            18.97138
+          ],
+          [
+            72.82393,
+            18.9717
+          ]
+        ]
+      },
+      "properties": {
+        "osm_id": "way/22852133",
+        "name": "Residential Highway",
+        "highway": "residential",
+        "surface": "paved"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            72.82556,
+            18.9834
+          ],
+          [
+            72.8259,
+            18.9836
+          ],
+          [
+            72.82606,
+            18.9837
+          ],
+          [
+            72.8262,
+            18.98378
+          ],
+          [
+            72.82647,
+            18.98393
+          ],
+          [
+            72.82658,
+            18.984
+          ],
+          [
+            72.82698,
+            18.98423
+          ],
+          [
+            72.82742,
+            18.98448
+          ],
+          [
+            72.8277,
+            18.98465
+          ],
+          [
+            72.82785,
+            18.98474
+          ],
+          [
+            72.82844,
+            18.98508
+          ]
+        ]
+      },
+      "properties": {
+        "osm_id": "way/22852134",
+        "name": "G Babu Sakpal Marg",
+        "highway": "residential",
+        "surface": "paved"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            72.82432,
+            18.98574
+          ],
+          [
+            72.82433,
+            18.98576
+          ],
+          [
+            72.82469,
+            18.98659
+          ],
+          [
+            72.8254,
+            18.98806
+          ],
+          [
+            72.82579,
+            18.98885
+          ],
+          [
+            72.82628,
+            18.98994
+          ],
+          [
+            72.82621,
+            18.98996
+          ]
+        ]
+      },
+      "properties": {
+        "osm_id": "way/22852140",
+        "name": "Shakti Mills Lane",
+        "highway": "unclassified",
+        "surface": "paved"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            72.82566,
+            18.97126
+          ],
+          [
+            72.82526,
+            18.97133
+          ],
+          [
+            72.82493,
+            18.97142
+          ],
+          [
+            72.82393,
+            18.9717
+          ],
+          [
+            72.8234,
+            18.97185
+          ],
+          [
+            72.82239,
+            18.97214
+          ]
+        ]
+      },
+      "properties": {
+        "osm_id": "way/22852142",
+        "name": "YMCA Road",
+        "highway": "residential",
+        "surface": "paved"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            72.82805,
+            18.97059
+          ],
+          [
+            72.82756,
+            18.97061
+          ],
+          [
+            72.82706,
+            18.97062
+          ],
+          [
+            72.8268,
+            18.97065
+          ],
+          [
+            72.8255,
+            18.97081
+          ]
+        ]
+      },
+      "properties": {
+        "osm_id": "way/22852144",
+        "name": "M U Rajab Road",
+        "highway": "residential",
+        "surface": "paved"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            72.82689,
+            18.97227
+          ],
+          [
+            72.82616,
+            18.97244
+          ],
+          [
+            72.82604,
+            18.97247
+          ]
+        ]
+      },
+      "properties": {
+        "osm_id": "way/22852157",
+        "name": "Ghelabhai Street",
+        "highway": "residential",
+        "surface": "paved"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            72.82609,
+            18.98233
+          ],
+          [
+            72.82601,
+            18.9825
+          ],
+          [
+            72.82556,
+            18.9834
+          ]
+        ]
+      },
+      "properties": {
+        "osm_id": "way/22852160",
+        "name": "G Babu Sakpal Marg",
+        "highway": "residential",
+        "surface": "paved"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            72.82736,
+            18.97597
+          ],
+          [
+            72.82681,
+            18.97611
+          ],
+          [
+            72.82641,
+            18.97623
+          ],
+          [
+            72.82609,
+            18.97632
+          ],
+          [
+            72.82566,
+            18.97644
+          ],
+          [
+            72.82482,
+            18.97668
+          ],
+          [
+            72.82427,
+            18.97683
+          ],
+          [
+            72.82403,
+            18.97689
+          ],
+          [
+            72.82395,
+            18.97691
+          ]
+        ]
+      },
+      "properties": {
+        "osm_id": "way/22852171",
+        "name": "R B Chandurkar Road (Gell Street)",
+        "highway": "residential",
+        "surface": "paved"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            72.82557,
+            18.97372
+          ],
+          [
+            72.82568,
+            18.97402
+          ],
+          [
+            72.82597,
+            18.97488
+          ],
+          [
+            72.82617,
+            18.97553
+          ],
+          [
+            72.82641,
+            18.97623
+          ]
+        ]
+      },
+      "properties": {
+        "osm_id": "way/22852175",
+        "name": "Madhav Rao Gangan Street",
+        "highway": "residential",
+        "surface": "paved"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            72.82923,
+            18.97513
+          ],
+          [
+            72.82933,
+            18.97575
+          ],
+          [
+            72.8294,
+            18.97616
+          ],
+          [
+            72.82944,
+            18.97648
+          ]
+        ]
+      },
+      "properties": {
+        "osm_id": "way/22852178",
+        "name": "Residential Highway",
+        "highway": "residential",
+        "surface": "paved"
+      }
+    }
+  ]
+}
